@@ -1,0 +1,2 @@
+# ibean
+Interface Java Beans
