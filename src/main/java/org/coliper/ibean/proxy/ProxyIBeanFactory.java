@@ -29,6 +29,7 @@ import org.coliper.ibean.CachedIBeanMetaInfoParser;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
+import org.coliper.ibean.proxy.handler.CloneableHandler;
 import org.coliper.ibean.proxy.handler.CompletableHandler;
 import org.coliper.ibean.proxy.handler.FreezableHandler;
 import org.coliper.ibean.proxy.handler.ModificationAwareHandler;
@@ -49,7 +50,8 @@ public class ProxyIBeanFactory implements IBeanFactory {
                     OptionalSupportHandler.SUPPORT,
                     NullSafeHandler.SUPPORT,
                     FreezableHandler.SUPPORT,
-                    CompletableHandler.SUPPORT);
+                    CompletableHandler.SUPPORT,
+                    CloneableHandler.SUPPORT);
   //@formatter:on 
 
     private final IBeanMetaInfoParser metaInfoParser;
@@ -147,6 +149,6 @@ public class ProxyIBeanFactory implements IBeanFactory {
                 this.extendedInterfacesKit.getSupportedExtendedInterfaces();
         IBeanTypeMetaInfo<T> meta =
                 this.metaInfoParser.parse(beanType, this.beanStyle, supportedExtendedInterfaces);
-        return new IBeanContext<>(meta, this.toStringStyle, this.beanStyle);
+        return new IBeanContext<>(this, meta, this.toStringStyle, this.beanStyle);
     }
 }

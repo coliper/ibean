@@ -14,13 +14,16 @@
 
 package org.coliper.ibean;
 
+import java.io.Serializable;
 import java.util.Date;
+
+import org.coliper.ibean.extension.CloneableBean;
 
 /**
  * @author alex@coliper.org
  *
  */
-public interface SampleBeanClassic {
+public interface SampleBeanClassic extends CloneableBean<SampleBeanClassic>, Serializable {
 
 //@formatter:off 
     void setIntObject(Integer i);

@@ -23,6 +23,8 @@ import org.apache.commons.beanutils.BeanUtils;
  *
  */
 public class PrimitivesBeanClassicImpl implements PrimitivesBeanClassic {
+    private static final long serialVersionUID = 1L;
+    
     private byte byte_;
     private short short_;
     private int int_;
@@ -55,6 +57,17 @@ public class PrimitivesBeanClassicImpl implements PrimitivesBeanClassic {
     private Double doubleObject;
     private Boolean booleanObject;
     private Character charObject;
+
+    @Override
+    public PrimitivesBeanClassic clone() throws CloneNotSupportedException {
+        PrimitivesBeanClassic clone = new PrimitivesBeanClassicImpl();
+        try {
+            this.copyTo(clone);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+        return clone;
+    }
 
     /**
      * @return the byte_

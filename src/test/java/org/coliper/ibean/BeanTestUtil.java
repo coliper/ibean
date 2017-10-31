@@ -19,19 +19,32 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import java.util.Collections;
+import java.util.List;
+
+import org.coliper.ibean.extension.CloneableBean;
+import org.coliper.ibean.extension.Completable;
+import org.coliper.ibean.extension.ModificationAwareExt;
+import org.coliper.ibean.extension.NullSafe;
+import org.coliper.ibean.extension.OptionalSupport;
+import org.coliper.ibean.extension.TempFreezable;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * @author alex@coliper.org
  *
  */
 public class BeanTestUtil {
+    private static final List<Class<?>> EXTENSION_INTERFACES = ImmutableList.of(
+            CloneableBean.class, Completable.class, TempFreezable.class, ModificationAwareExt.class, 
+            NullSafe.class, OptionalSupport.class);
 
     public static <T> void assertEqualsBean(Class<T> beanType, BeanStyle beanStyle, T bean1,
             T bean2) {
         assertNotNull(bean1);
         assertNotNull(bean2);
         IBeanTypeMetaInfo<T> meta =
-                new IBeanMetaInfoParser().parse(beanType, beanStyle, Collections.emptyList());
+                new IBeanMetaInfoParser().parse(beanType, beanStyle, EXTENSION_INTERFACES);
         for (IBeanFieldMetaInfo fieldMeta : meta.fieldMetaInfos()) {
             Object val1;
             Object val2;

@@ -23,6 +23,7 @@ import org.coliper.ibean.IBeanTypeMetaInfo;
  *
  */
 public class IBeanContext<T> {
+    private final ProxyIBeanFactory beanFactory;
     private final IBeanTypeMetaInfo<T> metaInfo;
     private final ToStringStyle toStringStyle;
     private final BeanStyle beanStyle;
@@ -32,10 +33,16 @@ public class IBeanContext<T> {
      * @param toStringStyle
      * @param beanStyle
      */
-    IBeanContext(IBeanTypeMetaInfo<T> metaInfo, ToStringStyle toStringStyle, BeanStyle beanStyle) {
+    IBeanContext(ProxyIBeanFactory beanFactory, IBeanTypeMetaInfo<T> metaInfo,
+            ToStringStyle toStringStyle, BeanStyle beanStyle) {
+        this.beanFactory = beanFactory;
         this.metaInfo = metaInfo;
         this.toStringStyle = toStringStyle;
         this.beanStyle = beanStyle;
+    }
+    
+    public ProxyIBeanFactory beanFactory() {
+        return this.beanFactory;
     }
 
     /**
