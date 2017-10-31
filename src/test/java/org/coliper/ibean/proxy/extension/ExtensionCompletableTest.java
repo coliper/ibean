@@ -1,0 +1,125 @@
+/*
+ * Copyright (C) 2017 the original author or authors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
+ */
+
+package org.coliper.ibean.proxy.extension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+
+import java.util.Optional;
+
+import org.coliper.ibean.extension.BeanIncompleteException;
+import org.coliper.ibean.extension.Completable;
+import org.coliper.ibean.extension.OptionalSupport;
+import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.junit.Test;
+
+/**
+ * @author alex@coliper.org
+ *
+ */
+public class ExtensionCompletableTest {
+
+    public static interface BeanType extends Completable<BeanType> {
+      //@formatter:off
+        String getString();
+        void setString(String s);
+
+        int getInt();
+        void setInt(int i);
+
+        void setDouble(Optional<Double> d);
+        Optional<Double> getDouble();
+      //@formatter:on
+    }
+
+    public static interface BeanTypeWithOptionalSupport extends BeanType, OptionalSupport {
+    }
+
+    @Test
+    public void testIsComplete() throws Exception {
+        BeanType bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
+                .create(BeanType.class);
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+
+        bean.setString("xx");
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+
+        bean.setDouble(Optional.empty());
+        assertThat(bean.isComplete()).isTrue();
+        assertThat(bean.assertComplete()).isSameAs(bean);
+
+        bean.setInt(0);
+        assertThat(bean.isComplete()).isTrue();
+        assertThat(bean.assertComplete()).isSameAs(bean);
+
+        bean.setDouble(null);
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+
+        bean.setInt(0);
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+
+        bean.setDouble(Optional.of(Double.valueOf(3.4)));
+        assertThat(bean.isComplete()).isTrue();
+        assertThat(bean.assertComplete()).isSameAs(bean);
+    }
+
+    @Test
+    public void testIsCompleteWithOptionalSupport() throws Exception {
+        BeanType bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
+                .create(BeanTypeWithOptionalSupport.class);
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+
+        bean.setString("xx");
+        assertThat(bean.isComplete()).isTrue();
+        assertThat(bean.assertComplete()).isSameAs(bean);
+
+        bean.setDouble(Optional.empty());
+        assertThat(bean.isComplete()).isTrue();
+        assertThat(bean.assertComplete()).isSameAs(bean);
+
+        bean.setInt(0);
+        assertThat(bean.isComplete()).isTrue();
+        assertThat(bean.assertComplete()).isSameAs(bean);
+
+        bean.setDouble(null);
+        assertThat(bean.isComplete()).isTrue();
+        assertThat(bean.assertComplete()).isSameAs(bean);
+
+        bean.setString(null);
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+
+        bean.setInt(0);
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+
+        bean.setDouble(Optional.of(Double.valueOf(3.4)));
+        assertThat(bean.isComplete()).isFalse();
+        assertThatExceptionOfType(BeanIncompleteException.class)
+                .isThrownBy(() -> bean.assertComplete());
+    }
+}

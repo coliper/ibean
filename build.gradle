@@ -1,0 +1,52 @@
+def PROJECTNAME = "Coliper IBean"
+
+// Apply the java-library plugin to add support for Java Library
+apply plugin: 'java-library'
+
+version = '0.4.0'
+description = 'creates all artifacts of the Coliper IBean project'
+sourceCompatibility = 1.8
+
+
+
+// In this section you declare where to find the dependencies of your project
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+dependencies {
+    // This dependency is exported to consumers, that is to say found on their compile classpath.
+    api 'org.apache.commons:commons-lang3:3.+'
+
+    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:21.0'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'commons-beanutils:commons-beanutils:1.9.3'
+    testImplementation 'org.assertj:assertj-core:3.8.0'
+}
+
+javadoc {
+    title = PROJECTNAME + ' API ' + version 
+    options.stylesheetFile file('doc-src/javadoc-stylesheet.css', PathValidation.FILE)
+    options.links "https://commons.apache.org/proper/commons-lang/apidocs/",
+                  "https://docs.oracle.com/javase/8/docs/api/"
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
