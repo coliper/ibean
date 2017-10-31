@@ -33,14 +33,17 @@ class ExtensionHandlerDispatcher {
 
     private static final ExtensionHandlerDispatcher EMPTY_BUNDLES_HANDLER =
             new ExtensionHandlerDispatcher(Collections.emptyMap());
-    
+
     static class Builder {
-        private final ImmutableMap.Builder<Class<?>, ExtensionHandler> handlerMapBuilder = new ImmutableMap.Builder<>();
+        private final ImmutableMap.Builder<Class<?>, ExtensionHandler> handlerMapBuilder =
+                new ImmutableMap.Builder<>();
+
         void add(Class<?> type, ExtensionHandler handler) {
             this.handlerMapBuilder.put(type, handler);
         }
+
         ExtensionHandlerDispatcher build() {
-            
+
             final ImmutableMap<Class<?>, ExtensionHandler> map = this.handlerMapBuilder.build();
             if (map.isEmpty()) {
                 return EMPTY_BUNDLES_HANDLER;
@@ -64,8 +67,8 @@ class ExtensionHandlerDispatcher {
             Object returnValue, Object proxyInstance) {
         Object modifiedReturnValue = returnValue;
         for (ExtensionHandler handler : handlerMap.values()) {
-            modifiedReturnValue =
-                    handler.interceptGetterCall(context, fieldMeta, modifiedReturnValue, proxyInstance);
+            modifiedReturnValue = handler.interceptGetterCall(context, fieldMeta,
+                    modifiedReturnValue, proxyInstance);
         }
         return modifiedReturnValue;
     }
@@ -74,7 +77,8 @@ class ExtensionHandlerDispatcher {
             Object newValue, Object proxyInstance) {
         Object modifiedNewValue = newValue;
         for (ExtensionHandler handler : handlerMap.values()) {
-            modifiedNewValue = handler.interceptSetterCall(context, fieldMeta, modifiedNewValue, proxyInstance);
+            modifiedNewValue = handler.interceptSetterCall(context, fieldMeta, modifiedNewValue,
+                    proxyInstance);
         }
         return modifiedNewValue;
     }
@@ -92,18 +96,17 @@ class ExtensionHandlerDispatcher {
         return this.handlerMap.containsKey(method.getDeclaringClass());
     }
 
-    Object handleExtendedInterfaceCall(IBeanContext<?> context, IBeanFieldAccess bean, Object proxyInstance,
-            Method method, Object[] params) throws Throwable {
+    Object handleExtendedInterfaceCall(IBeanContext<?> context, IBeanFieldAccess bean,
+            Object proxyInstance, Method method, Object[] params) throws Throwable {
         return this.handlerForType(method.getDeclaringClass()).handleExtendedInterfaceCall(context,
                 bean, proxyInstance, method, params);
     }
-    
-    void initHandler(Object proxyInstance, 
-            IBeanTypeMetaInfo<?> metaInfo) {
+
+    void initHandler(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
         for (ExtensionHandler handler : this.handlerMap.values()) {
             handler.onInitStateful(proxyInstance, metaInfo);
         }
-        
+
     }
 
 }

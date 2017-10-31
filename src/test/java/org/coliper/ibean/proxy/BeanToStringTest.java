@@ -27,7 +27,7 @@ public class BeanToStringTest {
     public BeanToStringTest() {
         this.factory = ProxyIBeanFactory.builder().build();
     }
-    
+
     private void switchToModernStyleBuilder() {
         this.factory = ProxyIBeanFactory.builder().withBeanStyle(BeanStyle.MODERN).build();
     }
@@ -99,8 +99,8 @@ public class BeanToStringTest {
 
     @Test
     public void testPrimitivesBeanClassic() throws Exception {
-        PrimitivesBeanClassicImpl regularBean = new PrimitivesBeanClassicImpl()
-                .fillWithTestValues();
+        PrimitivesBeanClassicImpl regularBean =
+                new PrimitivesBeanClassicImpl().fillWithTestValues();
         PrimitivesBeanClassic bean = this.factory.create(PrimitivesBeanClassic.class);
         String expected;
         //@formatter:off
@@ -115,7 +115,7 @@ public class BeanToStringTest {
                 + "short=0,shortObject=<null>]";
         //@formatter:on
         assertEquals(expected, bean.toString());
-        
+
         regularBean.copyTo(bean);
         //@formatter:off
         expected = "PrimitivesBeanClassic["
@@ -133,8 +133,8 @@ public class BeanToStringTest {
 
     @Test
     public void testDifferentToStringStyle() throws Exception {
-        IBeanFactory otherFactory = ProxyIBeanFactory.builder()
-                .withToStringStyle(ToStringStyle.JSON_STYLE).build();
+        IBeanFactory otherFactory =
+                ProxyIBeanFactory.builder().withToStringStyle(ToStringStyle.JSON_STYLE).build();
         SampleBeanClassicImpl regularBean = new SampleBeanClassicImpl().fillWithTestValues();
 
         SampleBeanClassic bean = otherFactory.create(SampleBeanClassic.class);

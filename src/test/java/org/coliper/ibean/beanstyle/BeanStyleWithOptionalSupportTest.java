@@ -19,19 +19,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import java.lang.reflect.InvocationHandler;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.coliper.ibean.BeanStyle;
-import org.coliper.ibean.EmptyBean;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
-import org.coliper.ibean.PrimitivesBeanClassic;
 import org.coliper.ibean.extension.OptionalSupport;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -41,7 +37,7 @@ import org.junit.Test;
  *
  */
 public class BeanStyleWithOptionalSupportTest {
-    
+
     public static interface ClassicBeanWithOptional extends OptionalSupport {
 
       //@formatter:off 
@@ -60,8 +56,8 @@ public class BeanStyleWithOptionalSupportTest {
           Optional<ClassicBeanWithOptional> getSelf();
           void setSelf(ClassicBeanWithOptional s);
       //@formatter:on    
-      }
-    
+    }
+
     public static interface ModernBeanWithOptional extends OptionalSupport {
 
       //@formatter:off 
@@ -80,7 +76,7 @@ public class BeanStyleWithOptionalSupportTest {
           Optional<ModernBeanWithOptional> self();
           ModernBeanWithOptional self(ModernBeanWithOptional s);
       //@formatter:on    
-      }
+    }
 
     private static void checkFieldInfo(IBeanFieldMetaInfo meta, String fieldName, Class<?> type,
             String getterName, String setterName) {
@@ -91,7 +87,8 @@ public class BeanStyleWithOptionalSupportTest {
         assertEquals(setterName, meta.setterMethod().getName());
         if (getterName.equals(setterName)) {
             // we "guess" modern style
-            assertSame(meta.getterMethod().getDeclaringClass(), meta.setterMethod().getReturnType());
+            assertSame(meta.getterMethod().getDeclaringClass(),
+                    meta.setterMethod().getReturnType());
         } else {
             // classic style
             assertSame(void.class, meta.setterMethod().getReturnType());
@@ -108,7 +105,7 @@ public class BeanStyleWithOptionalSupportTest {
     public BeanStyleWithOptionalSupportTest() {
         this.parser = new IBeanMetaInfoParser();
     }
-    
+
     @Test
     @Ignore
     public void test() {
@@ -117,8 +114,9 @@ public class BeanStyleWithOptionalSupportTest {
 
     @Test
     public void testClassicBeanWithOptional() {
-        IBeanTypeMetaInfo<ClassicBeanWithOptional> meta = this.parser.parse(ClassicBeanWithOptional.class,
-                BeanStyle.CLASSIC_WITH_OPTIONAL, Collections.emptyList());
+        IBeanTypeMetaInfo<ClassicBeanWithOptional> meta =
+                this.parser.parse(ClassicBeanWithOptional.class, BeanStyle.CLASSIC_WITH_OPTIONAL,
+                        Collections.emptyList());
         assertNotNull(meta);
         assertSame(ClassicBeanWithOptional.class, meta.beanType());
         assertSame(BeanStyle.CLASSIC_WITH_OPTIONAL, meta.beanStyle());
@@ -134,8 +132,9 @@ public class BeanStyleWithOptionalSupportTest {
 
     @Test
     public void testModernBeanWithOptional() {
-        IBeanTypeMetaInfo<ModernBeanWithOptional> meta = this.parser.parse(ModernBeanWithOptional.class,
-                BeanStyle.MODERN_WITH_OPTIONAL, Collections.emptyList());
+        IBeanTypeMetaInfo<ModernBeanWithOptional> meta =
+                this.parser.parse(ModernBeanWithOptional.class, BeanStyle.MODERN_WITH_OPTIONAL,
+                        Collections.emptyList());
         assertNotNull(meta);
         assertSame(ModernBeanWithOptional.class, meta.beanType());
         assertSame(BeanStyle.MODERN_WITH_OPTIONAL, meta.beanStyle());

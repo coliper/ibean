@@ -18,8 +18,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Method;
-import java.util.Comparator;
-import java.util.function.Function;
 
 import org.coliper.ibean.util.ReflectionUtil;
 

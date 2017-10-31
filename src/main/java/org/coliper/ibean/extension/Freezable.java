@@ -18,7 +18,8 @@ package org.coliper.ibean.extension;
  * @author alex@coliper.org
  *
  */
-public interface Freezable <T> {
+public interface Freezable<T> {
     T freeze();
+
     boolean isFrozen();
 }

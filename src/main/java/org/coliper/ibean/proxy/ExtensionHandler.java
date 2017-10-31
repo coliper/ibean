@@ -24,12 +24,15 @@ import org.coliper.ibean.IBeanTypeMetaInfo;
  *
  */
 public interface ExtensionHandler {
-    Object handleExtendedInterfaceCall(IBeanContext<?> context, IBeanFieldAccess bean, Object proxyInstance, Method method, Object[] params) throws Throwable;
-    
+    Object handleExtendedInterfaceCall(IBeanContext<?> context, IBeanFieldAccess bean,
+            Object proxyInstance, Method method, Object[] params) throws Throwable;
 
-    Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta, Object returnValue, Object proxyInstance);
-    
-    Object interceptSetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta, Object newValue, Object proxyInstance);
+    Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
+            Object returnValue, Object proxyInstance);
 
-    default void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {} 
+    Object interceptSetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
+            Object newValue, Object proxyInstance);
+
+    default void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
+    }
 }

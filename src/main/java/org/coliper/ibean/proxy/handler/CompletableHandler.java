@@ -21,8 +21,8 @@ import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.BeanIncompleteException;
 import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.OptionalSupport;
-import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.ExtensionSupport;
+import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
 
 /**
@@ -31,8 +31,8 @@ import org.coliper.ibean.proxy.IBeanFieldAccess;
  */
 public class CompletableHandler extends StatelessExtensionHandler {
 
-    public static final ExtensionSupport SUPPORT = new ExtensionSupport(
-            Completable.class, CompletableHandler.class, false/* stateful */);
+    public static final ExtensionSupport SUPPORT =
+            new ExtensionSupport(Completable.class, CompletableHandler.class, false/* stateful */);
 
     private static final Method IS_COMPLETE_METHOD;
     private static final Method ASSERT_COMPLETE_METHOD;
@@ -70,8 +70,8 @@ public class CompletableHandler extends StatelessExtensionHandler {
         return Boolean.valueOf(isBeanComplete(context, bean));
     }
 
-    private Object handleAssertCompleteCall(IBeanContext<?> context, IBeanFieldAccess bean, Object proxyInstance)
-            throws Throwable {
+    private Object handleAssertCompleteCall(IBeanContext<?> context, IBeanFieldAccess bean,
+            Object proxyInstance) throws Throwable {
         if (!isBeanComplete(context, bean)) {
             throw new BeanIncompleteException();
         }

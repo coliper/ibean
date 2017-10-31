@@ -26,7 +26,7 @@ public class BeanHashCodeTest {
     public BeanHashCodeTest() {
         this.factory = ProxyIBeanFactory.builder().build();
     }
-    
+
     private void switchToModernStyleBuilder() {
         this.factory = ProxyIBeanFactory.builder().withBeanStyle(BeanStyle.MODERN).build();
     }
@@ -75,8 +75,8 @@ public class BeanHashCodeTest {
 
     @Test
     public void testPrimitivesBeanClassicWithValues() throws Exception {
-        PrimitivesBeanClassicImpl regularBean = new PrimitivesBeanClassicImpl()
-                .fillWithTestValues();
+        PrimitivesBeanClassicImpl regularBean =
+                new PrimitivesBeanClassicImpl().fillWithTestValues();
         PrimitivesBeanClassic bean1 = this.factory.create(PrimitivesBeanClassic.class);
         PrimitivesBeanClassic bean2 = this.factory.create(PrimitivesBeanClassic.class);
 

@@ -15,17 +15,10 @@
 package org.coliper.ibean;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collections;
-import java.util.List;
-
-import javax.management.RuntimeErrorException;
-
-import junit.framework.AssertionFailedError;
 
 /**
  * @author alex@coliper.org
@@ -37,8 +30,8 @@ public class BeanTestUtil {
             T bean2) {
         assertNotNull(bean1);
         assertNotNull(bean2);
-        IBeanTypeMetaInfo<T> meta = new IBeanMetaInfoParser().parse(beanType, beanStyle,
-                Collections.emptyList());
+        IBeanTypeMetaInfo<T> meta =
+                new IBeanMetaInfoParser().parse(beanType, beanStyle, Collections.emptyList());
         for (IBeanFieldMetaInfo fieldMeta : meta.fieldMetaInfos()) {
             Object val1;
             Object val2;

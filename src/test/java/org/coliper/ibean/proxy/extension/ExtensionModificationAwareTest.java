@@ -39,7 +39,7 @@ public class ExtensionModificationAwareTest {
         Double getDouble();
       //@formatter:on
     }
-    
+
     public static interface BeanTypeExt extends BeanType, ModificationAwareExt {
     }
 

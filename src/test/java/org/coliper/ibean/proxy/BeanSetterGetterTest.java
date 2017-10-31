@@ -27,7 +27,7 @@ public class BeanSetterGetterTest {
     public BeanSetterGetterTest() {
         this.factory = ProxyIBeanFactory.builder().build();
     }
-    
+
     private void switchToModernStyleBuilder() {
         this.factory = ProxyIBeanFactory.builder().withBeanStyle(BeanStyle.MODERN).build();
     }
@@ -70,7 +70,7 @@ public class BeanSetterGetterTest {
 
         expected.copyTo(bean);
         BeanTestUtil.assertEqualsBean(SampleBeanClassic.class, BeanStyle.CLASSIC, expected, bean);
-        
+
         expected.fillWithNullValues();
         expected.copyTo(bean);
         BeanTestUtil.assertEqualsBean(SampleBeanClassic.class, BeanStyle.CLASSIC, expected, bean);
@@ -85,7 +85,7 @@ public class BeanSetterGetterTest {
 
         expected.copyTo(bean);
         BeanTestUtil.assertEqualsBean(SampleBeanModern.class, BeanStyle.MODERN, expected, bean);
-        
+
         expected.fillWithNullValues();
         expected.copyTo(bean);
         BeanTestUtil.assertEqualsBean(SampleBeanModern.class, BeanStyle.MODERN, expected, bean);

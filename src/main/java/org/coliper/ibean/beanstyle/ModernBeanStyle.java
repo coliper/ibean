@@ -22,33 +22,35 @@ import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.util.ReflectionUtil;
 
 /**
- * A {@link org.coliper.ibean.BeanStyle} implementation that reflects beans of traditional 
- * Java bean style as defined in the 
- * <a href="http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html">
- * Java Bean Specification</a>.
- * <p/>
- * For each property for a bean you basically have<ul>
- * <li>a no-argument getter method starting with "get" and returning the property type</li>
- * <li>a setter method starting with "set", returning void and having one parameter with type of the
- *     property</li>
+ * A {@link org.coliper.ibean.BeanStyle} implementation that has getters and setters named equal
+ * to the property and that return "this" from setters to allow setter chaining.
+ * <p>
+ * In many modern libraries you see a different way of defining setter and getter methods taken 
+ * from other programming languages like C++. This bean style reflects the most common one.
+ * <p>
+ * For each property for a bean you basically have a getter and a setter that are equally named
+ * to the property. 
+ * <ul>
+ * <li>The getter has no arguments and returns the property type.</li>
+ * <li>The setter has one argument with property type and returns the <em>bean class</em>.
+ *     The returned object is always the bean itself. By this you can chain setter calls easily.
+ *     </li>
  * </ul>
- * After the "set" respectively "get" prefix both methods would have the capitalized property name in
- * their name.<br/>
- * For example a property with name "zipCode" and type String would have following setter and getter:
- * <code>
- * void setZipCode(String c);
- * String getZipCode();
+ * For example a property with name "zipCode" and type String in a bean class named Address would
+ * have following setter and getter: <code>
+ * Adress zipCode(String c);
+ * String zipCode();
  * </code>
  * 
- *<p/>
- * This bean style also exists with <code>Optional</code> support in 
- * {@link ClassicBeanStyleWithOptionalSupport}.
+ * <p>
+ * This bean style also exists with <code>Optional</code> support in
+ * {@link ModernBeanStyleWithOptionalSupport}.
  * 
  * @author alex@coliper.org
  *
  */
 public class ModernBeanStyle extends BeanStyle {
-    
+
     public static final ModernBeanStyle INSTANCE = new ModernBeanStyle();
 
     /**
@@ -95,8 +97,7 @@ public class ModernBeanStyle extends BeanStyle {
      * @return
      */
     private boolean methodReturnsDeclaringType(Method method) {
-        return ReflectionUtil.areClassesRelated(
-                method.getDeclaringClass(),method.getReturnType());
+        return ReflectionUtil.areClassesRelated(method.getDeclaringClass(), method.getReturnType());
     }
 
     /*
@@ -123,14 +124,17 @@ public class ModernBeanStyle extends BeanStyle {
         return setterName;
     }
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.BeanStyle#createReturnValueForSetterCall(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.coliper.ibean.BeanStyle#createReturnValueForSetterCall(java.lang.
+     * Object, java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
     public Object createReturnValueForSetterCall(Object instance, Method setterMethod,
             Object newValue) {
         return instance;
     }
-    
-    
+
 }

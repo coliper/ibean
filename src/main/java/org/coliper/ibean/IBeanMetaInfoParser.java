@@ -172,7 +172,8 @@ public class IBeanMetaInfoParser {
             this.assertOrThrowException(
                     beanStyle.isSetterForGetter(beanType, meta.getter, meta.setter), beanType,
                     "getter %s and setter %s are not compatible", meta.getter, meta.getter);
-            meta.type = beanStyle.determineFieldTypeFromGetterAndSetter(beanType, meta.getter, meta.setter);
+            meta.type = beanStyle.determineFieldTypeFromGetterAndSetter(beanType, meta.getter,
+                    meta.setter);
         }
     }
 

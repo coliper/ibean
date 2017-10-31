@@ -27,7 +27,7 @@ public class BeanEqualsTest {
     public BeanEqualsTest() {
         this.factory = ProxyIBeanFactory.builder().build();
     }
-    
+
     private void switchToModernStyleBuilder() {
         this.factory = ProxyIBeanFactory.builder().withBeanStyle(BeanStyle.MODERN).build();
     }
@@ -179,7 +179,7 @@ public class BeanEqualsTest {
         SampleBeanClassic bean1 = this.factory.create(SampleBeanClassic.class);
         SampleBeanClassic bean2 = this.factory.create(SampleBeanClassic.class);
         SampleBeanClassic bean3 = this.factory.create(SampleBeanClassic.class);
-        
+
         // one bean cycle (1) <-> (1) , (2) <-> (2)
         bean1.setSelf(bean1);
         bean2.setSelf(bean2);
@@ -188,7 +188,7 @@ public class BeanEqualsTest {
         assertTrue(bean1.equals(bean1));
         assertTrue(bean2.equals(bean2));
 
-        // two bean cycle (1) <-> (2) 
+        // two bean cycle (1) <-> (2)
         bean2.setSelf(bean1);
         bean1.setSelf(bean2);
         assertFalse(bean1.equals(bean2));
@@ -222,6 +222,6 @@ public class BeanEqualsTest {
         assertTrue(bean2.equals(bean1));
         assertTrue(bean1.equals(bean1));
         assertTrue(bean2.equals(bean2));
-        
+
     }
 }

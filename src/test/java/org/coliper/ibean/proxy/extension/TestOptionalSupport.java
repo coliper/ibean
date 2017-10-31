@@ -18,8 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
-import org.coliper.ibean.extension.BeanIncompleteException;
-import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Test;
@@ -42,7 +40,6 @@ public class TestOptionalSupport {
         Optional<Double> getDouble();
       //@formatter:on
     }
-    
 
     @Test
     public void test() throws Exception {

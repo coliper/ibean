@@ -22,104 +22,30 @@ import java.util.Optional;
 
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.extension.OptionalSupport;
-import org.coliper.ibean.util.ReflectionUtil;
 
 /**
- * A {@link BeanStyle} implementation that is identical to the {@link ModernBeanStyle} but has
- * also {@link Optional} support. The difference to the {@link ModernBeanStyle} is that for a
- * property of type <code>T</code> it allows a getter method that either returns <code>T</code> or
+ * A {@link BeanStyle} implementation that is identical to the
+ * {@link ModernBeanStyle} but has also {@link Optional} support. The difference
+ * to the {@link ModernBeanStyle} is that for a property of type <code>T</code>
+ * it allows a getter method that either returns <code>T</code> or
  * <code>Optional&lt;T&gt;</code>.
- * <p/>
- * This bean style is only allowed for bean types that implement extension interface 
- * {@link OptionalSupport}. See {@link OptionalSupport} for more information.
- *  
+ * <p>
+ * This bean style is only allowed for bean types that implement extension
+ * interface {@link OptionalSupport}. See {@link OptionalSupport} for more
+ * information.
+ * 
  * @author alex@coliper.org
  */
 public class ModernBeanStyleWithOptionalSupport extends ModernBeanStyle {
-    
-    public static final ModernBeanStyleWithOptionalSupport INSTANCE = new ModernBeanStyleWithOptionalSupport();
+
+    public static final ModernBeanStyleWithOptionalSupport INSTANCE =
+            new ModernBeanStyleWithOptionalSupport();
 
     /**
-     * 
+     * {@link #INSTANCE} should be the only instance.
      */
-    private ModernBeanStyleWithOptionalSupport() {
+    protected ModernBeanStyleWithOptionalSupport() {
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.coliper.ibean.BeanStyle#isGetterMethod(java.lang.Class,
-     * java.lang.reflect.Method)
-     */
-    @Override
-    public boolean isGetterMethod(Class<?> beanType, Method method) {
-        requireNonNull(beanType, "beanType");
-        requireNonNull(method, "method");
-        assertMethodBelongsToType(method, beanType);
-        return hasGetterMethodSignature(method);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.coliper.ibean.BeanStyle#isSetterMethod(java.lang.Class,
-     * java.lang.reflect.Method)
-     */
-    @Override
-    public boolean isSetterMethod(Class<?> beanType, Method method) {
-        requireNonNull(beanType, "beanType");
-        requireNonNull(method, "method");
-        assertMethodBelongsToType(method, beanType);
-        return hasSetterMethodSignature(method);
-    }
-
-    @Override
-    protected boolean hasSetterMethodSignature(Method method) {
-        return super.hasSetterMethodSignature(method) && this.methodReturnsDeclaringType(method);
-    }
-
-    /**
-     * @param method
-     * @return
-     */
-    private boolean methodReturnsDeclaringType(Method method) {
-        return ReflectionUtil.areClassesRelated(
-                method.getDeclaringClass(),method.getReturnType());
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.coliper.ibean.BeanStyle#convertGetterNameToFieldName(java.lang.
-     * String)
-     */
-    @Override
-    public String convertGetterNameToFieldName(String getterName) {
-        requireNonNull(getterName, "getterName");
-        return getterName;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.coliper.ibean.BeanStyle#convertSetterNameToFieldName(java.lang.
-     * String)
-     */
-    @Override
-    public String convertSetterNameToFieldName(String setterName) {
-        requireNonNull(setterName, "setterName");
-        return setterName;
-    }
-
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.BeanStyle#createReturnValueForSetterCall(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
-     */
-    @Override
-    public Object createReturnValueForSetterCall(Object instance, Method setterMethod,
-            Object newValue) {
-        return instance;
-    }
-    
 
     @Override
     public boolean isSetterForGetter(Class<?> beanType, Method getterMethod, Method setterMethod) {
@@ -128,14 +54,14 @@ public class ModernBeanStyleWithOptionalSupport extends ModernBeanStyle {
         requireNonNull(setterMethod, "setterMethod");
         checkArgument(this.isGetterMethod(beanType, getterMethod), "not a getter: " + getterMethod);
         checkArgument(this.isSetterMethod(beanType, setterMethod), "not a setter: " + setterMethod);
-        
+
         String fieldNameFromGetter = this.convertGetterNameToFieldName(getterMethod.getName());
         String fieldNameFromSetter = this.convertSetterNameToFieldName(setterMethod.getName());
         Class<?> typeFromSetter = setterMethod.getParameterTypes()[0];
         Class<?> typeFromGetter = getterMethod.getReturnType();
-        final boolean getterAndSetterTypesCompatible = typeFromGetter == typeFromSetter || isAllowedOptionalReturnTypeForGetter(beanType, typeFromGetter);
-        return fieldNameFromGetter.equals(fieldNameFromSetter) 
-                && getterAndSetterTypesCompatible;
+        final boolean getterAndSetterTypesCompatible = typeFromGetter == typeFromSetter
+                || isAllowedOptionalReturnTypeForGetter(beanType, typeFromGetter);
+        return fieldNameFromGetter.equals(fieldNameFromSetter) && getterAndSetterTypesCompatible;
     }
 
     @Override
@@ -147,7 +73,9 @@ public class ModernBeanStyleWithOptionalSupport extends ModernBeanStyle {
         checkArgument(argTypes.length == 1, "unexpected no of arguments in setter " + setterMethod);
         final Class<?> getterRetType = getterMethod.getReturnType();
         final Class<?> setterArgType = argTypes[0];
-        checkArgument(setterArgType == getterRetType || isAllowedOptionalReturnTypeForGetter(beanType, getterRetType), 
+        checkArgument(
+                setterArgType == getterRetType
+                        || isAllowedOptionalReturnTypeForGetter(beanType, getterRetType),
                 "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
         return setterArgType;
     }
@@ -161,5 +89,10 @@ public class ModernBeanStyleWithOptionalSupport extends ModernBeanStyle {
             Class<?> typeFromGetter) {
         return OptionalSupport.class.isAssignableFrom(beanType) && typeFromGetter == Optional.class;
     }
-   
+
+    @Override
+    protected boolean hasGetterMethodSignature(Method method) {
+        return super.hasGetterMethodSignature(method) || method.getReturnType() == Optional.class;
+    }
+
 }

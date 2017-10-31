@@ -17,10 +17,8 @@ package org.coliper.ibean.proxy;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.coliper.ibean.util.ReflectionUtil;
 
 /**
@@ -42,7 +40,6 @@ public class ExtensionSupport {
     private final Class<? extends ExtensionHandler> handlerType;
     private final boolean handlerStateful;
 
-    
     /**
      * @param supportedInterface
      * @param handlerType

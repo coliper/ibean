@@ -27,7 +27,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
     private String string;
     private SampleBeanModern self;
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#intObject(java.lang.Integer)
      */
     @Override
@@ -36,7 +38,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#intObject()
      */
     @Override
@@ -44,7 +48,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this.intObject;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#booleanPrimitive(boolean)
      */
     @Override
@@ -53,7 +59,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#booleanPrimitive()
      */
     @Override
@@ -61,7 +69,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this.booleanPrimitive;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#date(java.util.Date)
      */
     @Override
@@ -70,7 +80,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#date()
      */
     @Override
@@ -78,7 +90,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this.date;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#string(java.lang.String)
      */
     @Override
@@ -87,7 +101,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#string()
      */
     @Override
@@ -95,7 +111,9 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this.string;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.SampleBeanModern#self()
      */
     @Override
@@ -103,15 +121,18 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         return this.self;
     }
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.SampleBeanModern#self(org.coliper.ibean.SampleBeanModern)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.coliper.ibean.SampleBeanModern#self(org.coliper.ibean.
+     * SampleBeanModern)
      */
     @Override
     public SampleBeanModern self(SampleBeanModern s) {
         this.self = s;
         return this;
     }
-    
+
     public SampleBeanModernImpl fillWithTestValues() {
         this.booleanPrimitive = true;
         this.date = new Date(0L);
@@ -120,7 +141,7 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         this.string = "dummy 2134452";
         return this;
     }
-    
+
     public SampleBeanModernImpl fillWithNullValues() {
         this.booleanPrimitive = false;
         this.date = null;
@@ -129,7 +150,6 @@ public class SampleBeanModernImpl implements SampleBeanModern {
         this.string = null;
         return this;
     }
-
 
     public boolean isEqual(SampleBeanModern other) {
         if (this == other)
@@ -162,7 +182,6 @@ public class SampleBeanModernImpl implements SampleBeanModern {
             return false;
         return true;
     }
-    
 
     public void copyTo(SampleBeanModern other) {
         other.booleanPrimitive(this.booleanPrimitive);

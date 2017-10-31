@@ -17,13 +17,8 @@ package org.coliper.ibean.proxy.extension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import java.util.Optional;
-
 import org.coliper.ibean.extension.BeanFrozenException;
-import org.coliper.ibean.extension.BeanIncompleteException;
-import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.Freezable;
-import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Test;

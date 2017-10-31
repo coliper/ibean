@@ -20,5 +20,6 @@ package org.coliper.ibean.extension;
  */
 public interface ModificationAwareExt extends ModificationAware {
     String[] getModifiedFieldNames();
+
     boolean allFieldsModified();
 }

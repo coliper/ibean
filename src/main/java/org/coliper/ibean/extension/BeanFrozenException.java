@@ -26,5 +26,4 @@ public class BeanFrozenException extends IllegalStateException {
         super("setter calls are not permitted when bean is frozen");
     }
 
-  
 }

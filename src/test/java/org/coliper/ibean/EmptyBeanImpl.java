@@ -20,5 +20,4 @@ package org.coliper.ibean;
  */
 public class EmptyBeanImpl implements EmptyBean {
 
-
 }

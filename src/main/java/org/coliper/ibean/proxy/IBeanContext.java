@@ -22,38 +22,41 @@ import org.coliper.ibean.IBeanTypeMetaInfo;
  * @author alex@coliper.org
  *
  */
-public class IBeanContext <T> {
+public class IBeanContext<T> {
     private final IBeanTypeMetaInfo<T> metaInfo;
     private final ToStringStyle toStringStyle;
     private final BeanStyle beanStyle;
+
     /**
      * @param metaInfo
      * @param toStringStyle
      * @param beanStyle
      */
-    IBeanContext(IBeanTypeMetaInfo<T> metaInfo, ToStringStyle toStringStyle,
-            BeanStyle beanStyle) {
+    IBeanContext(IBeanTypeMetaInfo<T> metaInfo, ToStringStyle toStringStyle, BeanStyle beanStyle) {
         this.metaInfo = metaInfo;
         this.toStringStyle = toStringStyle;
         this.beanStyle = beanStyle;
     }
+
     /**
      * @return the metaInfo
      */
     public IBeanTypeMetaInfo<T> metaInfo() {
         return metaInfo;
     }
+
     /**
      * @return the toStringStyle
      */
     public ToStringStyle toStringStyle() {
         return toStringStyle;
     }
+
     /**
      * @return the beanStyle
      */
     public BeanStyle beanStyle() {
         return beanStyle;
     }
-    
+
 }

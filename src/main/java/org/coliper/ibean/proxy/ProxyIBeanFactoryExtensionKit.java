@@ -14,21 +14,16 @@
 
 package org.coliper.ibean.proxy;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import org.coliper.ibean.IBeanTypeMetaInfo;
-import org.coliper.ibean.util.ReflectionUtil;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 /**
  * @author alex@coliper.org
@@ -45,8 +40,7 @@ class ProxyIBeanFactoryExtensionKit {
          * @param interfaceType
          * @param handler
          */
-        IBeanHandlerInterceptorBundle(ExtensionHandler handler,
-                ExtensionSupport support) {
+        IBeanHandlerInterceptorBundle(ExtensionHandler handler, ExtensionSupport support) {
             this.support = support;
             this.handler = Optional.ofNullable(handler);
         }
@@ -72,8 +66,7 @@ class ProxyIBeanFactoryExtensionKit {
      * @param extType
      * @return
      */
-    private static IBeanHandlerInterceptorBundle createGlobalBundle(
-            ExtensionSupport intfSupport) {
+    private static IBeanHandlerInterceptorBundle createGlobalBundle(ExtensionSupport intfSupport) {
         final ExtensionHandler handler;
         if (intfSupport.handlerStateful()) {
             handler = null;

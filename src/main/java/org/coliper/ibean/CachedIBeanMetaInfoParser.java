@@ -18,31 +18,33 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 /**
  * @author alex@coliper.org
  *
  */
 public class CachedIBeanMetaInfoParser extends IBeanMetaInfoParser {
-    
+
     private static final Map<Class<?>, IBeanTypeMetaInfo<?>> CACHE = new ConcurrentHashMap<>();
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.IBeanMetaInfoParser#parse(java.lang.Class, org.coliper.ibean.BeanStyle, java.util.List)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.coliper.ibean.IBeanMetaInfoParser#parse(java.lang.Class,
+     * org.coliper.ibean.BeanStyle, java.util.List)
      */
     @SuppressWarnings("unchecked")
     @Override
     public <T> IBeanTypeMetaInfo<T> parse(Class<T> beanType, final BeanStyle beanStyle,
             final List<Class<?>> ignorableSuperInterfaces) {
-        IBeanTypeMetaInfo<?> ret = CACHE.computeIfAbsent(beanType, 
+        IBeanTypeMetaInfo<?> ret = CACHE.computeIfAbsent(beanType,
                 (t) -> super.parse(t, beanStyle, ignorableSuperInterfaces));
-        // Only for one bean style meta is cached assuming there are not several bean styles used
+        // Only for one bean style meta is cached assuming there are not several
+        // bean styles used
         // in parallel.
         if (!ret.beanStyle().equals(beanStyle)) {
             return super.parse(beanType, beanStyle, ignorableSuperInterfaces);
         }
         return (IBeanTypeMetaInfo<T>) ret;
     }
-   
 
 }

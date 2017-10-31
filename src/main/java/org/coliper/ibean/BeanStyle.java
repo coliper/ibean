@@ -18,7 +18,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Method;
-import java.util.Optional;
 
 import org.coliper.ibean.beanstyle.ClassicBeanStyle;
 import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
@@ -34,8 +33,10 @@ public abstract class BeanStyle {
 
     public static final BeanStyle CLASSIC = ClassicBeanStyle.INSTANCE;
     public static final BeanStyle MODERN = ModernBeanStyle.INSTANCE;
-    public static final BeanStyle CLASSIC_WITH_OPTIONAL = ClassicBeanStyleWithOptionalSupport.INSTANCE;
-    public static final BeanStyle MODERN_WITH_OPTIONAL = ModernBeanStyleWithOptionalSupport.INSTANCE;
+    public static final BeanStyle CLASSIC_WITH_OPTIONAL =
+            ClassicBeanStyleWithOptionalSupport.INSTANCE;
+    public static final BeanStyle MODERN_WITH_OPTIONAL =
+            ModernBeanStyleWithOptionalSupport.INSTANCE;
 
     public abstract boolean isGetterMethod(Class<?> beanType, Method method);
 
@@ -66,20 +67,19 @@ public abstract class BeanStyle {
     protected boolean hasGetterMethodSignature(Method method) {
         return getNoOfMethodParameters(method) == 0 && method.getReturnType() != void.class;
     }
-    
+
     public boolean isSetterForGetter(Class<?> beanType, Method getterMethod, Method setterMethod) {
         requireNonNull(beanType, "beanType");
         requireNonNull(getterMethod, "getterMethod");
         requireNonNull(setterMethod, "setterMethod");
         checkArgument(this.isGetterMethod(beanType, getterMethod), "not a getter: " + getterMethod);
         checkArgument(this.isSetterMethod(beanType, setterMethod), "not a setter: " + setterMethod);
-        
+
         String fieldNameFromGetter = this.convertGetterNameToFieldName(getterMethod.getName());
         String fieldNameFromSetter = this.convertSetterNameToFieldName(setterMethod.getName());
         Class<?> typeFromSetter = setterMethod.getParameterTypes()[0];
         Class<?> typeFromGetter = getterMethod.getReturnType();
-        return fieldNameFromGetter.equals(fieldNameFromSetter) 
-                && typeFromGetter == typeFromSetter;
+        return fieldNameFromGetter.equals(fieldNameFromSetter) && typeFromGetter == typeFromSetter;
     }
 
     public Class<?> determineFieldTypeFromGetterAndSetter(Class<?> beanType, Method getterMethod,
@@ -88,7 +88,7 @@ public abstract class BeanStyle {
         requireNonNull(setterMethod, "setterMethod");
         Class<?>[] argTypes = setterMethod.getParameterTypes();
         checkArgument(argTypes.length == 1, "unexpected no of arguments in setter " + setterMethod);
-        checkArgument(argTypes[0] == getterMethod.getReturnType(), 
+        checkArgument(argTypes[0] == getterMethod.getReturnType(),
                 "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
         return argTypes[0];
     }

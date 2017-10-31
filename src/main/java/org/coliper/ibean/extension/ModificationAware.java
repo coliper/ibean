@@ -20,6 +20,6 @@ package org.coliper.ibean.extension;
  */
 public interface ModificationAware {
     boolean isModified();
-    
+
     void resetModified();
 }

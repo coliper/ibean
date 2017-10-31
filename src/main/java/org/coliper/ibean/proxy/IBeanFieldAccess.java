@@ -21,11 +21,13 @@ import org.coliper.ibean.IBeanFieldMetaInfo;
  *
  */
 public interface IBeanFieldAccess {
-    
+
     void setFieldValue(String fieldName, Object newValue);
+
     Object getFieldValue(String fieldName);
-    
+
     void setFieldValue(IBeanFieldMetaInfo fieldMeta, Object newValue);
+
     Object getFieldValue(IBeanFieldMetaInfo fieldMeta);
 
 }

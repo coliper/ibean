@@ -20,23 +20,26 @@ import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.extension.BeanFrozenException;
 import org.coliper.ibean.extension.TempFreezable;
-import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.ExtensionSupport;
+import org.coliper.ibean.proxy.IBeanContext;
 
 /**
  * @author alex@coliper.org
  *
  */
-public class FreezableHandler extends StatefulExtensionHandler implements TempFreezable {
+public class FreezableHandler extends StatefulExtensionHandler implements TempFreezable<Object> {
     public static final ExtensionSupport SUPPORT =
-    new ExtensionSupport(TempFreezable.class,
-            FreezableHandler.class, true/*stateful*/);
+            new ExtensionSupport(TempFreezable.class, FreezableHandler.class, true/* stateful */);
 
     private boolean frozen = false;
     private Object proxyInstance = null;
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.proxy.IBeanInvocationHandler#onInitStateful(org.coliper.ibean.IBeanTypeMetaInfo)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.coliper.ibean.proxy.IBeanInvocationHandler#onInitStateful(org.coliper
+     * .ibean.IBeanTypeMetaInfo)
      */
     @Override
     public void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
@@ -44,8 +47,12 @@ public class FreezableHandler extends StatefulExtensionHandler implements TempFr
         this.proxyInstance = proxyInstance;
     }
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.proxy.handler.StatefulExtendedInterfaceHandler#interceptSetterCall(org.coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.coliper.ibean.proxy.handler.StatefulExtendedInterfaceHandler#
+     * interceptSetterCall(org.coliper.ibean.proxy.IBeanContext,
+     * org.coliper.ibean.IBeanFieldMetaInfo, java.lang.Object)
      */
     @Override
     public Object interceptSetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
@@ -56,7 +63,9 @@ public class FreezableHandler extends StatefulExtensionHandler implements TempFr
         return newValue;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.extension.Freezable#freeze()
      */
     @Override
@@ -65,7 +74,9 @@ public class FreezableHandler extends StatefulExtensionHandler implements TempFr
         return this.proxyInstance;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.extension.Freezable#isFrozen()
      */
     @Override
@@ -73,7 +84,9 @@ public class FreezableHandler extends StatefulExtensionHandler implements TempFr
         return this.frozen;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see org.coliper.ibean.extension.TempFreezable#unfreeze()
      */
     @Override

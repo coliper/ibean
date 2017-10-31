@@ -17,11 +17,9 @@ package org.coliper.ibean.proxy.handler;
 import java.util.Optional;
 
 import org.coliper.ibean.IBeanFieldMetaInfo;
-import org.coliper.ibean.extension.NullSafe;
-import org.coliper.ibean.extension.NullSafetyException;
 import org.coliper.ibean.extension.OptionalSupport;
-import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.ExtensionSupport;
+import org.coliper.ibean.proxy.IBeanContext;
 
 /**
  * @author alex@coliper.org
@@ -29,12 +27,15 @@ import org.coliper.ibean.proxy.ExtensionSupport;
  */
 public class OptionalSupportHandler extends StatelessExtensionHandler {
 
-    public static final ExtensionSupport SUPPORT =
-    new ExtensionSupport(OptionalSupport.class,
-            OptionalSupportHandler.class, false/*stateful*/);
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(OptionalSupport.class,
+            OptionalSupportHandler.class, false/* stateful */);
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.proxy.handler.StatelessExtendedInterfaceHandler#interceptGetterCall(org.coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.coliper.ibean.proxy.handler.StatelessExtendedInterfaceHandler#
+     * interceptGetterCall(org.coliper.ibean.proxy.IBeanContext,
+     * org.coliper.ibean.IBeanFieldMetaInfo, java.lang.Object)
      */
     @Override
     public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,

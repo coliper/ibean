@@ -14,19 +14,10 @@
 
 package org.coliper.ibean.proxy.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import java.util.Optional;
-
-import org.coliper.ibean.extension.BeanFrozenException;
-import org.coliper.ibean.extension.BeanIncompleteException;
-import org.coliper.ibean.extension.Completable;
-import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.NullSafetyException;
-import org.coliper.ibean.extension.OptionalSupport;
-import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Test;
 
@@ -45,7 +36,7 @@ public class NullSafeTest {
         void setInt(int i);
       //@formatter:on
     }
-    
+
     @Test()
     public void testNullSafetyExceptionAfterCreation() throws Exception {
         NullSafeBean bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
@@ -53,7 +44,7 @@ public class NullSafeTest {
         bean.getInt();
         assertThatExceptionOfType(NullSafetyException.class).isThrownBy(() -> bean.getString());
     }
-    
+
     @Test()
     public void testNullSafetyExceptionFieldSetBackToNull() throws Exception {
         NullSafeBean bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()

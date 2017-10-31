@@ -26,14 +26,14 @@ public class IBean {
     static {
         resetToDefaultFactory();
     }
-    
+
     private static IBeanFactory factory;
-    
+
     public static <T> T newOf(Class<T> beanType) {
         requireNonNull(beanType, "beanType");
         return factory.create(beanType);
     }
-    
+
     public static void setFactory(IBeanFactory newFactory) {
         requireNonNull(newFactory, "newFactory");
         factory = newFactory;

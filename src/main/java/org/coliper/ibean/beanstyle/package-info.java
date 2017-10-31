@@ -13,7 +13,8 @@
  */
 
 /**
- * Contains variations of bean styles as subclasses of {@link org.coliper.ibean.BeanStyle}.
- * See {@link org.coliper.ibean.BeanStyle} for more information about what a bean style is.
+ * Contains variations of bean styles as subclasses of
+ * {@link org.coliper.ibean.BeanStyle}. See {@link org.coliper.ibean.BeanStyle}
+ * for more information about what a bean style is.
  */
 package org.coliper.ibean.beanstyle;

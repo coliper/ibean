@@ -26,5 +26,4 @@ public class BeanIncompleteException extends IllegalStateException {
         super("bean contains null values");
     }
 
-  
 }

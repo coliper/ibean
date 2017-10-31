@@ -39,9 +39,10 @@ import org.junit.Test;
  * @author alex@coliper.org
  *
  */
-public class ConcurrencyTest  {
+public class ConcurrencyTest {
 
-    public static interface BeanType extends Completable<BeanType>, TempFreezable<BeanType>, ModificationAwareExt, OptionalSupport, NullSafe {
+    public static interface BeanType extends Completable<BeanType>, TempFreezable<BeanType>,
+            ModificationAwareExt, OptionalSupport, NullSafe {
       //@formatter:off 
           void setBooleanPrimitive(boolean b);
           boolean isBooleanPrimitive();
@@ -53,21 +54,20 @@ public class ConcurrencyTest  {
           Optional<Date> getDate();
 
       //@formatter:on    
-      }
-    
+    }
+
     private static final int NO_OF_THREADS = 100;
     private static final int NO_OF_LOOPS = 100000;
-    
-    
+
     private final IBeanFactory factory;
     private final BeanType bean;
     private final ExecutorService executor = Executors.newFixedThreadPool(NO_OF_THREADS);
-    
+
     public ConcurrencyTest() {
         this.factory = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build();
         this.bean = this.factory.create(BeanType.class);
     }
-    
+
     @After
     public void shutdown() throws InterruptedException {
         this.executor.shutdown();
@@ -76,43 +76,45 @@ public class ConcurrencyTest  {
 
     private void testMultithreaded(Callable<?> testMethod) {
         List<Future<?>> futures = new ArrayList<>();
-        for (int i=0; i<NO_OF_THREADS; i++) {
+        for (int i = 0; i < NO_OF_THREADS; i++) {
             futures.add(this.executor.submit(testMethod));
         }
-        futures.forEach((f) -> { try {
-            f.get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            Assert.fail("unexpected: " + e);
-        } });
+        futures.forEach((f) -> {
+            try {
+                f.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+                Assert.fail("unexpected: " + e);
+            }
+        });
     }
-    
+
     @Test
     public void testFactory() throws Exception {
         testMultithreaded(this::hammerOnFactory);
     }
 
     public Object hammerOnFactory() {
-        for (int i=0; i<NO_OF_LOOPS; i++) {
+        for (int i = 0; i < NO_OF_LOOPS; i++) {
             this.factory.create(BeanType.class);
         }
         return null;
     }
-    
+
     @Test
     public void testBean() throws Exception {
         testMultithreaded(this::hammerOnBean);
     }
 
     public Object hammerOnBean() {
-        for (int i=0; i<NO_OF_LOOPS; i++) {
+        for (int i = 0; i < NO_OF_LOOPS; i++) {
             this.bean.setBooleanPrimitive(false);
             this.bean.setDate(null);
             this.bean.setString("slfdj");
             this.bean.isBooleanPrimitive();
             this.bean.getString();
             this.bean.getDate();
-            
+
             this.bean.isComplete();
             this.bean.assertComplete();
             this.bean.isFrozen();
@@ -124,5 +126,5 @@ public class ConcurrencyTest  {
         }
         return null;
     }
-    
+
 }

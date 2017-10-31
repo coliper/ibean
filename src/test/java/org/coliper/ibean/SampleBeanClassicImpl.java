@@ -29,71 +29,87 @@ public class SampleBeanClassicImpl implements SampleBeanClassic {
     private Date date;
     private String string;
     private SampleBeanClassic self;
+
     /**
      * @return the intPrimitive
      */
     public Integer getIntObject() {
         return intObject;
     }
+
     /**
-     * @param intPrimitive the intPrimitive to set
+     * @param intPrimitive
+     *            the intPrimitive to set
      */
     public void setIntObject(Integer intObject) {
         this.intObject = intObject;
     }
+
     /**
      * @return the booleanObject
      */
     public boolean isBooleanPrimitive() {
         return booleanPrimitive;
     }
+
     /**
-     * @param booleanObject the booleanObject to set
+     * @param booleanObject
+     *            the booleanObject to set
      */
     public void setBooleanPrimitive(boolean booleanPrimitive) {
         this.booleanPrimitive = booleanPrimitive;
     }
+
     /**
      * @return the date
      */
     public Date getDate() {
         return date;
     }
+
     /**
-     * @param date the date to set
+     * @param date
+     *            the date to set
      */
     public void setDate(Date date) {
         this.date = date;
     }
+
     /**
      * @return the string
      */
     public String getString() {
         return string;
     }
+
     /**
-     * @param string the string to set
+     * @param string
+     *            the string to set
      */
     public void setString(String string) {
         this.string = string;
     }
+
     /**
      * @return the self
      */
     public SampleBeanClassic getSelf() {
         return self;
     }
+
     /**
-     * @param self the self to set
+     * @param self
+     *            the self to set
      */
     public void setSelf(SampleBeanClassic self) {
         this.self = self;
     }
-    
-    public void copyTo(SampleBeanClassic other) throws IllegalAccessException, InvocationTargetException {
+
+    public void copyTo(SampleBeanClassic other)
+            throws IllegalAccessException, InvocationTargetException {
         BeanUtils.copyProperties(other, this);
     }
-    
+
     public SampleBeanClassicImpl fillWithTestValues() {
         this.setBooleanPrimitive(true);
         this.setDate(new Date(0L));
@@ -102,7 +118,7 @@ public class SampleBeanClassicImpl implements SampleBeanClassic {
         this.setString("dummy 2134452");
         return this;
     }
-    
+
     public SampleBeanClassicImpl fillWithNullValues() {
         this.setBooleanPrimitive(false);
         this.setDate(null);
@@ -111,5 +127,5 @@ public class SampleBeanClassicImpl implements SampleBeanClassic {
         this.setString(null);
         return this;
     }
-    
+
 }

@@ -26,5 +26,4 @@ public class NullSafetyException extends IllegalStateException {
         super("getter must not be called as value is null");
     }
 
-  
 }

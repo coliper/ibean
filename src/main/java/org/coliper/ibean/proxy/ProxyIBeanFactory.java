@@ -51,7 +51,7 @@ public class ProxyIBeanFactory implements IBeanFactory {
                     FreezableHandler.SUPPORT,
                     CompletableHandler.SUPPORT);
   //@formatter:on 
-    
+
     private final IBeanMetaInfoParser metaInfoParser;
     private final ToStringStyle toStringStyle;
     private final BeanStyle beanStyle;

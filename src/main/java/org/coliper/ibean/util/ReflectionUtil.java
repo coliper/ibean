@@ -16,7 +16,6 @@ package org.coliper.ibean.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,12 +35,15 @@ public class ReflectionUtil {
 
     /**
      * Determines if two classes are linked in a class hierarchy.
-     * @param type1 a class or <code>null</code>
-     * @param type2 the class to compare type1 with or <code>null</code>
-     * @return <code>true</code> if both classes are identical or if one type is base class of 
-     *      other. 
-     *      <code>false</code> if one of the given types or both are <code>null</code> or not in a
-     *      direct hierarchical relation.
+     * 
+     * @param type1
+     *            a class or <code>null</code>
+     * @param type2
+     *            the class to compare type1 with or <code>null</code>
+     * @return <code>true</code> if both classes are identical or if one type is
+     *         base class of other. <code>false</code> if one of the given types
+     *         or both are <code>null</code> or not in a direct hierarchical
+     *         relation.
      */
     public static boolean areClassesRelated(Class<?> type1, Class<?> type2) {
         if (type1 == null || type2 == null) {
@@ -52,20 +54,31 @@ public class ReflectionUtil {
 
     /**
      * Checks if method belongs to a given type or super-type.
-     * @return <code>true</code> if given method is declared in given type or one of its super 
-     *      types.
+     * 
+     * @param method
+     *            the method to check
+     * @param type
+     *            any class to search for the given method
+     * @return <code>true</code> if given method is declared in given type or
+     *         one of its super types.
      */
     public static boolean doesMethodBelongToType(Method method, Class<?> type) {
         return method.getDeclaringClass().isAssignableFrom(type);
     }
 
     /**
-     * Calls {@link Method#invoke(Object, Object...)} on the given method but catches away all 
-     * thrown Exceptions.
-     * @param object the object the method to call on. Can be <code>null</code> for static methods
-     * @param method the method to execute
+     * Calls {@link Method#invoke(Object, Object...)} on the given method but
+     * catches away all thrown Exceptions.
+     * 
+     * @param object
+     *            the object the method to call on. Can be <code>null</code> for
+     *            static methods
+     * @param method
+     *            the method to execute
      * @return the value returned from method call
-     * @throws RuntimeException wrapped around the checked exception from the method invocation
+     * @throws RuntimeException
+     *             wrapped around the checked exception from the method
+     *             invocation
      */
     public static Object invokeMethodUnchecked(Object object, Method method) {
         try {
@@ -76,11 +89,13 @@ public class ReflectionUtil {
     }
 
     /**
-     * Collects all classes and interfaces a given type extends or implements. This methods executes
-     * fast as its results are cached.
-     * @param rootType the class to examine
-     * @return an immutable list of super classes and interfaces including the given type but excluding 
-     *      {@link Object}
+     * Collects all classes and interfaces a given type extends or implements.
+     * This methods executes fast as its results are cached.
+     * 
+     * @param rootType
+     *            the class to examine
+     * @return an immutable list of super classes and interfaces including the
+     *         given type but excluding {@link Object}
      */
     public static List<Class<?>> getSuperTypesInclRoot(final Class<?> rootType) {
         return SUPERTYPE_INCL_CACHE.computeIfAbsent(rootType,
@@ -92,7 +107,10 @@ public class ReflectionUtil {
         final Iterable<Class<?>> classIterable =
                 ClassUtils.hierarchy(rootType, ClassUtils.Interfaces.INCLUDE);
         final ImmutableList.Builder<Class<?>> list = ImmutableList.builder();
-        classIterable.forEach((c) -> { if (c != Object.class) list.add(c); });
+        classIterable.forEach((c) -> {
+            if (c != Object.class)
+                list.add(c);
+        });
         return list.build();
     }
 

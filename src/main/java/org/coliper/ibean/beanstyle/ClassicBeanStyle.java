@@ -22,26 +22,28 @@ import java.lang.reflect.Method;
 import org.coliper.ibean.BeanStyle;
 
 /**
- * A {@link org.coliper.ibean.BeanStyle} implementation that reflects beans of traditional 
- * Java bean style as defined in the 
- * <a href="http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html">
+ * A {@link org.coliper.ibean.BeanStyle} implementation that reflects beans of
+ * traditional Java bean style as defined in the <a href=
+ * "http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html">
  * Java Bean Specification</a>.
- * <p/>
- * For each property for a bean you basically have<ul>
- * <li>a no-argument getter method starting with "get" and returning the property type</li>
- * <li>a setter method starting with "set", returning void and having one parameter with type of the
- *     property</li>
+ * <p>
+ * For each property for a bean you basically have
+ * <ul>
+ * <li>a no-argument getter method starting with "get" and returning the
+ * property type</li>
+ * <li>a setter method starting with "set", returning void and having one
+ * parameter with type of the property</li>
  * </ul>
- * After the "set" respectively "get" prefix both methods would have the capitalized property name in
- * their name.<br/>
- * For example a property with name "zipCode" and type String would have following setter and getter:
- * <code>
+ * After the "set" respectively "get" prefix both methods would have the
+ * capitalized property name in their name.<br>
+ * For example a property with name "zipCode" and type String would have
+ * following setter and getter: <code>
  * void setZipCode(String c);
  * String getZipCode();
  * </code>
  * 
- *<p/>
- * This bean style also exists with <code>Optional</code> support in 
+ * <p>
+ * This bean style also exists with <code>Optional</code> support in
  * {@link ClassicBeanStyleWithOptionalSupport}.
  * 
  * @author alex@coliper.org
@@ -50,7 +52,7 @@ public class ClassicBeanStyle extends BeanStyle {
     private static final String GETTER_PREFIX = "get";
     private static final String SETTER_PREFIX = "set";
     private static final String GETTER_BOOL_PREFIX = "is";
-    
+
     public static final ClassicBeanStyle INSTANCE = new ClassicBeanStyle();
 
     /**
@@ -60,15 +62,16 @@ public class ClassicBeanStyle extends BeanStyle {
     }
 
     /**
-     * Checks if the given method <ul>
+     * Checks if the given method
+     * <ul>
      * <li>does not return void</li>
      * <li>has no arguments</li>
-     * <li>and has a name that has at least four characters and 
-     *     starts with "get" or "is" for boolean properties</li>
+     * <li>and has a name that has at least four characters and starts with
+     * "get" or "is" for boolean properties</li>
      * </ul>
      * 
      * @see org.coliper.ibean.BeanStyle#isGetterMethod(java.lang.Class,
-     * java.lang.reflect.Method)
+     *      java.lang.reflect.Method)
      */
     @Override
     public boolean isGetterMethod(Class<?> beanType, Method method) {
@@ -91,14 +94,16 @@ public class ClassicBeanStyle extends BeanStyle {
     }
 
     /**
-     * Checks if the given method <ul>
+     * Checks if the given method
+     * <ul>
      * <li>returns void</li>
      * <li>has exactly one arguments</li>
-     * <li>and has a name that has at least four characters and starts with "set"</li>
+     * <li>and has a name that has at least four characters and starts with
+     * "set"</li>
      * </ul>
      * 
      * @see org.coliper.ibean.BeanStyle#isSetterMethod(java.lang.Class,
-     * java.lang.reflect.Method)
+     *      java.lang.reflect.Method)
      */
     @Override
     public boolean isSetterMethod(Class<?> beanType, Method method) {
@@ -120,8 +125,7 @@ public class ClassicBeanStyle extends BeanStyle {
     /**
      * Cuts off "get" and decapitalizes the first character of the remaining.
      * 
-     * @see org.coliper.ibean.BeanStyle#convertGetterNameToFieldName(java.lang.
-     * String)
+     * @see org.coliper.ibean.BeanStyle#convertGetterNameToFieldName(java.lang.String)
      */
     @Override
     public String convertGetterNameToFieldName(String getterName) {
@@ -138,8 +142,7 @@ public class ClassicBeanStyle extends BeanStyle {
     /**
      * Cuts off "set" and decapitalizes the first character of the remaining.
      * 
-     * @see org.coliper.ibean.BeanStyle#convertSetterNameToFieldName(java.lang.
-     * String)
+     * @see org.coliper.ibean.BeanStyle#convertSetterNameToFieldName(java.lang.String)
      */
     @Override
     public String convertSetterNameToFieldName(String setterName) {

@@ -24,24 +24,27 @@ import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.extension.OptionalSupport;
 
 /**
- * A {@link BeanStyle} implementation that is identical to the {@link ClassicBeanStyle} but has
- * also {@link Optional} support. The difference to the {@link ClassicBeanStyle} is that for a
- * property of type <code>T</code> it allows a getter method that either returns <code>T</code> or
- * <code>Optional&lt;T&gt;</code>.
- * <p/>
- * This bean style is only allowed for bean types that implement extension interface 
- * {@link OptionalSupport}. See {@link OptionalSupport} for more information.
- *  
+ * A {@link BeanStyle} implementation that is identical to the
+ * {@link ClassicBeanStyle} but has also {@link Optional} support. The
+ * difference to the {@link ClassicBeanStyle} is that for a property of type
+ * <code>T</code> it allows a getter method that either returns <code>T</code>
+ * or <code>Optional&lt;T&gt;</code>.
+ * <p>
+ * This bean style is only allowed for bean types that implement extension
+ * interface {@link OptionalSupport}. See {@link OptionalSupport} for more
+ * information.
+ * 
  * @author alex@coliper.org
  */
 public class ClassicBeanStyleWithOptionalSupport extends ClassicBeanStyle {
-    
-    public static final ClassicBeanStyleWithOptionalSupport INSTANCE = new ClassicBeanStyleWithOptionalSupport();
+
+    public static final ClassicBeanStyleWithOptionalSupport INSTANCE =
+            new ClassicBeanStyleWithOptionalSupport();
 
     /**
-     * 
+     * {@link #INSTANCE} should be the only instance.
      */
-    private ClassicBeanStyleWithOptionalSupport() {
+    protected ClassicBeanStyleWithOptionalSupport() {
     }
 
     @Override
@@ -51,14 +54,14 @@ public class ClassicBeanStyleWithOptionalSupport extends ClassicBeanStyle {
         requireNonNull(setterMethod, "setterMethod");
         checkArgument(this.isGetterMethod(beanType, getterMethod), "not a getter: " + getterMethod);
         checkArgument(this.isSetterMethod(beanType, setterMethod), "not a setter: " + setterMethod);
-        
+
         String fieldNameFromGetter = this.convertGetterNameToFieldName(getterMethod.getName());
         String fieldNameFromSetter = this.convertSetterNameToFieldName(setterMethod.getName());
         Class<?> typeFromSetter = setterMethod.getParameterTypes()[0];
         Class<?> typeFromGetter = getterMethod.getReturnType();
-        final boolean getterAndSetterTypesCompatible = typeFromGetter == typeFromSetter || isAllowedOptionalReturnTypeForGetter(beanType, typeFromGetter);
-        return fieldNameFromGetter.equals(fieldNameFromSetter) 
-                && getterAndSetterTypesCompatible;
+        final boolean getterAndSetterTypesCompatible = typeFromGetter == typeFromSetter
+                || isAllowedOptionalReturnTypeForGetter(beanType, typeFromGetter);
+        return fieldNameFromGetter.equals(fieldNameFromSetter) && getterAndSetterTypesCompatible;
     }
 
     @Override
@@ -70,7 +73,9 @@ public class ClassicBeanStyleWithOptionalSupport extends ClassicBeanStyle {
         checkArgument(argTypes.length == 1, "unexpected no of arguments in setter " + setterMethod);
         final Class<?> getterRetType = getterMethod.getReturnType();
         final Class<?> setterArgType = argTypes[0];
-        checkArgument(setterArgType == getterRetType || isAllowedOptionalReturnTypeForGetter(beanType, getterRetType), 
+        checkArgument(
+                setterArgType == getterRetType
+                        || isAllowedOptionalReturnTypeForGetter(beanType, getterRetType),
                 "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
         return setterArgType;
     }

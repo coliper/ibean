@@ -18,7 +18,8 @@ package org.coliper.ibean.extension;
  * @author alex@coliper.org
  *
  */
-public interface Completable <T> {
+public interface Completable<T> {
     boolean isComplete();
+
     T assertComplete() throws BeanIncompleteException;
 }

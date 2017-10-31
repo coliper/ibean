@@ -35,8 +35,8 @@ public class RecursionCycleDetectorTest {
     }
 
     public static class BadAlgorithmWithDetector extends BadAlgorithm {
-        private final RecursionCycleDetector<Boolean> detector = new RecursionCycleDetector<Boolean>(
-                Boolean.FALSE);
+        private final RecursionCycleDetector<Boolean> detector =
+                new RecursionCycleDetector<Boolean>(Boolean.FALSE);
 
         @Override
         public Boolean isMultipleOfSeven(final int no) {

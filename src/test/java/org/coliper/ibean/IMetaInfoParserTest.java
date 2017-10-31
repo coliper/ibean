@@ -26,8 +26,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.google.common.collect.Lists;
-
 /**
  * @author alex@coliper.org
  *
@@ -44,7 +42,8 @@ public class IMetaInfoParserTest {
         assertEquals(setterName, meta.setterMethod().getName());
         if (getterName.equals(setterName)) {
             // we "guess" modern style
-            assertSame(meta.getterMethod().getDeclaringClass(), meta.setterMethod().getReturnType());
+            assertSame(meta.getterMethod().getDeclaringClass(),
+                    meta.setterMethod().getReturnType());
         } else {
             // classic style
             assertSame(void.class, meta.setterMethod().getReturnType());
@@ -130,8 +129,8 @@ public class IMetaInfoParserTest {
 
     @Test
     public void testEmptyBean() {
-        IBeanTypeMetaInfo<EmptyBean> meta = this.parser.parse(EmptyBean.class, BeanStyle.CLASSIC,
-                Collections.emptyList());
+        IBeanTypeMetaInfo<EmptyBean> meta =
+                this.parser.parse(EmptyBean.class, BeanStyle.CLASSIC, Collections.emptyList());
         assertNotNull(meta);
         assertSame(EmptyBean.class, meta.beanType());
         assertSame(BeanStyle.CLASSIC, meta.beanStyle());
@@ -170,8 +169,8 @@ public class IMetaInfoParserTest {
 
     @Test
     public void testCombinedType() {
-        IBeanTypeMetaInfo<Combined> meta = this.parser.parse(Combined.class, BeanStyle.CLASSIC,
-                Collections.emptyList());
+        IBeanTypeMetaInfo<Combined> meta =
+                this.parser.parse(Combined.class, BeanStyle.CLASSIC, Collections.emptyList());
         assertNotNull(meta);
         assertSame(Combined.class, meta.beanType());
         assertSame(BeanStyle.CLASSIC, meta.beanStyle());

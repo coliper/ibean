@@ -17,9 +17,9 @@ package org.coliper.ibean.proxy.handler;
 import java.lang.reflect.Method;
 
 import org.coliper.ibean.IBeanFieldMetaInfo;
+import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
-import org.coliper.ibean.proxy.ExtensionHandler;
 
 /**
  * @author alex@coliper.org
@@ -27,8 +27,13 @@ import org.coliper.ibean.proxy.ExtensionHandler;
  */
 public abstract class StatefulExtensionHandler implements ExtensionHandler {
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.proxy.IBeanInvocationHandler#handleExtendedInterfaceCall(org.coliper.ibean.proxy.IBeanContext, org.coliper.ibean.proxy.IBeanFieldAccess, java.lang.reflect.Method, java.lang.Object[])
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.coliper.ibean.proxy.IBeanInvocationHandler#
+     * handleExtendedInterfaceCall(org.coliper.ibean.proxy.IBeanContext,
+     * org.coliper.ibean.proxy.IBeanFieldAccess, java.lang.reflect.Method,
+     * java.lang.Object[])
      */
     @Override
     public Object handleExtendedInterfaceCall(IBeanContext<?> context, IBeanFieldAccess bean,
@@ -36,8 +41,13 @@ public abstract class StatefulExtensionHandler implements ExtensionHandler {
         return method.invoke(this, params);
     }
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.proxy.IBeanInvocationHandler#interceptGetterCall(org.coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.coliper.ibean.proxy.IBeanInvocationHandler#interceptGetterCall(org.
+     * coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo,
+     * java.lang.Object)
      */
     @Override
     public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
@@ -45,8 +55,13 @@ public abstract class StatefulExtensionHandler implements ExtensionHandler {
         return returnValue;
     }
 
-    /* (non-Javadoc)
-     * @see org.coliper.ibean.proxy.IBeanInvocationHandler#interceptSetterCall(org.coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo, java.lang.Object)
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.coliper.ibean.proxy.IBeanInvocationHandler#interceptSetterCall(org.
+     * coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo,
+     * java.lang.Object)
      */
     @Override
     public Object interceptSetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
