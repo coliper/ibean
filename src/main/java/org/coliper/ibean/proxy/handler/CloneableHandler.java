@@ -45,7 +45,8 @@ public class CloneableHandler extends StatelessExtensionHandler {
         }
     }
 
-    private static void copyFields(IBeanTypeMetaInfo<?> meta, Object sourceBean, Object targetBean) {
+    private static void copyFields(IBeanTypeMetaInfo<?> meta, Object sourceBean,
+            Object targetBean) {
         List<IBeanFieldMetaInfo> f = meta.fieldMetaInfos();
         for (IBeanFieldMetaInfo fieldMeta : f) {
             try {
@@ -59,7 +60,7 @@ public class CloneableHandler extends StatelessExtensionHandler {
             }
         }
     }
-    
+
     /*
      * (non-Javadoc)
      * 
@@ -78,10 +79,9 @@ public class CloneableHandler extends StatelessExtensionHandler {
     }
 
     @SuppressWarnings("unchecked")
-    private Object handleCloneCall(IBeanContext<?> context, Object proxyInstance)
-            throws Throwable {
+    private Object handleCloneCall(IBeanContext<?> context, Object proxyInstance) throws Throwable {
         final Object clone = context.beanFactory().create(context.metaInfo().beanType());
-        copyFields((IBeanTypeMetaInfo<Object>)context.metaInfo(), proxyInstance, clone);
+        copyFields((IBeanTypeMetaInfo<Object>) context.metaInfo(), proxyInstance, clone);
         return clone;
     }
 }

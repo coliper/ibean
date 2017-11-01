@@ -13,7 +13,21 @@
  */
 
 /**
- * @author alex@coliper.org
+ * Contains all extension interfaces that are supported out of the box by IBean.
+ * An extension interface adds cross-cutting functionality to bean interfaces.
+ * Extension interfaces are enabled by adding them to the super-interface list
+ * of the bean type. For example, to add extension interfaces
+ * {@link org.coliper.ibean.extension.NullSafe} and
+ * {@link org.coliper.ibean.extension.Freezable} to bean type Customer they just
+ * need to be listed in the extended clause: <code>
+ * public interface Customer extends NullSafe, Freezable {
+ *     ...
+ * </code>
  *
+ * Developers can define their own extension interfaces. See
+ * {@link org.coliper.ibean.proxy.ExtensionHandler} for a description how to do
+ * this.<br>
+ * This package contains all built-in extension interfaces of the IBean
+ * framework.
  */
 package org.coliper.ibean.extension;

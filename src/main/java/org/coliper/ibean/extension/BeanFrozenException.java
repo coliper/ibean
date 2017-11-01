@@ -15,13 +15,19 @@
 package org.coliper.ibean.extension;
 
 /**
+ * Thrown from beans that are extended with {@link Freezable} interface when
+ * their status is frozen and a setter is called.
+ * 
+ * @see Freezable
  * @author alex@coliper.org
- *
  */
 public class BeanFrozenException extends IllegalStateException {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates a new {@link BeanFrozenException}.
+     */
     public BeanFrozenException() {
         super("setter calls are not permitted when bean is frozen");
     }

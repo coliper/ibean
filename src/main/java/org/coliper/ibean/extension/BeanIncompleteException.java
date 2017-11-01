@@ -15,8 +15,12 @@
 package org.coliper.ibean.extension;
 
 /**
+ * Thrown from beans that are extended with the {@link Completable} interface
+ * when calling {@link Completable#assertComplete()} in case the bean still has
+ * unset fields.
+ * 
+ * @see Completable
  * @author alex@coliper.org
- *
  */
 public class BeanIncompleteException extends IllegalStateException {
 
