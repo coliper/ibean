@@ -22,8 +22,8 @@ public class NullSafetyException extends IllegalStateException {
 
     private static final long serialVersionUID = 1L;
 
-    public NullSafetyException() {
-        super("getter must not be called as value is null");
+    public NullSafetyException(String fieldName) {
+        super("illegal read of field '" + fieldName + "': value is null");
     }
 
 }

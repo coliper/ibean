@@ -40,7 +40,7 @@ public class NullSafeHandler extends StatelessExtensionHandler {
     public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
             Object returnValue, Object proxyInstance) {
         if (returnValue == null) {
-            throw new NullSafetyException();
+            throw new NullSafetyException(fieldMeta.fieldName());
         }
         return returnValue;
     }
