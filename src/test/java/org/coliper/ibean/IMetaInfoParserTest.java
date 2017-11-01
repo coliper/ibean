@@ -207,4 +207,30 @@ public class IMetaInfoParserTest {
         checkFieldInfo(fields.get(3), "self", SampleBeanClassic.class, "getSelf", "setSelf");
         checkFieldInfo(fields.get(4), "string", String.class, "getString", "setString");
     }
+
+    public static interface BeanWithDefaultAndStatic {
+        String getStr();
+
+        void setStr(String s);
+
+        default int strLength() {
+            return getStr().length();
+        }
+
+        static void someStaticMethod() {
+        }
+    }
+
+    @Test
+    public void testDefaultAndStaticMethods() {
+        IBeanTypeMetaInfo<BeanWithDefaultAndStatic> meta =
+                this.parser.parse(BeanWithDefaultAndStatic.class, BeanStyle.CLASSIC,
+                        Arrays.asList(InvocationHandler.class, List.class));
+        assertNotNull(meta);
+        assertSame(BeanWithDefaultAndStatic.class, meta.beanType());
+        assertSame(BeanStyle.CLASSIC, meta.beanStyle());
+        List<IBeanFieldMetaInfo> fields = meta.fieldMetaInfos();
+        assertEquals(1, fields.size());
+        checkFieldInfo(fields.get(0), "str", String.class, "getStr", "setStr");
+    }
 }

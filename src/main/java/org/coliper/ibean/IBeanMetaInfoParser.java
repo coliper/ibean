@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,8 +55,10 @@ public class IBeanMetaInfoParser {
         final List<Method> filteredMethods = new ArrayList<>();
         for (Method method : allMethods) {
             if (method.getDeclaringClass() == Object.class) {
-                // toString(), equals() etc can be ignored
-                continue;
+                continue; // toString(), equals() etc can be ignored
+            }
+            if (method.isDefault() || Modifier.isStatic(method.getModifiers())) {
+                continue; // ignore static and Java8 default methods
             }
             if (isIgnorableMethod(method, ignorableSuperInterfaces)) {
                 continue;
