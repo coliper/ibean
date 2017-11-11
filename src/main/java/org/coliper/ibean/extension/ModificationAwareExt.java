@@ -15,11 +15,32 @@
 package org.coliper.ibean.extension;
 
 /**
+ * Extends {@link ModificationAware} with functionality to determine which
+ * fields have been modified.
+ * 
+ * @see ModificationAware
  * @author alex@coliper.org
- *
  */
 public interface ModificationAwareExt extends ModificationAware {
+
+    /**
+     * Gives the names of all bean fields that have been modified since creation
+     * or respectively since the last call of {@link #resetModified()}.
+     * 
+     * @return a string array containing the names of the modified fields. If no
+     *         fields have been modified an empty array will be returned. The
+     *         names of the fields are deducible from the getter and setter
+     *         names depending on the bean style.<br>
+     *         The order of field names returned is random and not be reliable!
+     */
     String[] getModifiedFieldNames();
 
+    /**
+     * Checks if every field has been set since creation or
+     * {@link #resetModified()}. Can for example be used as a runtime check if
+     * an initialization has been complete.
+     * 
+     * @return <code>true</code> if each setter had been called
+     */
     boolean allFieldsModified();
 }

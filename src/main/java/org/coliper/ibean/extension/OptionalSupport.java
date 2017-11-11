@@ -14,9 +14,22 @@
 
 package org.coliper.ibean.extension;
 
+import java.util.Optional;
+
+import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
+import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
+
 /**
+ * Marker extension interface that gives null safety to all getter methods that
+ * return type {@link Optional}. If such a getter is called and the
+ * corresponding field value is <code>null</code> then the getter will return an
+ * empty <code>Optional</code> instead of <code>null</code>.
+ * <p>
+ * This interface is often used in conjunction with bean styles
+ * {@link ModernBeanStyleWithOptionalSupport} and
+ * {@link ClassicBeanStyleWithOptionalSupport}.
+ * 
  * @author alex@coliper.org
- *
  */
 public interface OptionalSupport {
 

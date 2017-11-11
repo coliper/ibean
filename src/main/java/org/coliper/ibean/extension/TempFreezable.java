@@ -15,8 +15,12 @@
 package org.coliper.ibean.extension;
 
 /**
+ * Extension of the {@link Freezable} interface that gives the possibility to
+ * change a bean from an immutable (frozen) state back to a mutable state.<br>
+ * Could for example used to freeze beans only for usage in certain portions of
+ * the code where they are not supposed to be modified.
+ * 
  * @author alex@coliper.org
- *
  */
 public interface TempFreezable<T> extends Freezable<T> {
     T unfreeze();

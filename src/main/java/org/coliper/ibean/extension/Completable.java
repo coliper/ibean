@@ -21,15 +21,15 @@ import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
 /**
  * Extension interface that allows runtime checking whether all fields of a bean
  * have been initialized, that is, are not null.<br>
- * The generic type <code>T</code> should always be set to the bean type. The type is used in 
- * {@link #assertComplete()} and is done to be able to put {@link #assertComplete()} at the end 
- * of an initialization chain. See example below.
- * <p> 
+ * The generic type <code>T</code> should always be set to the bean type. The
+ * type is used in {@link #assertComplete()} and is done to be able to put
+ * {@link #assertComplete()} at the end of an initialization chain. See example
+ * below.
+ * <p>
  * If used together with {@link OptionalSupport} some bean fields can be set to
  * not mandatory and will be left out of the not-null check.<br>
  * Here you find an example that also uses {@link OptionalSupport} and modern
- * bean style (see {@link ModernBeanStyleWithOptionalSupport}): 
- * <code>
+ * bean style (see {@link ModernBeanStyleWithOptionalSupport}): <code>
  * public interface Person extends Completable&lt;Person&gt;, OptionalSupport {
  *     String firstName();
  *     Person firstName(String s);
@@ -45,8 +45,7 @@ import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
  * {@link #assertComplete()} should now always be called after the
  * initialization of a <code>Person</code> bean is completed.
  * <code>dateOfBirth</code> is set as optional so it will not be considered when
- * checking for completeness: 
- * <code>
+ * checking for completeness: <code>
  * // will throw no exception as firstName and lastName are set
  * Person person1 = IBean.of(Person.class).firstName("John").lastName("Doe").assertComplete();
  *
@@ -73,15 +72,18 @@ import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
  */
 public interface Completable<T> {
     /**
-     * @return <code>true</code> if all (non-optional) bean fields are not <code>null</code>
+     * @return <code>true</code> if all (non-optional) bean fields are not
+     *         <code>null</code>
      * @see Completable
      */
     boolean isComplete();
 
     /**
      * Checks if all (non-optional) bean fields are not <code>null</code>.
+     * 
      * @return this bean if all fields are set and check was successful
-     * @throws BeanIncompleteException if some of the (mandatory) fields are <code>null</code>
+     * @throws BeanIncompleteException
+     *             if some of the (mandatory) fields are <code>null</code>
      * @see Completable
      */
     T assertComplete() throws BeanIncompleteException;
