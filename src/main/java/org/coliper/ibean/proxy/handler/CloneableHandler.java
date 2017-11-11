@@ -19,21 +19,31 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Optional;
 
+import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.extension.CloneableBean;
+import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
+import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
 import com.google.common.base.Throwables;
 
 /**
+ * {@link ExtensionHandler} implementation for bean extension interface
+ * {@link CloneableBean}.
+ * 
  * @author alex@coliper.org
- *
  */
 public class CloneableHandler extends StatelessExtensionHandler {
 
+    /**
+     * {@link ExtensionSupport} related to this handler supposed to be used when
+     * configuring extension handlers in {@link IBeanFactory}s, for example in
+     * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
+     */
     public static final ExtensionSupport SUPPORT =
             new ExtensionSupport(CloneableBean.class, CloneableHandler.class, false/* stateful */);
 
@@ -71,7 +81,8 @@ public class CloneableHandler extends StatelessExtensionHandler {
         Object val = fieldMeta.getterMethod().invoke(sourceBean);
         // if value is wrapped into an Optional, unwrap first
         if (val instanceof Optional && fieldMeta.fieldType() != Optional.class) {
-            val = ((Optional<?>)val).get();
+            final Optional<?> opt = (Optional<?>) val;
+            val = opt.orElse(null);
         }
         fieldMeta.setterMethod().invoke(targetBean, val);
     }

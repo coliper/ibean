@@ -22,18 +22,32 @@ import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
 
 /**
+ * /** Abstract base class for {@link ExtensionHandler} implementations that
+ * need to maintain their own state. Concrete implementations can choose with of
+ * the default implementations of
+ * {@link #handleExtendedInterfaceCall(IBeanContext, IBeanFieldAccess, Object, Method, Object[])},
+ * {@link #interceptGetterCall(IBeanContext, IBeanFieldMetaInfo, Object, Object)}
+ * and
+ * {@link #interceptSetterCall(IBeanContext, IBeanFieldMetaInfo, Object, Object)}
+ * to override.
+ * <p>
+ * For stateful handlers it is recommendable if the handler itself implements
+ * the extension interface. This class' implementation of
+ * {@link #handleExtendedInterfaceCall(IBeanContext, IBeanFieldAccess, Object, Method, Object[])}
+ * does simply forwards any extension interface call to the bean to associated
+ * handler instance.
+ * 
  * @author alex@coliper.org
- *
  */
 public abstract class StatefulExtensionHandler implements ExtensionHandler {
 
-    /*
-     * (non-Javadoc)
+    /**
+     * This default implementation re-calls the interface method onto the
+     * handler itself assuming the handler implements the extension interface as
+     * well.
      * 
-     * @see org.coliper.ibean.proxy.IBeanInvocationHandler#
-     * handleExtendedInterfaceCall(org.coliper.ibean.proxy.IBeanContext,
-     * org.coliper.ibean.proxy.IBeanFieldAccess, java.lang.reflect.Method,
-     * java.lang.Object[])
+     * @see ExtensionHandler#handleExtendedInterfaceCall(IBeanContext,
+     *      IBeanFieldAccess, Object, Method, Object[])
      */
     @Override
     public Object handleExtendedInterfaceCall(IBeanContext<?> context, IBeanFieldAccess bean,
@@ -41,13 +55,12 @@ public abstract class StatefulExtensionHandler implements ExtensionHandler {
         return method.invoke(this, params);
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * This default implementation does nothing and just passes through the
+     * return value.
      * 
-     * @see
-     * org.coliper.ibean.proxy.IBeanInvocationHandler#interceptGetterCall(org.
-     * coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo,
-     * java.lang.Object)
+     * @see ExtensionHandler#interceptGetterCall(IBeanContext,
+     *      IBeanFieldMetaInfo, Object, Object)
      */
     @Override
     public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
@@ -55,13 +68,12 @@ public abstract class StatefulExtensionHandler implements ExtensionHandler {
         return returnValue;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * This default implementation does nothing and just passes through the new
+     * value.
      * 
-     * @see
-     * org.coliper.ibean.proxy.IBeanInvocationHandler#interceptSetterCall(org.
-     * coliper.ibean.proxy.IBeanContext, org.coliper.ibean.IBeanFieldMetaInfo,
-     * java.lang.Object)
+     * @see ExtensionHandler#interceptSetterCall(IBeanContext,
+     *      IBeanFieldMetaInfo, Object, Object)
      */
     @Override
     public Object interceptSetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,

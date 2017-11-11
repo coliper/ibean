@@ -123,6 +123,12 @@ public class ProxyIBeanFactory implements IBeanFactory {
             return this;
         }
 
+        public Builder withInterfaceSupport(ExtensionSupport support) {
+            requireNonNull(support, "support");
+            this.interfaceSupport.add(support);
+            return this;
+        }
+
         public Builder withDefaultInterfaceSupport() {
             this.interfaceSupport.addAll(DEFAULT_INTERFACE_SUPPORTS);
             return this;

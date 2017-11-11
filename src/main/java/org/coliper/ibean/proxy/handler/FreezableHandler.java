@@ -16,18 +16,31 @@ package org.coliper.ibean.proxy.handler;
 
 import static java.util.Objects.requireNonNull;
 
+import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.extension.BeanFrozenException;
+import org.coliper.ibean.extension.Freezable;
+import org.coliper.ibean.extension.ModificationAware;
+import org.coliper.ibean.extension.ModificationAwareExt;
 import org.coliper.ibean.extension.TempFreezable;
+import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
+import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
 /**
- * @author alex@coliper.org
+ * {@link ExtensionHandler} implementation for bean extension interface
+ * {@link Freezable} and {@link TempFreezable}.
  *
+ * @author alex@coliper.org
  */
 public class FreezableHandler extends StatefulExtensionHandler implements TempFreezable<Object> {
+    /**
+     * {@link ExtensionSupport} related to this handler supposed to be used when
+     * configuring extension handlers in {@link IBeanFactory}s, for example in
+     * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
+     */
     public static final ExtensionSupport SUPPORT =
             new ExtensionSupport(TempFreezable.class, FreezableHandler.class, true/* stateful */);
 

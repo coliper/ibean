@@ -114,15 +114,19 @@ public class ModernBeanStyleSample {
         
         // Persons are created using the create method together with a lambda expression that 
         // initializes at least all mandatory fields and eventually some optional ones. 
-        person = Person.create(p -> p.firstName("John").lastName("Doe"));
-        assertThat(person.lastName()).isEqualTo("Doe");
-
-        // Create a new person with optional birthday.
         person = Person.create(p -> p
                 .firstName("John")
-                .lastName("Lennon")
+                .lastName("Doe")
                 .dateOfBirth(LocalDate.of(1940, 10, 9)));
+        assertThat(person.lastName()).isEqualTo("Doe");
+
+        // Create a new person WITHOUT optional birthday.
+        person = Person.create(p -> p.firstName("John").lastName("Lennon"));
         assertThat(person.firstName()).isEqualTo("John");
+       
+        // Here we can see the effect of interface OptionalSupport. Even though the dateOfBirth
+        // has not been initialized we receive an (empty) Optional value from the getter.
+        assertThat(person.dateOfBirth().isPresent()).isFalse();
         
         // If we create a Person and do not set all mandatory fields we run into a 
         // BeanIncompleteException. Let's try it and set only lastName.
@@ -142,8 +146,8 @@ public class ModernBeanStyleSample {
         //
         // We can now simulate something similar with our Person bean. We create an identical 
         // Person object with firstName and lastName modified.
-        person = person.clone().firstName("John Winston").lastName("Lennon Ono");
-        assertThat(person.dateOfBirth().get()).isEqualTo(LocalDate.of(1940, 10, 9));
+        person = person.clone().firstName("John Winston").dateOfBirth(LocalDate.of(1940, 10, 9));
+        assertThat(person.lastName()).isEqualTo("Lennon");
     }
 
     @After

@@ -21,23 +21,36 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
+import org.coliper.ibean.extension.ModificationAware;
 import org.coliper.ibean.extension.ModificationAwareExt;
+import org.coliper.ibean.extension.OptionalSupport;
+import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
+import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
 /**
+ * {@link ExtensionHandler} implementation for bean extension interface
+ * {@link ModificationAware} and {@link ModificationAwareExt}.
+ * 
  * @author alex@coliper.org
- *
  */
 public class ModificationAwareHandler extends StatefulExtensionHandler
         implements ModificationAwareExt {
+    /**
+     * {@link ExtensionSupport} related to this handler supposed to be used when
+     * configuring extension handlers in {@link IBeanFactory}s, for example in
+     * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
+     */
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(ModificationAwareExt.class,
+            ModificationAwareHandler.class, true/* stateful */);
+
     private boolean modified = false;
     private boolean[] fieldModified = null;
     private IBeanTypeMetaInfo<?> beanMetaInfo = null;
-    public static final ExtensionSupport SUPPORT = new ExtensionSupport(ModificationAwareExt.class,
-            ModificationAwareHandler.class, true/* stateful */);
 
     /*
      * (non-Javadoc)

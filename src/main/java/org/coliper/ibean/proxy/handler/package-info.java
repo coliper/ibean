@@ -13,7 +13,16 @@
  */
 
 /**
+ * IBean internal package that contains all
+ * {@link org.coliper.ibean.proxy.ProxyIBeanFactory} related
+ * {@link org.coliper.ibean.proxy.ExtensionHandler}s for the predefined
+ * extension interfaces. Bean extension interfaces that are predefined in the
+ * IBean framework can be found in package {@link org.coliper.ibean.extension}.
+ * To enable all these interfaces with the proxy implementation of IBean (see
+ * {@link org.coliper.ibean.proxy} an
+ * {@link org.coliper.ibean.proxy.ExtensionHandler} is required for each
+ * interface. This package contains all these handlers.
+ * 
  * @author alex@coliper.org
- *
  */
 package org.coliper.ibean.proxy.handler;
