@@ -14,15 +14,11 @@
 
 package org.coliper.ibean;
 
-import java.io.Serializable;
-
-import org.coliper.ibean.extension.CloneableBean;
-
 /**
  * @author alex@coliper.org
  *
  */
-public interface PrimitivesBeanClassic extends CloneableBean<PrimitivesBeanClassic>, Serializable {
+public interface PrimitivesBeanClassic {
 //@formatter:off 
     void setByte(byte b);
     byte getByte();

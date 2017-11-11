@@ -17,6 +17,7 @@ package org.coliper.ibean.proxy.handler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Optional;
 
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
@@ -49,16 +50,30 @@ public class CloneableHandler extends StatelessExtensionHandler {
             Object targetBean) {
         List<IBeanFieldMetaInfo> f = meta.fieldMetaInfos();
         for (IBeanFieldMetaInfo fieldMeta : f) {
-            try {
-                Object val = fieldMeta.getterMethod().invoke(sourceBean);
-                fieldMeta.setterMethod().invoke(targetBean, val);
-            } catch (IllegalAccessException | IllegalArgumentException e) {
-                throw new RuntimeException(e);
-            } catch (InvocationTargetException e) {
-                Throwables.throwIfUnchecked(e.getTargetException());
-                throw new RuntimeException(e.getTargetException());
-            }
+            copyField(fieldMeta, sourceBean, targetBean);
         }
+    }
+
+    private static void copyField(IBeanFieldMetaInfo fieldMeta, Object sourceBean,
+            Object targetBean) {
+        try {
+            copyFieldThrowing(fieldMeta, sourceBean, targetBean);
+        } catch (IllegalAccessException | IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            Throwables.throwIfUnchecked(e.getTargetException());
+            throw new RuntimeException(e.getTargetException());
+        }
+    }
+
+    private static void copyFieldThrowing(IBeanFieldMetaInfo fieldMeta, Object sourceBean,
+            Object targetBean) throws IllegalAccessException, InvocationTargetException {
+        Object val = fieldMeta.getterMethod().invoke(sourceBean);
+        // if value is wrapped into an Optional, unwrap first
+        if (val instanceof Optional && fieldMeta.fieldType() != Optional.class) {
+            val = ((Optional<?>)val).get();
+        }
+        fieldMeta.setterMethod().invoke(targetBean, val);
     }
 
     /*

@@ -40,8 +40,16 @@ public class OptionalSupportHandler extends StatelessExtensionHandler {
     @Override
     public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
             Object returnValue, Object proxyInstance) {
-        if (returnValue == null && fieldMeta.fieldType() == Optional.class) {
-            return Optional.empty();
+
+        final boolean isOptionalReturnType =
+                fieldMeta.getterMethod().getReturnType() == Optional.class;
+        if (isOptionalReturnType) {
+            if (returnValue == null) {
+                return Optional.empty();
+            }
+            if (!(returnValue instanceof Optional)) {
+                return Optional.of(returnValue);
+            }
         }
         return returnValue;
     }

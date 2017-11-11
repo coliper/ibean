@@ -14,14 +14,10 @@
 
 package org.coliper.ibean;
 
-import java.io.Serializable;
-
-import org.coliper.ibean.extension.CloneableBean;
-
 /**
  * @author alex@coliper.org
  *
  */
-public interface EmptyBean extends CloneableBean<EmptyBean>, Serializable {
+public interface EmptyBean {
 
 }

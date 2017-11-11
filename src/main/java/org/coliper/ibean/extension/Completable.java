@@ -23,20 +23,21 @@ import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
  * have been initialized, that is, are not null.<br>
  * The generic type <code>T</code> should always be set to the bean type. The type is used in 
  * {@link #assertComplete()} and is done to be able to put {@link #assertComplete()} at the end 
- * of an initializaion chain. See example below.
+ * of an initialization chain. See example below.
  * <p> 
  * If used together with {@link OptionalSupport} some bean fields can be set to
  * not mandatory and will be left out of the not-null check.<br>
  * Here you find an example that also uses {@link OptionalSupport} and modern
- * bean style (see {@link ModernBeanStyleWithOptionalSupport}): <code>
- * public interface Person extends Completable<Person>, OptionalSupport {
+ * bean style (see {@link ModernBeanStyleWithOptionalSupport}): 
+ * <code>
+ * public interface Person extends Completable&lt;Person&gt;, OptionalSupport {
  *     String firstName();
  *     Person firstName(String s);
  *     
  *     String lastName();
  *     Person lastName(String s);
  *     
- *     Optional<LocalDate> dateOfBirth();
+ *     Optional&lt;LocalDate&gt; dateOfBirth();
  *     Person dateOfBirth(LocalDate d);
  * }
  * </code>

@@ -19,9 +19,6 @@ package org.coliper.ibean;
  *
  */
 public class EmptyBeanImpl implements EmptyBean {
-
-    private static final long serialVersionUID = -2225760310247659705L;
-
     @Override
     public EmptyBean clone() throws CloneNotSupportedException {
         return new EmptyBeanImpl();

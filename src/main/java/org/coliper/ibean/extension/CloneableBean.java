@@ -26,7 +26,7 @@ import org.coliper.ibean.IBeanFactory;
  * not having to cast the returned clone.
  * <p>
  * Example: <code>
- * public interface Customer extends CloneableBean<Customer> {
+ * public interface Customer extends CloneableBean&lt;Customer&gt; {
  *     ...
  * </code>
  * <p>
@@ -51,8 +51,6 @@ public interface CloneableBean<T> extends Cloneable {
      * initial state on any extension interface.
      * 
      * @return an IBean of the same type
-     * @throws CloneNotSupportedException
-     *             declared but never thrown
      */
-    T clone() throws CloneNotSupportedException;
+    T clone();
 }

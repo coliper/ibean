@@ -24,8 +24,6 @@ import org.apache.commons.beanutils.BeanUtils;
  *
  */
 public class SampleBeanClassicImpl implements SampleBeanClassic {
-    private static final long serialVersionUID = 1L;
-
     private Integer intObject;
     private boolean booleanPrimitive;
     private Date date;
@@ -40,7 +38,7 @@ public class SampleBeanClassicImpl implements SampleBeanClassic {
     }
 
     @Override
-    public SampleBeanClassic clone() throws CloneNotSupportedException {
+    public SampleBeanClassic clone() {
         SampleBeanClassic clone = new SampleBeanClassicImpl();
         try {
             this.copyTo(clone);

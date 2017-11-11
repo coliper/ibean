@@ -15,6 +15,14 @@
 package org.coliper.ibean.extension;
 
 /**
+ * Extension interface that allows setting the status of a bean to immutable ("frozen") by 
+ * preventing all further setter calls.<br>
+ * The generic type <code>T</code> of this interface should be set to the bean type. The generic
+ * type is used in {@link #freeze()} to allow chaining {@link #freeze()} to modern bean style
+ * setters.
+ * <p>
+ * The bean instance is set to immutable (aka frozen) by calling {@link #freeze()}. All subsequent
+ * calls to any setter will cause a {@link BeanFrozenException} to be thrown from the setter. 
  * @author alex@coliper.org
  *
  */
