@@ -71,6 +71,7 @@ public interface CloneableBean<T> extends Cloneable {
      * <li>Fields of type {@link CloneableBean} are recursively deep cloned.</li>
      * <li>Any field that is not of type {@link Cloneable} or {@link CloneableBean} is not cloned.
      * </li> 
+     * </ul>
      * 
      * {@link #deepClone()} has no cycle detection. If you need cycle detection or a more 
      * sophisticated cloning use one of the deep cloning Java frameworks out there.
