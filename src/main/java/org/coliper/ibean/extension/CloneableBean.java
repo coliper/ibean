@@ -14,6 +14,8 @@
 
 package org.coliper.ibean.extension;
 
+import java.util.Collection;
+
 import org.coliper.ibean.IBean;
 import org.coliper.ibean.IBeanFactory;
 
@@ -48,9 +50,32 @@ import org.coliper.ibean.IBeanFactory;
 public interface CloneableBean<T> extends Cloneable {
     /**
      * Creates a copy of this bean, having the same field values but having an
-     * initial state on any extension interface.
+     * initial state on any extension interface. If field value is an object the newly created
+     * bean will also reference the same object. If you need the field values also cloned use
+     * {@link #deepClone()}.
      * 
      * @return an IBean of the same type
      */
     T clone();
+
+    /**
+     * Creates a copy of this bean with the same field values. In opposite to {@link #clone()}
+     * field values are also cloned with following logic:<ul>
+     * <li>Fields of type {@link Cloneable} are just cloned but no special deep cloning algorithm
+     *     is executed on them.</li>
+     * <li>There is a special logic for fields of type {@link Collection}. If the collection is 
+     *     {@link Cloneable} it is cloned. If in addition it is also modifiable deep cloning is also
+     *     executed on its elements, that is, all contained elements will be replaced by their deep
+     *     clones. A collection is considered as modifiable when it supports methods
+     *     {@link Collection#clear()} and {@link Collection#add(Object)}.</li>
+     * <li>Fields of type {@link CloneableBean} are recursively deep cloned.</li>
+     * <li>Any field that is not of type {@link Cloneable} or {@link CloneableBean} is not cloned.
+     * </li> 
+     * 
+     * {@link #deepClone()} has no cycle detection. If you need cycle detection or a more 
+     * sophisticated cloning use one of the deep cloning Java frameworks out there.
+     *  
+     * @return an IBean of the same type
+     */
+    T deepClone();
 }

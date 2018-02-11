@@ -5,6 +5,8 @@ package org.coliper.ibean.proxy;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.BeanTestUtil;
 import org.coliper.ibean.EmptyBean;
@@ -15,6 +17,8 @@ import org.coliper.ibean.SampleBeanClassic;
 import org.coliper.ibean.SampleBeanClassicImpl;
 import org.coliper.ibean.extension.CloneableBean;
 import org.junit.Test;
+
+import com.google.common.collect.Lists;
 
 public class CloningTest {
     private IBeanFactory factory;
@@ -63,4 +67,28 @@ public class CloningTest {
         clone.setInt(-77);
         assertThat(clone.getInt()).isEqualTo(-77);
     }
+    
+    public static interface NestedBean extends CloneableBean<NestedBean> {
+        SampleBeanClassicCloneable sample();
+        void sample(SampleBeanClassicCloneable s);
+        List<PrimitivesBeanClassicCloneable> list();
+        void list(List<PrimitivesBeanClassicCloneable> l);
+    }
+    
+    @Test
+    public void testDeepClone() throws Exception {
+        NestedBean nestedOrig = this.factory.create(NestedBean.class);
+        PrimitivesBeanClassicCloneable prim1Orig = this.factory.create(PrimitivesBeanClassicCloneable.class);
+        new PrimitivesBeanClassicImpl().fillWithTestValues().copyTo(prim1Orig);
+        PrimitivesBeanClassicCloneable prim2Orig = this.factory.create(PrimitivesBeanClassicCloneable.class);
+        new PrimitivesBeanClassicImpl().fillWithNullValues().copyTo(prim2Orig);
+        SampleBeanClassicCloneable smplOrig = this.factory.create(SampleBeanClassicCloneable.class);
+        new SampleBeanClassicImpl().fillWithTestValues().copyTo(smplOrig);
+        nestedOrig.sample(smplOrig);
+        nestedOrig.list(Lists.newArrayList(prim1Orig, null, prim2Orig));
+        
+        NestedBean nestedCopy = nestedOrig.deepClone(); 
+    }
+    
+    test immutable list
 }
