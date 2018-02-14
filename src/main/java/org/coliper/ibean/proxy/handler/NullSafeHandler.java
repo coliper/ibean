@@ -18,7 +18,6 @@ import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.NullSafetyException;
-import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
