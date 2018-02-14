@@ -14,11 +14,6 @@
 
 package org.coliper.ibean.extension;
 
-import java.util.Optional;
-
-import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
-import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
-
 /**
  * Thrown from getter methods from beans that extend {@link NullSafe} in case
  * the value of the field is <code>null</code>.

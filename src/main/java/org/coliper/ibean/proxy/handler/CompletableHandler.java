@@ -21,8 +21,6 @@ import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.BeanIncompleteException;
 import org.coliper.ibean.extension.Completable;
-import org.coliper.ibean.extension.ModificationAware;
-import org.coliper.ibean.extension.ModificationAwareExt;
 import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;

@@ -21,8 +21,6 @@ import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.extension.BeanFrozenException;
 import org.coliper.ibean.extension.Freezable;
-import org.coliper.ibean.extension.ModificationAware;
-import org.coliper.ibean.extension.ModificationAwareExt;
 import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
