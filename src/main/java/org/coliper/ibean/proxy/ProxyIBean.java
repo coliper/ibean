@@ -31,15 +31,30 @@ import org.coliper.ibean.util.RecursionCycleDetector;
 import org.coliper.ibean.util.ReflectionUtil;
 
 /**
+ * Implementation for an IBean interface using Java proxy technology. Therefore it implements
+ * {@link InvocationHandler}.<p>
+ * One ProxyIBean instance represents one IBean instance. Instances of {@link ProxyIBean} are 
+ * exclusively created by {@link ProxyIBeanFactory}.
+ * 
  * @author alex@coliper.org
- *
  */
 class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
+    
+    /*
+     * An instance of this class represents one bean instance. 
+     * It holds following information:
+     *   - meta information about the bean type in field "context"
+     *   - the bean values as an object array in field "beanValues"
+     *   
+     * See invoke method for details how method calls to the bean are handled.
+     */
 
     private static final String METHOD_NAME_TO_STRING = "toString";
     private static final String METHOD_NAME_HASH_CODE = "hashCode";
     private static final String METHOD_NAME_EQUALS = "equals";
 
+    // As field values may contain other IBeans Object-type methods hashCode() and equals() may 
+    // run into endless recursion. To prevent this RecursionCycleDetectors are used here.
     private static final RecursionCycleDetector<Object> RECURSION_DETECTOR_HASHCODE =
             new RecursionCycleDetector<Object>(Integer.valueOf(1));
     private static final RecursionCycleDetector<Object> RECURSION_DETECTOR_EQUALS =
@@ -78,7 +93,12 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     }
 
     /*
-     * (non-Javadoc)
+     * Handles all method calls to the bean:
+     *   - Getter and setter calls are handled by this class (see handleGetterOrSetter() below).
+     *   - Calls to Object-type methods like toString() are also handled by this class (see
+     *     handleRootObjectTypeMethod() below).
+     *   - Calls to extension interface methods are dispatched to the contained 
+     *     "extendedInterfaceHandler".
      * 
      * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object,
      * java.lang.reflect.Method, java.lang.Object[])

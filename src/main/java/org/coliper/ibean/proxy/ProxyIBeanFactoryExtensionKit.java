@@ -26,8 +26,14 @@ import org.coliper.ibean.IBeanTypeMetaInfo;
 import com.google.common.collect.ImmutableList;
 
 /**
+ * Class representing a configuration of all extension interfaces that are supported by a
+ * {@link ProxyIBeanFactory}. It is only used internally by {@link ProxyIBeanFactory} to store
+ * its extension interface setup.<p>
+ * {@link ProxyIBeanFactoryExtensionKit} does not only hold the extension interface configuration,
+ * it also supports creating new {@link ExtensionHandlerDispatcher} instances for new beans objects
+ * (see {@link #createHandlerFor(IBeanTypeMetaInfo)}).
+ * 
  * @author alex@coliper.org
- *
  */
 class ProxyIBeanFactoryExtensionKit {
 
@@ -35,11 +41,6 @@ class ProxyIBeanFactoryExtensionKit {
         final ExtensionSupport support;
         final Optional<ExtensionHandler> handler;
 
-        /**
-         * @param support
-         * @param interfaceType
-         * @param handler
-         */
         IBeanHandlerInterceptorBundle(ExtensionHandler handler, ExtensionSupport support) {
             this.support = support;
             this.handler = Optional.ofNullable(handler);
@@ -47,10 +48,6 @@ class ProxyIBeanFactoryExtensionKit {
 
     }
 
-    /**
-     * @param intfSupportList
-     * @return
-     */
     private static List<IBeanHandlerInterceptorBundle> createBundleList(
             List<ExtensionSupport> intfSupportList) {
         ImmutableList.Builder<IBeanHandlerInterceptorBundle> listBuilder = ImmutableList.builder();
@@ -61,11 +58,6 @@ class ProxyIBeanFactoryExtensionKit {
         return listBuilder.build();
     }
 
-    /**
-     * @param intfSupport
-     * @param extType
-     * @return
-     */
     private static IBeanHandlerInterceptorBundle createGlobalBundle(ExtensionSupport intfSupport) {
         final ExtensionHandler handler;
         if (intfSupport.handlerStateful()) {
@@ -88,10 +80,6 @@ class ProxyIBeanFactoryExtensionKit {
         }
     }
 
-    /**
-     * @param intfSupportList
-     * @return
-     */
     private static List<Class<?>> createSupportedInterfacesList(
             List<ExtensionSupport> intfSupportList) {
         Set<Class<?>> interfaceSet = new HashSet<>();
@@ -104,9 +92,6 @@ class ProxyIBeanFactoryExtensionKit {
     private final List<IBeanHandlerInterceptorBundle> bundles;
     private final List<Class<?>> supportedInterfaces;
 
-    /**
-     * 
-     */
     ProxyIBeanFactoryExtensionKit(List<ExtensionSupport> intfSupportList) {
         requireNonNull(intfSupportList, "intfSupportList");
 
@@ -126,11 +111,6 @@ class ProxyIBeanFactoryExtensionKit {
         return dispatcherBuilder.build();
     }
 
-    /**
-     * @param metaInfo
-     * @param dispatcherBuilder
-     * @param bundle
-     */
     private void addHandlerForSupportedTypesToDispatcherBuilder(IBeanTypeMetaInfo<?> metaInfo,
             ExtensionHandlerDispatcher.Builder dispatcherBuilder,
             IBeanHandlerInterceptorBundle bundle) {

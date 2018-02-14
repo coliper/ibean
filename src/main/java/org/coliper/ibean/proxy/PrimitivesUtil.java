@@ -22,18 +22,29 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 /**
+ * Only internally used helper class related to primitive types.
  * @author alex@coliper.org
- *
  */
 class PrimitivesUtil {
 
+  //@formatter:off
     private static final Map<Class<?>, Object> DEFAULTS_MAP =
-            new ImmutableMap.Builder<Class<?>, Object>().put(byte.class, Byte.valueOf((byte) 0))
-                    .put(short.class, Short.valueOf((short) 0)).put(int.class, Integer.valueOf(0))
-                    .put(long.class, Long.valueOf(0L)).put(float.class, Float.valueOf((float) 0.0))
-                    .put(double.class, Double.valueOf(0.0)).put(boolean.class, Boolean.FALSE)
-                    .put(char.class, Character.valueOf('\u0000')).build();
-
+            new ImmutableMap.Builder<Class<?>, Object>()
+                    .put(byte.class, Byte.valueOf((byte) 0))
+                    .put(short.class, Short.valueOf((short) 0))
+                    .put(int.class, Integer.valueOf(0))
+                    .put(long.class, Long.valueOf(0L))
+                    .put(float.class, Float.valueOf((float) 0.0))
+                    .put(double.class, Double.valueOf(0.0))
+                    .put(boolean.class, Boolean.FALSE)
+                    .put(char.class, Character.valueOf('\u0000'))
+                    .build();
+  //@formatter:off
+    
+    /**
+     * Returnes the default value for a given primitive type, basically all flavours of zero for
+     * the number types and <code>false</code> for <code>boolean.class</code>.
+     */
     static Object defaultValue(Class<?> primitiveType) {
         requireNonNull(primitiveType, "primitiveType");
         Object ret = DEFAULTS_MAP.get(primitiveType);
@@ -42,7 +53,7 @@ class PrimitivesUtil {
     }
 
     /**
-     * 
+     * No instance.
      */
     private PrimitivesUtil() {
     }
