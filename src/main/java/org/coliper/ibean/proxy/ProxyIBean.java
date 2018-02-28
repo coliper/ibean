@@ -86,7 +86,7 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
             IBeanFieldMetaInfo fieldMetaInfo = context.metaInfo().fieldMetaInfos().get(i);
             Class<?> fieldType = fieldMetaInfo.fieldType();
             if (fieldType.isPrimitive()) {
-                val[i] = PrimitivesUtil.defaultValue(fieldType);
+                val[i] = ReflectionUtil.primitiveTypeDefaultValue(fieldType);
             }
         }
         return val;

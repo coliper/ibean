@@ -14,22 +14,46 @@
 
 package org.coliper.ibean.util;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
+
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMap.Builder;
+import com.google.common.reflect.Reflection;
 
 /**
+ * Contains static helper methods related to classes and reflection.
+ * 
  * @author alex@coliper.org
- *
  */
 public class ReflectionUtil {
+
+    //@formatter:off
+    public static final Map<Class<?>, Object> DEFAULTS_MAP =
+            new ImmutableMap.Builder<Class<?>, Object>()
+                    .put(byte.class, Byte.valueOf((byte) 0))
+                    .put(short.class, Short.valueOf((short) 0))
+                    .put(int.class, Integer.valueOf(0))
+                    .put(long.class, Long.valueOf(0L))
+                    .put(float.class, Float.valueOf((float) 0.0))
+                    .put(double.class, Double.valueOf(0.0))
+                    .put(boolean.class, Boolean.FALSE)
+                    .put(char.class, Character.valueOf('\u0000'))
+                    .build();
+    //@formatter:on
 
     private static Map<Class<?>, List<Class<?>>> SUPERTYPE_INCL_CACHE = new ConcurrentHashMap<>();
 
@@ -113,12 +137,53 @@ public class ReflectionUtil {
         });
         return list.build();
     }
+    
+    private static final class LastMethodCallRecordingProxy implements InvocationHandler {
+        private Method lastMethodCalled = null;
+
+        public Method getLastMethodCalled() {
+            return lastMethodCalled;
+        }
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            this.lastMethodCalled = method;
+            if (method.getReturnType().isPrimitive()) {
+                return primitiveTypeDefaultValue(method.getReturnType());
+            }
+            return null;
+        }
+    }
+    
+    public static <T> Method lookupInterfaceMethod(Class<T> interfaceType, 
+            Consumer<T> methodSpecifier) {
+        requireNonNull(interfaceType, "interfaceType");
+        requireNonNull(methodSpecifier, "methodSpecifier");
+        checkArgument(interfaceType.isInterface(), "%s is not an interface type", interfaceType);
+        final LastMethodCallRecordingProxy handler = new LastMethodCallRecordingProxy();
+        T proxy = Reflection.newProxy(interfaceType, handler);
+        methodSpecifier.accept(proxy);
+        final Method method = handler.getLastMethodCalled();
+        checkArgument(method != null, "given methodSpecifier does not call a method on interface %s", interfaceType);
+        return method;
+    }
 
     /*
      * no instances
      */
     private ReflectionUtil() {
 
+    }
+
+    /**
+     * Returnes the default value for a given primitive type, basically all flavours of zero for
+     * the number types and <code>false</code> for <code>boolean.class</code>.
+     */
+    public static Object primitiveTypeDefaultValue(Class<?> primitiveType) {
+        requireNonNull(primitiveType, "primitiveType");
+        Object ret = ReflectionUtil.DEFAULTS_MAP.get(primitiveType);
+        checkArgument(ret != null, "%s is not a primitive type", primitiveType);
+        return ret;
     }
 
 }

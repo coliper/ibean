@@ -16,3 +16,4 @@ hs_err_pid*
 
 # Virtual Studio Code
 .vscode
+/bin/

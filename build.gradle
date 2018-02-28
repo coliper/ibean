@@ -27,6 +27,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'commons-beanutils:commons-beanutils:1.9.3'
     testImplementation 'org.assertj:assertj-core:3.8.0'
+	testImplementation 'com.google.code.gson:gson:2.8.2'
+	testImplementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
+	testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.9.3'
 }
 
 javadoc {
