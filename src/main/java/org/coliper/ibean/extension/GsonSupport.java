@@ -14,6 +14,9 @@
 
 package org.coliper.ibean.extension;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -22,11 +25,11 @@ import com.google.gson.stream.JsonWriter;
  * @author alex@coliper.org
  *
  */
-@JsonAdapter(IBeanTypeAdapterFactory.class)
+@JsonAdapter(GsonSerializerDeserializerForIBeans.class)
 public interface GsonSupport {
     
-    void jsonRead(JsonReader reader);
+    void readFromJsonObject(JsonObject jsonObject, JsonDeserializationContext context);
     
-    void jsonWrite(JsonWriter write);
+    void writeToJsonObject(JsonObject jsonObject, JsonSerializationContext context);
     
 }
