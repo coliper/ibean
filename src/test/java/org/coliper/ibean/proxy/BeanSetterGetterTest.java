@@ -64,7 +64,7 @@ public class BeanSetterGetterTest {
 
     @Test
     public void testSampleBeanClassicWithValues() throws Exception {
-        SampleBeanClassicImpl expected = new SampleBeanClassicImpl().fillWithTestValues();
+        SampleBeanClassic expected = new SampleBeanClassicImpl().fillWithTestValues();
         SampleBeanClassic bean = this.factory.create(SampleBeanClassic.class);
         assertNotNull(bean);
 
@@ -79,7 +79,7 @@ public class BeanSetterGetterTest {
     @Test
     public void testSampleBeanModernWithValues() throws Exception {
         this.switchToModernStyleBuilder();
-        SampleBeanModernImpl expected = new SampleBeanModernImpl().fillWithTestValues();
+        SampleBeanModern expected = new SampleBeanModernImpl().fillWithTestValues();
         SampleBeanModern bean = this.factory.create(SampleBeanModern.class);
         assertNotNull(bean);
 
@@ -93,7 +93,7 @@ public class BeanSetterGetterTest {
 
     @Test
     public void testPrimitivesBeanClassicWithValues() throws Exception {
-        PrimitivesBeanClassicImpl expected = new PrimitivesBeanClassicImpl().fillWithTestValues();
+        PrimitivesBeanClassic expected = new PrimitivesBeanClassicImpl().fillWithTestValues();
         PrimitivesBeanClassic bean = this.factory.create(PrimitivesBeanClassic.class);
         assertNotNull(bean);
 

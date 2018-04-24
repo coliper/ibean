@@ -48,7 +48,7 @@ public class CloningTest {
 
     @Test
     public void testSampleBeanClassic() throws Exception {
-        SampleBeanClassicImpl expected = new SampleBeanClassicImpl().fillWithTestValues();
+        SampleBeanClassic expected = new SampleBeanClassicImpl().fillWithTestValues();
         SampleBeanClassicCloneable bean = this.factory.create(SampleBeanClassicCloneable.class);
         expected.copyTo(bean);
         SampleBeanClassic clone = bean.clone();
@@ -63,7 +63,7 @@ public class CloningTest {
 
     @Test
     public void testPrimitivesBeanClassic() throws Exception {
-        PrimitivesBeanClassicImpl expected = new PrimitivesBeanClassicImpl().fillWithTestValues();
+        PrimitivesBeanClassic expected = new PrimitivesBeanClassicImpl().fillWithTestValues();
         PrimitivesBeanClassicCloneable bean =
                 this.factory.create(PrimitivesBeanClassicCloneable.class);
         expected.copyTo(bean);

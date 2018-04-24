@@ -116,27 +116,4 @@ public class SampleBeanClassicImpl implements SampleBeanClassic {
         this.self = self;
     }
 
-    public void copyTo(SampleBeanClassic other)
-            throws IllegalAccessException, InvocationTargetException {
-        BeanUtils.copyProperties(other, this);
-    }
-
-    public SampleBeanClassicImpl fillWithTestValues() {
-        this.setBooleanPrimitive(true);
-        this.setDate(new Date(0L));
-        this.setIntObject(Integer.valueOf(Integer.MAX_VALUE));
-        this.setSelf(new SampleBeanClassicImpl());
-        this.setString("dummy 2134452");
-        return this;
-    }
-
-    public SampleBeanClassicImpl fillWithNullValues() {
-        this.setBooleanPrimitive(false);
-        this.setDate(null);
-        this.setIntObject(Integer.valueOf(0));
-        this.setSelf(null);
-        this.setString(null);
-        return this;
-    }
-
 }

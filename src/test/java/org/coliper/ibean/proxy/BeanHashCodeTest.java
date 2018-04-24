@@ -40,7 +40,7 @@ public class BeanHashCodeTest {
 
     @Test
     public void testSampleBeanClassic() throws Exception {
-        SampleBeanClassicImpl regularBean = new SampleBeanClassicImpl().fillWithTestValues();
+        SampleBeanClassic regularBean = new SampleBeanClassicImpl().fillWithTestValues();
 
         SampleBeanClassic bean1 = this.factory.create(SampleBeanClassic.class);
         SampleBeanClassic bean2 = this.factory.create(SampleBeanClassic.class);
@@ -58,7 +58,7 @@ public class BeanHashCodeTest {
     @Test
     public void testSampleBeanModern() throws Exception {
         this.switchToModernStyleBuilder();
-        SampleBeanModernImpl regularBean = new SampleBeanModernImpl().fillWithTestValues();
+        SampleBeanModern regularBean = new SampleBeanModernImpl().fillWithTestValues();
 
         SampleBeanModern bean1 = this.factory.create(SampleBeanModern.class);
         SampleBeanModern bean2 = this.factory.create(SampleBeanModern.class);
@@ -75,7 +75,7 @@ public class BeanHashCodeTest {
 
     @Test
     public void testPrimitivesBeanClassicWithValues() throws Exception {
-        PrimitivesBeanClassicImpl regularBean =
+        PrimitivesBeanClassic regularBean =
                 new PrimitivesBeanClassicImpl().fillWithTestValues();
         PrimitivesBeanClassic bean1 = this.factory.create(PrimitivesBeanClassic.class);
         PrimitivesBeanClassic bean2 = this.factory.create(PrimitivesBeanClassic.class);

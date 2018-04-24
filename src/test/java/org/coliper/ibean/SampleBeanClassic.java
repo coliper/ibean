@@ -14,7 +14,10 @@
 
 package org.coliper.ibean;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
+
+import org.apache.commons.beanutils.BeanUtils;
 
 /**
  * @author alex@coliper.org
@@ -38,4 +41,33 @@ public interface SampleBeanClassic {
     SampleBeanClassic getSelf();
     void setSelf(SampleBeanClassic s);
 //@formatter:on    
+    
+
+    default void copyTo(SampleBeanClassic other)
+            throws IllegalAccessException, InvocationTargetException {
+        BeanUtils.copyProperties(other, this);
+    }
+
+    default SampleBeanClassic fillWithTestValues() {
+        this.setBooleanPrimitive(true);
+        this.setDate(new Date(0L));
+        this.setIntObject(Integer.valueOf(Integer.MAX_VALUE));
+        this.setSelf(new SampleBeanClassicImpl());
+        this.setString("dummy 2134452");
+        return this;
+    }
+
+    default SampleBeanClassic fillWithNullValues() {
+        this.setBooleanPrimitive(false);
+        this.setDate(null);
+        this.setIntObject(Integer.valueOf(0));
+        this.setSelf(null);
+        this.setString(null);
+        return this;
+    }
+    
+    default void assertEqual(SampleBeanClassic other) {
+        BeanTestUtil.assertEqualsBean(SampleBeanClassic.class, BeanStyle.CLASSIC, this, other);
+    }
+    
 }

@@ -42,7 +42,7 @@ public class BeanToStringTest {
 
     @Test
     public void testSampleBeanClassic() throws Exception {
-        SampleBeanClassicImpl regularBean = new SampleBeanClassicImpl().fillWithTestValues();
+        SampleBeanClassic regularBean = new SampleBeanClassicImpl().fillWithTestValues();
 
         SampleBeanClassic bean = this.factory.create(SampleBeanClassic.class);
         //@formatter:off
@@ -71,7 +71,7 @@ public class BeanToStringTest {
     @Test
     public void testSampleBeanModern() throws Exception {
         this.switchToModernStyleBuilder();
-        SampleBeanModernImpl regularBean = new SampleBeanModernImpl().fillWithTestValues();
+        SampleBeanModern regularBean = new SampleBeanModernImpl().fillWithTestValues();
 
         SampleBeanModern bean = this.factory.create(SampleBeanModern.class);
         //@formatter:off
@@ -99,7 +99,7 @@ public class BeanToStringTest {
 
     @Test
     public void testPrimitivesBeanClassic() throws Exception {
-        PrimitivesBeanClassicImpl regularBean =
+        PrimitivesBeanClassic regularBean =
                 new PrimitivesBeanClassicImpl().fillWithTestValues();
         PrimitivesBeanClassic bean = this.factory.create(PrimitivesBeanClassic.class);
         String expected;
@@ -135,7 +135,7 @@ public class BeanToStringTest {
     public void testDifferentToStringStyle() throws Exception {
         IBeanFactory otherFactory =
                 ProxyIBeanFactory.builder().withToStringStyle(ToStringStyle.JSON_STYLE).build();
-        SampleBeanClassicImpl regularBean = new SampleBeanClassicImpl().fillWithTestValues();
+        SampleBeanClassic regularBean = new SampleBeanClassicImpl().fillWithTestValues();
 
         SampleBeanClassic bean = otherFactory.create(SampleBeanClassic.class);
         //@formatter:off

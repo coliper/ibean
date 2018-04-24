@@ -38,4 +38,67 @@ public interface SampleBeanModern {
     SampleBeanModern self();
     SampleBeanModern self(SampleBeanModern s);
 //@formatter:on    
+    
+
+    default SampleBeanModern fillWithTestValues() {
+        this.booleanPrimitive(true);
+        this.date(new Date(0L));
+        this.intObject(Integer.valueOf(Integer.MAX_VALUE));
+        this.self(new SampleBeanModernImpl());
+        this.string("dummy 2134452");
+        return this;
+    }
+
+    default SampleBeanModern fillWithNullValues() {
+        this.booleanPrimitive(false);
+        this.date(null);
+        this.intObject(Integer.valueOf(0));
+        this.self(null);
+        this.string(null);
+        return this;
+    }
+
+    default boolean isEqual(SampleBeanModern other) {
+        if (this == other)
+            return true;
+        if (other == null)
+            return false;
+        if (getClass() != other.getClass())
+            return false;
+        if (booleanPrimitive() != other.booleanPrimitive())
+            return false;
+        if (date() == null) {
+            if (other.date() != null)
+                return false;
+        } else if (!date().equals(other.date()))
+            return false;
+        if (intObject() == null) {
+            if (other.intObject() != null)
+                return false;
+        } else if (!intObject().equals(other.intObject()))
+            return false;
+        if (self() == null) {
+            if (other.self() != null)
+                return false;
+        } else if (!self().equals(other.self()))
+            return false;
+        if (string() == null) {
+            if (other.string() != null)
+                return false;
+        } else if (!string().equals(other.string()))
+            return false;
+        return true;
+    }
+    
+    default void assertEqual(SampleBeanModern other) {
+        BeanTestUtil.assertEqualsBean(SampleBeanModern.class, BeanStyle.CLASSIC, this, other);
+    }
+
+    default void copyTo(SampleBeanModern other) {
+        other.booleanPrimitive(this.booleanPrimitive());
+        other.intObject(this.intObject());
+        other.date(this.date());
+        other.self(this.self());
+        other.string(this.string());
+    }    
 }
