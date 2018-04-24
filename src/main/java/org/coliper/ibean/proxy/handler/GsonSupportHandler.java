@@ -21,11 +21,14 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.GsonSupport;
+import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
-import org.coliper.ibean.util.ReflectionUtil;
+import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Primitives;
@@ -40,11 +43,20 @@ import com.google.gson.JsonSyntaxException;
  *
  */
 public class GsonSupportHandler extends StatelessExtensionHandler {
+    /**
+     * {@link ExtensionSupport} related to this handler supposed to be used when
+     * configuring extension handlers in {@link IBeanFactory}s, for example in
+     * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
+     */
+    public static final ExtensionSupport SUPPORT =
+            new ExtensionSupport(GsonSupport.class, GsonSupportHandler.class, false/* stateful */);
 
-    private static final Method JSON_READ_METHOD = ReflectionUtil
-            .lookupInterfaceMethod(GsonSupport.class, (s) -> s.readFromJsonObject(null, null));
-    private static final Method JSON_WRITE_METHOD = ReflectionUtil
-            .lookupInterfaceMethod(GsonSupport.class, (s) -> s.writeToJsonObject(null, null));
+    private static final Method JSON_READ_METHOD =
+            MethodUtils.getAccessibleMethod(GsonSupport.class, "readFromJsonObject",
+                    JsonObject.class, JsonDeserializationContext.class);
+    private static final Method JSON_WRITE_METHOD =
+            MethodUtils.getAccessibleMethod(GsonSupport.class, "writeToJsonObject",
+                    JsonObject.class, JsonSerializationContext.class);
 
     /*
      * (non-Javadoc)
@@ -59,12 +71,12 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
             Object proxyInstance, Method method, Object[] params) throws Throwable {
         if (JSON_WRITE_METHOD.equals(method)) {
             Objects.requireNonNull(params, "params");
-            Preconditions.checkArgument(params.length == 1);
+            Preconditions.checkArgument(params.length == 2);
             this.writeToJsonObject((JsonObject) params[0], (JsonSerializationContext) params[1],
                     context, bean);
         } else if (JSON_READ_METHOD.equals(method)) {
             Objects.requireNonNull(params, "params");
-            Preconditions.checkArgument(params.length == 1);
+            Preconditions.checkArgument(params.length == 2);
             this.readFromJsonObject((JsonObject) params[0], (JsonDeserializationContext) params[1],
                     context, bean);
         } else {
