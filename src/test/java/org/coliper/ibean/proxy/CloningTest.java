@@ -70,8 +70,8 @@ public class CloningTest {
         PrimitivesBeanClassic clone = bean.clone();
         BeanTestUtil.assertEqualsBean(PrimitivesBeanClassic.class, BeanStyle.CLASSIC, expected,
                 clone);
-        clone.setInt(-77);
-        assertThat(clone.getInt()).isEqualTo(-77);
+        clone.setIntPrimitive(-77);
+        assertThat(clone.getIntPrimitive()).isEqualTo(-77);
     }
 
     public static interface NestedBean extends CloneableBean<NestedBean> {
@@ -99,7 +99,7 @@ public class CloningTest {
         nestedOrig.setList(Lists.newArrayList(prim1Orig, null, prim2Orig));
 
         NestedBean nestedCopy = nestedOrig.deepClone();
-        
+
         assertThat(nestedCopy).isNotNull();
         assertThat(nestedCopy).isNotSameAs(nestedOrig);
         assertThat(nestedCopy.getSample()).isNotSameAs(nestedOrig.getSample());

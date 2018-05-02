@@ -38,7 +38,6 @@ public interface SampleBeanModern {
     SampleBeanModern self();
     SampleBeanModern self(SampleBeanModern s);
 //@formatter:on    
-    
 
     default SampleBeanModern fillWithTestValues() {
         this.booleanPrimitive(true);
@@ -89,9 +88,14 @@ public interface SampleBeanModern {
             return false;
         return true;
     }
-    
+
     default void assertEqual(SampleBeanModern other) {
-        BeanTestUtil.assertEqualsBean(SampleBeanModern.class, BeanStyle.CLASSIC, this, other);
+        BeanTestUtil.assertEqualsBean(SampleBeanModern.class, BeanStyle.MODERN, this, other);
+    }
+
+    default void assertEqual(SampleBeanModern other, boolean requireNestedObjectsSame) {
+        BeanTestUtil.assertEqualsBean(SampleBeanModern.class, BeanStyle.MODERN, this, other,
+                requireNestedObjectsSame);
     }
 
     default void copyTo(SampleBeanModern other) {
@@ -100,5 +104,5 @@ public interface SampleBeanModern {
         other.date(this.date());
         other.self(this.self());
         other.string(this.string());
-    }    
+    }
 }

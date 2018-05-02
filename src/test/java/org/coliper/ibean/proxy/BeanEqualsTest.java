@@ -124,7 +124,7 @@ public class BeanEqualsTest {
         assertTrue(bean2.equals(bean1));
         assertFalse(bean1.equals(regularBean));
 
-        bean1.setInt(666); // change bean1 again: beans differ
+        bean1.setIntPrimitive(666); // change bean1 again: beans differ
         assertFalse(bean1.equals(bean2));
         assertFalse(bean2.equals(bean1));
         assertFalse(bean1.equals(regularBean));

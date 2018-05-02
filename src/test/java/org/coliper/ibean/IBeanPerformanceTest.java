@@ -54,7 +54,7 @@ public class IBeanPerformanceTest {
 
         start = System.currentTimeMillis();
         for (long i = 0; i < CLASSIC_ITERATIONS; i++) {
-            o.setInt(17);
+            o.setIntPrimitive(17);
         }
         duration = System.currentTimeMillis() - start;
         durationPerCall = 1000_000.0 * duration / (double) CLASSIC_ITERATIONS;
@@ -92,7 +92,7 @@ public class IBeanPerformanceTest {
 
         start = System.currentTimeMillis();
         for (long i = 0; i < IBEAN_ITERATIONS; i++) {
-            o.setInt(17);
+            o.setIntPrimitive(17);
         }
         duration = System.currentTimeMillis() - start;
         durationPerCall = 1000_000.0 * duration / (double) IBEAN_ITERATIONS;
@@ -101,7 +101,7 @@ public class IBeanPerformanceTest {
 
         start = System.currentTimeMillis();
         for (long i = 0; i < IBEAN_ITERATIONS; i++) {
-            o.setLong(i);
+            o.setLongPrimitive(i);
         }
         duration = System.currentTimeMillis() - start;
         durationPerCall = 1000_000.0 * duration / (double) IBEAN_ITERATIONS;

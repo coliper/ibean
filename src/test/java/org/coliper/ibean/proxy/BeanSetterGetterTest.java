@@ -3,6 +3,7 @@
  */
 package org.coliper.ibean.proxy;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
 import org.coliper.ibean.BeanStyle;
@@ -105,5 +106,12 @@ public class BeanSetterGetterTest {
         expected.copyTo(bean);
         BeanTestUtil.assertEqualsBean(PrimitivesBeanClassic.class, BeanStyle.CLASSIC, expected,
                 bean);
+    }
+
+    @Test
+    public void testDefaultMethods() {
+        SampleBeanClassic bean = this.factory.create(SampleBeanClassic.class);
+        bean.fillWithTestValues();
+        assertThat(bean.getString()).isEqualTo(SampleBeanClassic.STRING_DEFAULT_VALUE);
     }
 }

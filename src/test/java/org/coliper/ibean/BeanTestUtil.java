@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.coliper.ibean.extension.CloneableBean;
 import org.coliper.ibean.extension.Completable;
+import org.coliper.ibean.extension.GsonSupport;
 import org.coliper.ibean.extension.ModificationAwareExt;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.OptionalSupport;
@@ -34,12 +35,18 @@ import com.google.common.collect.ImmutableList;
  *
  */
 public class BeanTestUtil {
-    private static final List<Class<?>> EXTENSION_INTERFACES = ImmutableList.of(
-            CloneableBean.class, Completable.class, TempFreezable.class, ModificationAwareExt.class, 
-            NullSafe.class, OptionalSupport.class);
+    private static final List<Class<?>> EXTENSION_INTERFACES = ImmutableList.of(CloneableBean.class,
+            Completable.class, TempFreezable.class, ModificationAwareExt.class, NullSafe.class,
+            OptionalSupport.class, GsonSupport.class);
 
     public static <T> void assertEqualsBean(Class<T> beanType, BeanStyle beanStyle, T bean1,
             T bean2) {
+        final boolean requireNestedObjectsSame = true;
+        assertEqualsBean(beanType, beanStyle, bean1, bean2, requireNestedObjectsSame);
+    }
+
+    public static <T> void assertEqualsBean(Class<T> beanType, BeanStyle beanStyle, T bean1,
+            T bean2, boolean requireNestedObjectsSame) {
         assertNotNull(bean1);
         assertNotNull(bean2);
         IBeanTypeMetaInfo<T> meta =
@@ -53,7 +60,7 @@ public class BeanTestUtil {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            if (fieldMeta.fieldType().isPrimitive()) {
+            if (fieldMeta.fieldType().isPrimitive() || !requireNestedObjectsSame) {
                 assertEquals(fieldMeta.fieldName(), val1, val2);
             } else {
                 assertSame(fieldMeta.fieldName(), val1, val2);

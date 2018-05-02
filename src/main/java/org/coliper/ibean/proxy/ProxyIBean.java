@@ -18,6 +18,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -31,21 +33,21 @@ import org.coliper.ibean.util.RecursionCycleDetector;
 import org.coliper.ibean.util.ReflectionUtil;
 
 /**
- * Implementation for an IBean interface using Java proxy technology. Therefore it implements
- * {@link InvocationHandler}.<p>
- * One ProxyIBean instance represents one IBean instance. Instances of {@link ProxyIBean} are 
- * exclusively created by {@link ProxyIBeanFactory}.
+ * Implementation for an IBean interface using Java proxy technology. Therefore
+ * it implements {@link InvocationHandler}.
+ * <p>
+ * One ProxyIBean instance represents one IBean instance. Instances of
+ * {@link ProxyIBean} are exclusively created by {@link ProxyIBeanFactory}.
  * 
  * @author alex@coliper.org
  */
 class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
-    
+
     /*
-     * An instance of this class represents one bean instance. 
-     * It holds following information:
-     *   - meta information about the bean type in field "context"
-     *   - the bean values as an object array in field "beanValues"
-     *   
+     * An instance of this class represents one bean instance. It holds
+     * following information: - meta information about the bean type in field
+     * "context" - the bean values as an object array in field "beanValues"
+     * 
      * See invoke method for details how method calls to the bean are handled.
      */
 
@@ -53,8 +55,10 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     private static final String METHOD_NAME_HASH_CODE = "hashCode";
     private static final String METHOD_NAME_EQUALS = "equals";
 
-    // As field values may contain other IBeans Object-type methods hashCode() and equals() may 
-    // run into endless recursion. To prevent this RecursionCycleDetectors are used here.
+    // As field values may contain other IBeans Object-type methods hashCode()
+    // and equals() may
+    // run into endless recursion. To prevent this RecursionCycleDetectors are
+    // used here.
     private static final RecursionCycleDetector<Object> RECURSION_DETECTOR_HASHCODE =
             new RecursionCycleDetector<Object>(Integer.valueOf(1));
     private static final RecursionCycleDetector<Object> RECURSION_DETECTOR_EQUALS =
@@ -93,12 +97,11 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     }
 
     /*
-     * Handles all method calls to the bean:
-     *   - Getter and setter calls are handled by this class (see handleGetterOrSetter() below).
-     *   - Calls to Object-type methods like toString() are also handled by this class (see
-     *     handleRootObjectTypeMethod() below).
-     *   - Calls to extension interface methods are dispatched to the contained 
-     *     "extendedInterfaceHandler".
+     * Handles all method calls to the bean: - Getter and setter calls are
+     * handled by this class (see handleGetterOrSetter() below). - Calls to
+     * Object-type methods like toString() are also handled by this class (see
+     * handleRootObjectTypeMethod() below). - Calls to extension interface
+     * methods are dispatched to the contained "extendedInterfaceHandler".
      * 
      * @see java.lang.reflect.InvocationHandler#invoke(java.lang.Object,
      * java.lang.reflect.Method, java.lang.Object[])
@@ -112,7 +115,20 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
             return this.extendedInterfaceHandler.handleExtendedInterfaceCall(this.context, this,
                     proxy, method, args);
         }
+        if (method.isDefault()) {
+            return this.handleDefaultMethod(proxy, method, args);
+        }
         return this.handleGetterOrSetter(proxy, method, args);
+    }
+
+    private Object handleDefaultMethod(Object proxy, Method method, Object[] args)
+            throws Throwable {
+        final Class<?> declaringClass = method.getDeclaringClass();
+        Constructor<MethodHandles.Lookup> constructor =
+                MethodHandles.Lookup.class.getDeclaredConstructor(Class.class, int.class);
+        constructor.setAccessible(true);
+        return constructor.newInstance(declaringClass, MethodHandles.Lookup.PRIVATE)
+                .unreflectSpecial(method, declaringClass).bindTo(proxy).invokeWithArguments(args);
     }
 
     private boolean isRootObjectTypeMethod(Method method) {

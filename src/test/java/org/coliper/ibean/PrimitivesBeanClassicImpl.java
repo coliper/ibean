@@ -16,26 +16,27 @@ package org.coliper.ibean;
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 /**
  * @author alex@coliper.org
  *
  */
 public class PrimitivesBeanClassicImpl implements PrimitivesBeanClassic {
-    private byte byte_;
-    private short short_;
-    private int int_;
-    private long long_;
-    private float float_;
-    private double double_;
-    private boolean boolean_;
-    private char char_;
+    private byte bytePrimitive;
+    private short shortPrimitive;
+    private int intPrimitive;
+    private long longPrimitive;
+    private float floatPrimitive;
+    private double doublePrimitive;
+    private boolean booleanPrimitive;
+    private char charPrimitive;
     private Byte byteObject;
     private Short shortObject;
     private Integer intObject;
     private Long longObject;
     private Float floatObject;
+    private Double doubleObject;
+    private Boolean booleanObject;
+    private Character charObject;
 
     /**
      * @return the floatObject
@@ -52,10 +53,6 @@ public class PrimitivesBeanClassicImpl implements PrimitivesBeanClassic {
         this.floatObject = floatObject;
     }
 
-    private Double doubleObject;
-    private Boolean booleanObject;
-    private Character charObject;
-
     @Override
     public PrimitivesBeanClassic clone() {
         PrimitivesBeanClassic clone = new PrimitivesBeanClassicImpl();
@@ -68,123 +65,123 @@ public class PrimitivesBeanClassicImpl implements PrimitivesBeanClassic {
     }
 
     /**
-     * @return the byte_
+     * @return the bytePrimitive
      */
-    public byte getByte() {
-        return byte_;
+    public byte getBytePrimitive() {
+        return bytePrimitive;
     }
 
     /**
-     * @param byte_
-     *            the byte_ to set
+     * @param bytePrimitive
+     *            the bytePrimitive to set
      */
-    public void setByte(byte byte_) {
-        this.byte_ = byte_;
+    public void setBytePrimitive(byte bytePrimitive) {
+        this.bytePrimitive = bytePrimitive;
     }
 
     /**
-     * @return the short_
+     * @return the shortPrimitive
      */
-    public short getShort() {
-        return short_;
+    public short getShortPrimitive() {
+        return shortPrimitive;
     }
 
     /**
-     * @param short_
-     *            the short_ to set
+     * @param shortPrimitive
+     *            the shortPrimitive to set
      */
-    public void setShort(short short_) {
-        this.short_ = short_;
+    public void setShortPrimitive(short shortPrimitive) {
+        this.shortPrimitive = shortPrimitive;
     }
 
     /**
-     * @return the int_
+     * @return the intPrimitive
      */
-    public int getInt() {
-        return int_;
+    public int getIntPrimitive() {
+        return intPrimitive;
     }
 
     /**
-     * @param int_
-     *            the int_ to set
+     * @param intPrimitive
+     *            the intPrimitive to set
      */
-    public void setInt(int int_) {
-        this.int_ = int_;
+    public void setIntPrimitive(int intPrimitive) {
+        this.intPrimitive = intPrimitive;
     }
 
     /**
-     * @return the long_
+     * @return the longPrimitive
      */
-    public long getLong() {
-        return long_;
+    public long getLongPrimitive() {
+        return longPrimitive;
     }
 
     /**
-     * @param long_
-     *            the long_ to set
+     * @param longPrimitive
+     *            the longPrimitive to set
      */
-    public void setLong(long long_) {
-        this.long_ = long_;
+    public void setLongPrimitive(long longPrimitive) {
+        this.longPrimitive = longPrimitive;
     }
 
     /**
-     * @return the float_
+     * @return the floatPrimitive
      */
-    public float getFloat() {
-        return float_;
+    public float getFloatPrimitive() {
+        return floatPrimitive;
     }
 
     /**
-     * @param float_
-     *            the float_ to set
+     * @param floatPrimitive
+     *            the floatPrimitive to set
      */
-    public void setFloat(float float_) {
-        this.float_ = float_;
+    public void setFloatPrimitive(float floatPrimitive) {
+        this.floatPrimitive = floatPrimitive;
     }
 
     /**
-     * @return the double_
+     * @return the doublePrimitive
      */
-    public double getDouble() {
-        return double_;
+    public double getDoublePrimitive() {
+        return doublePrimitive;
     }
 
     /**
-     * @param double_
-     *            the double_ to set
+     * @param doublePrimitive
+     *            the doublePrimitive to set
      */
-    public void setDouble(double double_) {
-        this.double_ = double_;
+    public void setDoublePrimitive(double doublePrimitive) {
+        this.doublePrimitive = doublePrimitive;
     }
 
     /**
-     * @return the boolean_
+     * @return the booleanPrimitive
      */
-    public boolean isBoolean() {
-        return boolean_;
+    public boolean isBooleanPrimitive() {
+        return booleanPrimitive;
     }
 
     /**
-     * @param boolean_
-     *            the boolean_ to set
+     * @param booleanPrimitive
+     *            the booleanPrimitive to set
      */
-    public void setBoolean(boolean boolean_) {
-        this.boolean_ = boolean_;
+    public void setBooleanPrimitive(boolean booleanPrimitive) {
+        this.booleanPrimitive = booleanPrimitive;
     }
 
     /**
-     * @return the char_
+     * @return the charPrimitive
      */
-    public char getChar() {
-        return char_;
+    public char getCharPrimitive() {
+        return charPrimitive;
     }
 
     /**
-     * @param char_
-     *            the char_ to set
+     * @param charPrimitive
+     *            the charPrimitive to set
      */
-    public void setChar(char char_) {
-        this.char_ = char_;
+    public void setCharPrimitive(char charPrimitive) {
+        this.charPrimitive = charPrimitive;
     }
 
     /**

@@ -25,6 +25,8 @@ import org.apache.commons.beanutils.BeanUtils;
  */
 public interface SampleBeanClassic {
 
+    public static final String STRING_DEFAULT_VALUE = "dummy 2134452";
+
 //@formatter:off 
     void setIntObject(Integer i);
     Integer getIntObject();
@@ -41,7 +43,6 @@ public interface SampleBeanClassic {
     SampleBeanClassic getSelf();
     void setSelf(SampleBeanClassic s);
 //@formatter:on    
-    
 
     default void copyTo(SampleBeanClassic other)
             throws IllegalAccessException, InvocationTargetException {
@@ -53,7 +54,7 @@ public interface SampleBeanClassic {
         this.setDate(new Date(0L));
         this.setIntObject(Integer.valueOf(Integer.MAX_VALUE));
         this.setSelf(new SampleBeanClassicImpl());
-        this.setString("dummy 2134452");
+        this.setString(STRING_DEFAULT_VALUE);
         return this;
     }
 
@@ -65,9 +66,9 @@ public interface SampleBeanClassic {
         this.setString(null);
         return this;
     }
-    
+
     default void assertEqual(SampleBeanClassic other) {
         BeanTestUtil.assertEqualsBean(SampleBeanClassic.class, BeanStyle.CLASSIC, this, other);
     }
-    
+
 }

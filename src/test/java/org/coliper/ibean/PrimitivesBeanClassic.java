@@ -24,29 +24,29 @@ import org.apache.commons.beanutils.BeanUtils;
  */
 public interface PrimitivesBeanClassic {
 //@formatter:off 
-    void setByte(byte b);
-    byte getByte();
+    void setBytePrimitive(byte b);
+    byte getBytePrimitive();
     
-    void setShort(short s);
-    short getShort();
+    void setShortPrimitive(short s);
+    short getShortPrimitive();
     
-    void setInt(int i);
-    int getInt();
+    void setIntPrimitive(int i);
+    int getIntPrimitive();
     
-    void setLong(long l);
-    long getLong();
+    void setLongPrimitive(long l);
+    long getLongPrimitive();
     
-    void setFloat(float f);
-    float getFloat();
+    void setFloatPrimitive(float f);
+    float getFloatPrimitive();
     
-    void setDouble(double d);
-    double getDouble();
+    void setDoublePrimitive(double d);
+    double getDoublePrimitive();
     
-    void setBoolean(boolean b);
-    boolean isBoolean();
+    void setBooleanPrimitive(boolean b);
+    boolean isBooleanPrimitive();
     
-    void setChar(char c);
-    char getChar();
+    void setCharPrimitive(char c);
+    char getCharPrimitive();
 
     void setByteObject(Byte b);
     Byte getByteObject();
@@ -73,43 +73,42 @@ public interface PrimitivesBeanClassic {
     Character getCharObject();
 //@formatter:on    
 
-
     default PrimitivesBeanClassic fillWithTestValues() {
-        this.setBoolean(true);
+        this.setBooleanPrimitive(true);
         this.setBooleanObject(Boolean.TRUE);
-        this.setByte(Byte.MIN_VALUE);
+        this.setBytePrimitive(Byte.MIN_VALUE);
         this.setByteObject(Byte.valueOf(Byte.MAX_VALUE));
-        this.setChar('x');
+        this.setCharPrimitive('x');
         this.setCharObject(Character.valueOf('@'));
-        this.setDouble(Double.MIN_NORMAL);
+        this.setDoublePrimitive(Double.MIN_NORMAL);
         this.setDoubleObject(Double.valueOf(Double.MAX_VALUE));
-        this.setFloat(Float.NEGATIVE_INFINITY);
-        this.setFloatObject(Float.valueOf(Float.NaN));
-        this.setInt(Integer.MIN_VALUE);
+        this.setFloatPrimitive(Float.MAX_VALUE);
+        this.setFloatObject(Float.valueOf(Float.MIN_VALUE));
+        this.setIntPrimitive(Integer.MIN_VALUE);
         this.setIntObject(Integer.valueOf(-1));
-        this.setLong(Long.MAX_VALUE);
+        this.setLongPrimitive(Long.MAX_VALUE);
         this.setLongObject(Long.valueOf(Long.MIN_VALUE));
-        this.setShort(Short.MAX_VALUE);
+        this.setShortPrimitive(Short.MAX_VALUE);
         this.setShortObject(Short.valueOf(Short.MIN_VALUE));
         return this;
     }
 
     default PrimitivesBeanClassic fillWithNullValues() {
-        this.setBoolean(false);
+        this.setBooleanPrimitive(false);
         this.setBooleanObject(null);
-        this.setByte((byte) 0);
+        this.setBytePrimitive((byte) 0);
         this.setByteObject(null);
-        this.setChar('\u0000');
+        this.setCharPrimitive('\u0000');
         this.setCharObject(null);
-        this.setDouble(0.0);
+        this.setDoublePrimitive(0.0);
         this.setDoubleObject(null);
-        this.setFloat((float) 0.0);
+        this.setFloatPrimitive((float) 0.0);
         this.setFloatObject(null);
-        this.setInt(0);
+        this.setIntPrimitive(0);
         this.setIntObject(null);
-        this.setLong(0L);
+        this.setLongPrimitive(0L);
         this.setLongObject(null);
-        this.setShort((short) 0);
+        this.setShortPrimitive((short) 0);
         this.setShortObject(null);
         return this;
     }
@@ -118,8 +117,13 @@ public interface PrimitivesBeanClassic {
             throws IllegalAccessException, InvocationTargetException {
         BeanUtils.copyProperties(other, this);
     }
-    
+
     default void assertEqual(PrimitivesBeanClassic other) {
         BeanTestUtil.assertEqualsBean(PrimitivesBeanClassic.class, BeanStyle.CLASSIC, this, other);
+    }
+
+    default void assertEqual(PrimitivesBeanClassic other, boolean requireNestedObjectsSame) {
+        BeanTestUtil.assertEqualsBean(PrimitivesBeanClassic.class, BeanStyle.CLASSIC, this, other,
+                requireNestedObjectsSame);
     }
 }
