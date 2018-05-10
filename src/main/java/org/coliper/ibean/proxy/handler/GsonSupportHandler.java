@@ -21,7 +21,6 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.GsonSupport;
@@ -29,6 +28,7 @@ import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.util.ReflectionUtil;
 
 import com.google.common.base.Preconditions;
 import com.google.common.primitives.Primitives;
@@ -52,11 +52,13 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
             new ExtensionSupport(GsonSupport.class, GsonSupportHandler.class, false/* stateful */);
 
     private static final Method JSON_READ_METHOD =
-            MethodUtils.getAccessibleMethod(GsonSupport.class, "readFromJsonObject",
-                    JsonObject.class, JsonDeserializationContext.class);
+            ReflectionUtil.lookupInterfaceMethod(GsonSupport.class, (GsonSupport s) -> {
+                s.readFromJsonObject(null, null);
+            });
     private static final Method JSON_WRITE_METHOD =
-            MethodUtils.getAccessibleMethod(GsonSupport.class, "writeToJsonObject",
-                    JsonObject.class, JsonSerializationContext.class);
+            ReflectionUtil.lookupInterfaceMethod(GsonSupport.class, (GsonSupport s) -> {
+                s.writeToJsonObject(null, null);
+            });
 
     /*
      * (non-Javadoc)
