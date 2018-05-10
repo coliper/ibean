@@ -33,6 +33,7 @@ import org.coliper.ibean.proxy.handler.CloneableHandler;
 import org.coliper.ibean.proxy.handler.CompletableHandler;
 import org.coliper.ibean.proxy.handler.FreezableHandler;
 import org.coliper.ibean.proxy.handler.GsonSupportHandler;
+import org.coliper.ibean.proxy.handler.Jackson2SupportHandler;
 import org.coliper.ibean.proxy.handler.ModificationAwareHandler;
 import org.coliper.ibean.proxy.handler.NullSafeHandler;
 import org.coliper.ibean.proxy.handler.OptionalSupportHandler;
@@ -53,7 +54,8 @@ public class ProxyIBeanFactory implements IBeanFactory {
                     FreezableHandler.SUPPORT,
                     CompletableHandler.SUPPORT,
                     CloneableHandler.SUPPORT,
-                    GsonSupportHandler.SUPPORT);
+                    GsonSupportHandler.SUPPORT,
+                    Jackson2SupportHandler.SUPPORT);
   //@formatter:on 
 
     private final IBeanMetaInfoParser metaInfoParser;

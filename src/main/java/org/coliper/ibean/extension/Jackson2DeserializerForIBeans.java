@@ -28,22 +28,18 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
  * @author alex@coliper.org
  *
  */
-public class Jackson2DeserializerForIBeans extends JsonDeserializer<Jackson2Support> {
+class Jackson2DeserializerForIBeans extends JsonDeserializer<Jackson2Support> {
 
     private final IBeanFactory iBeanFactory;
+    private final Class<? extends Jackson2Support> beanType;
 
     /**
      * @param factory
      */
-    public Jackson2DeserializerForIBeans() {
-        this.iBeanFactory = null;
-    }
-
-    /**
-     * @param factory
-     */
-    public Jackson2DeserializerForIBeans(IBeanFactory factory) {
+    public Jackson2DeserializerForIBeans(IBeanFactory factory,
+            Class<? extends Jackson2Support> beanType) {
         this.iBeanFactory = factory;
+        this.beanType = beanType;
     }
 
     private <T> T createBean(Class<T> beanType) {
@@ -64,11 +60,8 @@ public class Jackson2DeserializerForIBeans extends JsonDeserializer<Jackson2Supp
     @Override
     public Jackson2Support deserialize(JsonParser p, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
-        @SuppressWarnings("unchecked")
-        Class<? extends Jackson2Support> beanType =
-                (Class<? extends Jackson2Support>) ctxt.getContextualType().getRawClass();
-        final Jackson2Support bean = this.createBean(beanType);
-        bean.readFromJsonObject(p, ctxt);
+        final Jackson2Support bean = this.createBean(this.beanType);
+        bean.readFromJsonParser(p, ctxt);
         return bean;
     }
 

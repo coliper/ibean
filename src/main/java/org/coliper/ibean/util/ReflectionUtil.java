@@ -27,11 +27,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMap.Builder;
 import com.google.common.reflect.Reflection;
 
 /**
@@ -137,7 +135,7 @@ public class ReflectionUtil {
         });
         return list.build();
     }
-    
+
     private static final class LastMethodCallRecordingProxy implements InvocationHandler {
         private Method lastMethodCalled = null;
 
@@ -148,14 +146,14 @@ public class ReflectionUtil {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
             this.lastMethodCalled = method;
-            if (method.getReturnType().isPrimitive()) {
+            if (method.getReturnType().isPrimitive() && method.getReturnType() != void.class) {
                 return primitiveTypeDefaultValue(method.getReturnType());
             }
             return null;
         }
     }
-    
-    public static <T> Method lookupInterfaceMethod(Class<T> interfaceType, 
+
+    public static <T> Method lookupInterfaceMethod(Class<T> interfaceType,
             Consumer<T> methodSpecifier) {
         requireNonNull(interfaceType, "interfaceType");
         requireNonNull(methodSpecifier, "methodSpecifier");
@@ -164,7 +162,8 @@ public class ReflectionUtil {
         T proxy = Reflection.newProxy(interfaceType, handler);
         methodSpecifier.accept(proxy);
         final Method method = handler.getLastMethodCalled();
-        checkArgument(method != null, "given methodSpecifier does not call a method on interface %s", interfaceType);
+        checkArgument(method != null,
+                "given methodSpecifier does not call a method on interface %s", interfaceType);
         return method;
     }
 
@@ -176,8 +175,9 @@ public class ReflectionUtil {
     }
 
     /**
-     * Returnes the default value for a given primitive type, basically all flavours of zero for
-     * the number types and <code>false</code> for <code>boolean.class</code>.
+     * Returnes the default value for a given primitive type, basically all
+     * flavours of zero for the number types and <code>false</code> for
+     * <code>boolean.class</code>.
      */
     public static Object primitiveTypeDefaultValue(Class<?> primitiveType) {
         requireNonNull(primitiveType, "primitiveType");
