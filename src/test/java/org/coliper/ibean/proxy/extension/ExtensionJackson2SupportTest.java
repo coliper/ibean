@@ -1,5 +1,7 @@
 package org.coliper.ibean.proxy.extension;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Date;
 
 import org.coliper.ibean.BeanStyle;
@@ -8,7 +10,6 @@ import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.PrimitivesBeanClassic;
 import org.coliper.ibean.PrimitivesBeanClassicImpl;
 import org.coliper.ibean.SampleBeanModern;
-import org.coliper.ibean.SampleBeanModernImpl;
 import org.coliper.ibean.extension.Jackson2ModuleForIBeans;
 import org.coliper.ibean.extension.Jackson2Support;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
@@ -110,47 +111,33 @@ public class ExtensionJackson2SupportTest {
     }
 
     @Test
-    public void testModernStyleTestValuesIBeanRoot() throws Exception {
+    public void testModernStyleTestValues() throws Exception {
         final boolean requireNestedObjectsSame = false;
         String json;
         SampleBeanModern root = this.factoryModern.create(SampleBeanModernJackson2.class)
                 .fillWithTestValues().self(null);
         json = this.jackson2Modern.writeValueAsString(root);
-        SampleBeanModern copy = this.jackson2Modern.readValue(json, SampleBeanModernImpl.class);
-        copy.assertEqual(root, requireNestedObjectsSame);
-        copy = this.jackson2Modern.readValue(json, SampleBeanModernJackson2.class);
-        copy.assertEqual(root, requireNestedObjectsSame);
-    }
-
-    @Test
-    public void testModernStyleTestValuesClassRoot() throws Exception {
-        final boolean requireNestedObjectsSame = false;
-        String json;
-        SampleBeanModern root = new SampleBeanModernImpl().fillWithTestValues().self(null);
-        json = this.jackson2Modern.writeValueAsString(root);
+        assertThat(json).contains("\"booleanPrimitive\":true");
+        assertThat(json).contains("\"date\":0");
+        assertThat(json).contains("\"intObject\":2147483647");
+        assertThat(json).contains("self\":null");
+        assertThat(json).contains("\"string\":\"dummy 2134452\"");
         SampleBeanModern copy = this.jackson2Modern.readValue(json, SampleBeanModernJackson2.class);
         copy.assertEqual(root, requireNestedObjectsSame);
     }
 
     @Test
-    public void testModernStyleNullValuesIBeanRoot() throws Exception {
+    public void testModernStyleNullValues() throws Exception {
         final boolean requireNestedObjectsSame = false;
         String json;
         SampleBeanModern root =
                 this.factoryModern.create(SampleBeanModernJackson2.class).fillWithNullValues();
         json = this.jackson2Modern.writeValueAsString(root);
-        SampleBeanModern copy = this.jackson2Modern.readValue(json, SampleBeanModernImpl.class);
-        copy.assertEqual(root, requireNestedObjectsSame);
-        copy = this.jackson2Modern.readValue(json, SampleBeanModernJackson2.class);
-        copy.assertEqual(root, requireNestedObjectsSame);
-    }
-
-    @Test
-    public void testModernStyleNullValuesClassRoot() throws Exception {
-        final boolean requireNestedObjectsSame = false;
-        String json;
-        SampleBeanModern root = new SampleBeanModernImpl().fillWithNullValues();
-        json = this.jackson2Modern.writeValueAsString(root);
+        assertThat(json).contains("\"booleanPrimitive\":false");
+        assertThat(json).contains("\"date\":null");
+        assertThat(json).contains("\"intObject\":0");
+        assertThat(json).contains("self\":null");
+        assertThat(json).contains("\"string\":null");
         SampleBeanModern copy = this.jackson2Modern.readValue(json, SampleBeanModernJackson2.class);
         copy.assertEqual(root, requireNestedObjectsSame);
     }
