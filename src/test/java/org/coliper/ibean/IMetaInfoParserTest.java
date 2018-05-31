@@ -104,26 +104,34 @@ public class IMetaInfoParserTest {
         assertSame(BeanStyle.CLASSIC, meta.beanStyle());
         List<IBeanFieldMetaInfo> fields = meta.fieldMetaInfos();
         assertEquals(16, fields.size());
-        checkFieldInfo(fields.get(0), "boolean", boolean.class, "isBoolean", "setBoolean");
-        checkFieldInfo(fields.get(1), "booleanObject", Boolean.class, "getBooleanObject",
+        checkFieldInfo(fields.get(1), "booleanPrimitive", boolean.class, "isBooleanPrimitive",
+                "setBooleanPrimitive");
+        checkFieldInfo(fields.get(0), "booleanObject", Boolean.class, "getBooleanObject",
                 "setBooleanObject");
-        checkFieldInfo(fields.get(2), "byte", byte.class, "getByte", "setByte");
-        checkFieldInfo(fields.get(3), "byteObject", Byte.class, "getByteObject", "setByteObject");
-        checkFieldInfo(fields.get(4), "char", char.class, "getChar", "setChar");
-        checkFieldInfo(fields.get(5), "charObject", Character.class, "getCharObject",
+        checkFieldInfo(fields.get(3), "bytePrimitive", byte.class, "getBytePrimitive",
+                "setBytePrimitive");
+        checkFieldInfo(fields.get(2), "byteObject", Byte.class, "getByteObject", "setByteObject");
+        checkFieldInfo(fields.get(5), "charPrimitive", char.class, "getCharPrimitive",
+                "setCharPrimitive");
+        checkFieldInfo(fields.get(4), "charObject", Character.class, "getCharObject",
                 "setCharObject");
-        checkFieldInfo(fields.get(6), "double", double.class, "getDouble", "setDouble");
-        checkFieldInfo(fields.get(7), "doubleObject", Double.class, "getDoubleObject",
+        checkFieldInfo(fields.get(7), "doublePrimitive", double.class, "getDoublePrimitive",
+                "setDoublePrimitive");
+        checkFieldInfo(fields.get(6), "doubleObject", Double.class, "getDoubleObject",
                 "setDoubleObject");
-        checkFieldInfo(fields.get(8), "float", float.class, "getFloat", "setFloat");
-        checkFieldInfo(fields.get(9), "floatObject", Float.class, "getFloatObject",
+        checkFieldInfo(fields.get(9), "floatPrimitive", float.class, "getFloatPrimitive",
+                "setFloatPrimitive");
+        checkFieldInfo(fields.get(8), "floatObject", Float.class, "getFloatObject",
                 "setFloatObject");
-        checkFieldInfo(fields.get(10), "int", int.class, "getInt", "setInt");
-        checkFieldInfo(fields.get(11), "intObject", Integer.class, "getIntObject", "setIntObject");
-        checkFieldInfo(fields.get(12), "long", long.class, "getLong", "setLong");
-        checkFieldInfo(fields.get(13), "longObject", Long.class, "getLongObject", "setLongObject");
-        checkFieldInfo(fields.get(14), "short", short.class, "getShort", "setShort");
-        checkFieldInfo(fields.get(15), "shortObject", Short.class, "getShortObject",
+        checkFieldInfo(fields.get(11), "intPrimitive", int.class, "getIntPrimitive",
+                "setIntPrimitive");
+        checkFieldInfo(fields.get(10), "intObject", Integer.class, "getIntObject", "setIntObject");
+        checkFieldInfo(fields.get(13), "longPrimitive", long.class, "getLongPrimitive",
+                "setLongPrimitive");
+        checkFieldInfo(fields.get(12), "longObject", Long.class, "getLongObject", "setLongObject");
+        checkFieldInfo(fields.get(15), "shortPrimitive", short.class, "getShortPrimitive",
+                "setShortPrimitive");
+        checkFieldInfo(fields.get(14), "shortObject", Short.class, "getShortObject",
                 "setShortObject");
     }
 

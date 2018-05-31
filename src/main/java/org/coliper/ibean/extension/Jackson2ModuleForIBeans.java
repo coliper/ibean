@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.deser.Deserializers;
  *
  */
 public class Jackson2ModuleForIBeans extends Module {
+    @SuppressWarnings("unused")
     private static final long serialVersionUID = 1L;
 
     private static class IBeanDeserializers extends Deserializers.Base {

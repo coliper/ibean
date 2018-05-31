@@ -19,8 +19,12 @@ import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
 /**
+ * {@link IBeanContext} is provided to {@link ExtensionHandler}s to provide them
+ * information about the context of a IBean method call. Only used in
+ * {@link ExtensionHandler} context, for example in
+ * {@link ExtensionHandler#handleExtendedInterfaceCall(IBeanContext, IBeanFieldAccess, Object, java.lang.reflect.Method, Object[])}
+ * 
  * @author alex@coliper.org
- *
  */
 public class IBeanContext<T> {
     private final ProxyIBeanFactory beanFactory;
@@ -29,9 +33,7 @@ public class IBeanContext<T> {
     private final BeanStyle beanStyle;
 
     /**
-     * @param metaInfo
-     * @param toStringStyle
-     * @param beanStyle
+     * Internal constructor as only created by the framework itself.
      */
     IBeanContext(ProxyIBeanFactory beanFactory, IBeanTypeMetaInfo<T> metaInfo,
             ToStringStyle toStringStyle, BeanStyle beanStyle) {
@@ -40,27 +42,31 @@ public class IBeanContext<T> {
         this.toStringStyle = toStringStyle;
         this.beanStyle = beanStyle;
     }
-    
+
+    /**
+     * Provides the factory that created the IBean. Especially useful if the
+     * {@link ExtensionHandler} itself needs to create other IBeans.
+     */
     public ProxyIBeanFactory beanFactory() {
         return this.beanFactory;
     }
 
     /**
-     * @return the metaInfo
+     * Provides the meta information about the IBean.
      */
     public IBeanTypeMetaInfo<T> metaInfo() {
         return metaInfo;
     }
 
     /**
-     * @return the toStringStyle
+     * Provides the style used in IBean's {@link Object#toString()} method.
      */
     public ToStringStyle toStringStyle() {
         return toStringStyle;
     }
 
     /**
-     * @return the beanStyle
+     * Provides the {@link BeanStyle} of the IBean.
      */
     public BeanStyle beanStyle() {
         return beanStyle;

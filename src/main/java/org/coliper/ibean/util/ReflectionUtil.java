@@ -40,7 +40,7 @@ import com.google.common.reflect.Reflection;
 public class ReflectionUtil {
 
     //@formatter:off
-    public static final Map<Class<?>, Object> DEFAULTS_MAP =
+    private static final Map<Class<?>, Object> DEFAULTS_MAP =
             new ImmutableMap.Builder<Class<?>, Object>()
                     .put(byte.class, Byte.valueOf((byte) 0))
                     .put(short.class, Short.valueOf((short) 0))
@@ -167,13 +167,6 @@ public class ReflectionUtil {
         return method;
     }
 
-    /*
-     * no instances
-     */
-    private ReflectionUtil() {
-
-    }
-
     /**
      * Returnes the default value for a given primitive type, basically all
      * flavours of zero for the number types and <code>false</code> for
@@ -184,6 +177,13 @@ public class ReflectionUtil {
         Object ret = ReflectionUtil.DEFAULTS_MAP.get(primitiveType);
         checkArgument(ret != null, "%s is not a primitive type", primitiveType);
         return ret;
+    }
+
+    /*
+     * no instances
+     */
+    private ReflectionUtil() {
+
     }
 
 }

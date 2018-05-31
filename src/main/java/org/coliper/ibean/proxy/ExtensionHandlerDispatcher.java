@@ -26,22 +26,24 @@ import org.coliper.ibean.IBeanTypeMetaInfo;
 import com.google.common.collect.ImmutableMap;
 
 /**
- * Class used internally by {@link ProxyIBean} to process calls to methods that belong to the 
- * extension interfaces. Every {@link ProxyIBean} owns an instance of 
- * {@link ExtensionHandlerDispatcher} and routes every extension interface call to it.
+ * Class used internally by {@link ProxyIBean} to process calls to methods that
+ * belong to the extension interfaces. Every {@link ProxyIBean} owns an instance
+ * of {@link ExtensionHandlerDispatcher} and routes every extension interface
+ * call to it.
  * <p>
- * {@link ExtensionHandlerDispatcher} instances can only be created via its nested {@link Builder}
- * class.
+ * {@link ExtensionHandlerDispatcher} instances can only be created via its
+ * nested {@link Builder} class.
  * 
  * @author alex@coliper.org
  *
  */
 class ExtensionHandlerDispatcher {
-    
+
     /*
-     * ExtensionHandlerDispatcher itself does not handle extension interface calls. It just 
-     * dispatches them further to the appropriate ExtensionHandler. To do so it holds all required
-     * handlers in "handlerMap".
+     * ExtensionHandlerDispatcher itself does not handle extension interface
+     * calls. It just dispatches them further to the appropriate
+     * ExtensionHandler. To do so it holds all required handlers in
+     * "handlerMap".
      */
 
     private static final ExtensionHandlerDispatcher EMPTY_BUNDLES_HANDLER =
@@ -65,13 +67,12 @@ class ExtensionHandlerDispatcher {
         }
     }
 
-    // Maps all supported extension interface types to the corresponding ExtensionHandler.
-    // For example it would contain NullSafe.class mapped to a NullSafeHandler instance.
+    // Maps all supported extension interface types to the corresponding
+    // ExtensionHandler.
+    // For example it would contain NullSafe.class mapped to a NullSafeHandler
+    // instance.
     private final Map<Class<?>, ExtensionHandler> handlerMap;
 
-    /**
-     * @param interfaceSetupMap
-     */
     private ExtensionHandlerDispatcher(Map<Class<?>, ExtensionHandler> handlerMap) {
         requireNonNull(handlerMap, "handlerMap");
         // we do not copy the map as we trust the caller

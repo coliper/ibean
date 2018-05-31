@@ -17,8 +17,6 @@ package org.coliper.ibean;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 /**
  * @author alex@coliper.org
  *

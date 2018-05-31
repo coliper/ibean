@@ -55,30 +55,4 @@ public abstract class StatefulExtensionHandler implements ExtensionHandler {
         return method.invoke(this, params);
     }
 
-    /**
-     * This default implementation does nothing and just passes through the
-     * return value.
-     * 
-     * @see ExtensionHandler#interceptGetterCall(IBeanContext,
-     *      IBeanFieldMetaInfo, Object, Object)
-     */
-    @Override
-    public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
-            Object returnValue, Object proxyInstance) {
-        return returnValue;
-    }
-
-    /**
-     * This default implementation does nothing and just passes through the new
-     * value.
-     * 
-     * @see ExtensionHandler#interceptSetterCall(IBeanContext,
-     *      IBeanFieldMetaInfo, Object, Object)
-     */
-    @Override
-    public Object interceptSetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
-            Object newValue, Object proxyInstance) {
-        return newValue;
-    }
-
 }

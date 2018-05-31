@@ -13,7 +13,18 @@
  */
 
 /**
+ * Contains an {@link org.coliper.ibean.IBeanFactory} implementation that uses
+ * Java proxy technology (see {@link java.lang.reflect.Proxy}). Beans are
+ * created as interface proxies.<br>
+ * Factory implementation is {@link org.coliper.ibean.proxy.ProxyIBeanFactory}.
+ * See this class to check out its different configuration and customization
+ * options.
+ * <p>
+ * {@link org.coliper.ibean.proxy.ExtensionSupport} is used to configure
+ * handlers for custom extension interfaces.
+ * <p>
+ * Most other classes in this package are used internally by the framework.
+ * 
  * @author alex@coliper.org
- *
  */
 package org.coliper.ibean.proxy;

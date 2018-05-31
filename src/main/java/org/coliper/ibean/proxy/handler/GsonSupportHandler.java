@@ -24,6 +24,7 @@ import org.apache.commons.lang3.ClassUtils;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.GsonSupport;
+import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
@@ -39,8 +40,10 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSyntaxException;
 
 /**
+ * {@link ExtensionHandler} implementation for bean extension interface
+ * {@link GsonSupport}.
+ * 
  * @author alex@coliper.org
- *
  */
 public class GsonSupportHandler extends StatelessExtensionHandler {
     /**
@@ -87,13 +90,6 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.coliper.ibean.extension.GsonSupport#jsonRead(com.google.gson.stream.
-     * JsonReader)
-     */
     private void readFromJsonObject(JsonObject jsonObject, JsonDeserializationContext jsonContext,
             IBeanContext<?> context, IBeanFieldAccess bean) throws IOException {
         Set<Entry<String, JsonElement>> elements = jsonObject.entrySet();
@@ -108,12 +104,6 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
         }
     }
 
-    /**
-     * @param value
-     * @param jsonContext
-     * @param fieldType
-     * @return
-     */
     private Object readElement(JsonElement value, JsonDeserializationContext jsonContext,
             Class<?> fieldType) {
         if (value.isJsonNull()) {
@@ -127,11 +117,6 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
         }
     }
 
-    /**
-     * @param value
-     * @param fieldType
-     * @return
-     */
     private Object readPrimitiveElement(JsonElement value, Class<?> fieldType) {
         Class<?> prim = Primitives.unwrap(fieldType);
         if (boolean.class == prim) {
@@ -161,13 +146,6 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
         throw new RuntimeException("unexpected type " + fieldType);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.coliper.ibean.extension.GsonSupport#jsonWrite(com.google.gson.stream.
-     * JsonWriter)
-     */
     private void writeToJsonObject(JsonObject jsonObject, JsonSerializationContext jsonContext,
             IBeanContext<?> context, IBeanFieldAccess bean) {
         for (IBeanFieldMetaInfo meta : context.metaInfo().fieldMetaInfos()) {
@@ -185,11 +163,6 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
         }
     }
 
-    /**
-     * @param jsonObject
-     * @param value
-     * @return
-     */
     private void writePrimitiveElement(JsonObject jsonObject, String fieldName, Object value) {
         if (value instanceof Number) {
             jsonObject.addProperty(fieldName, (Number) value);

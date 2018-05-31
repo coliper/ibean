@@ -22,6 +22,7 @@ import org.apache.commons.lang3.ClassUtils;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.Jackson2Support;
+import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
@@ -39,8 +40,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.primitives.Primitives;
 
 /**
+ * {@link ExtensionHandler} implementation for bean extension interface
+ * {@link Jackson2Support}.
+ * 
  * @author alex@coliper.org
- *
  */
 public class Jackson2SupportHandler extends StatelessExtensionHandler {
     /**
@@ -102,13 +105,6 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.coliper.ibean.extension.Jackson2Support#jsonRead(com.google.gson.
-     * stream. JsonReader)
-     */
     private void readFromJsonParser(JsonParser parser, DeserializationContext ctxt,
             IBeanContext<?> context, IBeanFieldAccess bean) throws IOException {
         JsonToken jsonToken = parser.nextToken();
@@ -120,15 +116,6 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         }
     }
 
-    /**
-     * @param parser
-     * @param ctxt
-     * @param context
-     * @param bean
-     * @return
-     * @throws IOException
-     * @throws JsonParseException
-     */
     private void readField(JsonParser parser, DeserializationContext ctxt, IBeanContext<?> context,
             IBeanFieldAccess bean) throws IOException, JsonParseException {
         String fieldName = parser.getCurrentName();
@@ -143,13 +130,6 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         bean.setFieldValue(meta, value);
     }
 
-    /**
-     * @param parser
-     * @param ctxt
-     * @param fieldType
-     * @return
-     * @throws IOException
-     */
     private Object readFieldValue(JsonParser parser, DeserializationContext ctxt,
             Class<?> fieldType) throws IOException {
         if (JsonToken.VALUE_NULL.equals(parser.getCurrentToken())) {
@@ -163,12 +143,6 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         }
     }
 
-    /**
-     * @param parser
-     * @param fieldType
-     * @return
-     * @throws IOException
-     */
     private Object readPrimitiveElement(JsonParser parser, Class<?> fieldType) throws IOException {
         Class<?> prim = Primitives.unwrap(fieldType);
         if (boolean.class == prim) {
@@ -213,11 +187,6 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         gen.writeEndObject();
     }
 
-    /**
-     * @param context
-     * @param bean
-     * @throws IOException
-     */
     private void serializeFields(JsonGenerator gen, SerializerProvider serializers,
             IBeanContext<?> context, IBeanFieldAccess bean) throws IOException {
         for (IBeanFieldMetaInfo meta : context.metaInfo().fieldMetaInfos()) {

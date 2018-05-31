@@ -19,11 +19,21 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.List;
 
+import org.coliper.ibean.IBeanFactory;
+import org.coliper.ibean.proxy.ProxyIBeanFactory.Builder;
 import org.coliper.ibean.util.ReflectionUtil;
 
 /**
+ * Bundles an {@link ExtensionHandler} with its supported interfaces. This tuple
+ * is then used as a configuration element for creating and customizing
+ * {@link IBeanFactory}s. See {@link ExtensionHandler} for a general description
+ * of the {@link ProxyIBeanFactory} extension concept. See
+ * {@link Builder#withInterfaceSupport(ExtensionSupport)} for where and how to
+ * use {@link ExtensionSupport}. {@link ExtensionSupport} instances are created
+ * via constructor {@link #ExtensionSupport(Class, Class, boolean)} and are then
+ * immutable.
+ * 
  * @author alex@coliper.org
- *
  */
 public class ExtensionSupport {
 
@@ -41,9 +51,20 @@ public class ExtensionSupport {
     private final boolean handlerStateful;
 
     /**
+     * Creates a new immutable {@link ExtensionSupport}.
+     * 
      * @param supportedInterface
+     *            specifies the extension interface supported by the
+     *            {@link ExtensionHandler}. Must be a Java interface type.
      * @param handlerType
+     *            the {@link ExtensionHandler} type responsible for intercepting
+     *            IBean calls to the extension interface. Must be a sublcass of
+     *            {@link ExtensionHandler}.
      * @param handlerStateful
+     *            specifies if the handler is stateful or stateless. If
+     *            <code>true</code> a handler type will be treated as stateful
+     *            an a new handler instance will be created for each new IBean
+     *            instance.
      */
     public ExtensionSupport(Class<?> supportedInterface,
             Class<? extends ExtensionHandler> handlerType, boolean handlerStateful) {
@@ -57,24 +78,33 @@ public class ExtensionSupport {
         this.handlerStateful = handlerStateful;
     }
 
+    /**
+     * Provides the interface that is covered by the corresponding handler.
+     */
     public Class<?> supportedInterface() {
         return this.supportedInterface;
     }
 
     /**
-     * @return the handlerType
+     * Provides the {@link ExtensionHandler} implementation responsible for the
+     * supported interface.
      */
     public Class<? extends ExtensionHandler> handlerType() {
         return handlerType;
     }
 
     /**
-     * @return the handlerStateful
+     * Returns <code>true</code> if the handler is stateful and needs to have an
+     * individual instance per IBean object.
      */
     public boolean handlerStateful() {
         return handlerStateful;
     }
 
+    /**
+     * Returns the {@link #supportedInterface()} together with all
+     * sub-interfaces of that interface.
+     */
     public List<Class<?>> supportedInterfaceAndSuperInterfaces() {
         return ReflectionUtil.getSuperTypesInclRoot(this.supportedInterface);
     }

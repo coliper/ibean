@@ -68,9 +68,6 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     private final ExtensionHandlerDispatcher extendedInterfaceHandler;
     private final Object[] beanValues;
 
-    /**
-     * @param context
-     */
     ProxyIBean(IBeanContext<T> context, ExtensionHandlerDispatcher handler) {
         requireNonNull(context, "context");
         requireNonNull(handler, "handler");
@@ -79,10 +76,6 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
         this.beanValues = initBeanValues(context);
     }
 
-    /**
-     * @param context
-     * @return
-     */
     private Object[] initBeanValues(IBeanContext<T> context) {
         Object[] val = new Object[context.metaInfo().noOfFields()];
         // init all "primitive" values with defaults
@@ -259,8 +252,6 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     }
 
     /*
-     * (non-Javadoc)
-     * 
      * @see
      * org.coliper.ibean.proxy.IBeanFieldAccess#setFieldValue(java.lang.String,
      * java.lang.Object)
@@ -275,8 +266,6 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     }
 
     /*
-     * (non-Javadoc)
-     * 
      * @see
      * org.coliper.ibean.proxy.IBeanFieldAccess#getFieldValue(java.lang.String)
      */
@@ -290,8 +279,6 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     }
 
     /*
-     * (non-Javadoc)
-     * 
      * @see
      * org.coliper.ibean.proxy.IBeanFieldAccess#setFieldValue(org.coliper.ibean.
      * IBeanFieldMetaInfo, java.lang.Object)
@@ -306,8 +293,6 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     }
 
     /*
-     * (non-Javadoc)
-     * 
      * @see
      * org.coliper.ibean.proxy.IBeanFieldAccess#getFieldValue(org.coliper.ibean.
      * IBeanFieldMetaInfo)
