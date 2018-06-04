@@ -22,21 +22,25 @@ dependencies {
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:21.0'
+    implementation 'com.google.code.gson:gson:2.4'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.6.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
     testImplementation 'commons-beanutils:commons-beanutils:1.9.3'
     testImplementation 'org.assertj:assertj-core:3.8.0'
-	testImplementation 'com.google.code.gson:gson:2.4'
-	testImplementation 'com.fasterxml.jackson.core:jackson-core:2.6.1'
-	testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
 }
 
 javadoc {
     title = PROJECTNAME + ' API ' + version 
     options.stylesheetFile file('doc-src/javadoc-stylesheet.css', PathValidation.FILE)
     options.links "https://commons.apache.org/proper/commons-lang/apidocs/",
-                  "https://docs.oracle.com/javase/8/docs/api/"
+                  "https://docs.oracle.com/javase/8/docs/api/",
+                  "http://fasterxml.github.io/jackson-core/javadoc/2.6/",
+                  "http://fasterxml.github.io/jackson-databind/javadoc/2.6/"
+    options.linksOffline("https://static.javadoc.io/com.google.code.gson/gson/2.8.5/", 
+                         "./doc-src/gson-2.4-javadoc")
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {

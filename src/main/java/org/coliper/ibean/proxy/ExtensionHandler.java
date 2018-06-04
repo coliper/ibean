@@ -31,8 +31,7 @@ import org.coliper.ibean.proxy.handler.StatelessExtensionHandler;
  * {@link ExtensionHandler}s contain the logic for handling calls to extension
  * interfaces of IBeans. They are used by {@link ProxyIBeanFactory} for internal
  * extension interfaces but also for any custom extension interface. See
- * {@link IBeanFactory} and {@org.coliper.ibean.extension} for general
- * descriptions about extension interfaces.
+ * {@link IBeanFactory} for general descriptions about extension interfaces.
  * <p>
  * {@link ExtensionHandler} itself is just an interface and each extension
  * interface requires its individual implementation of {@link ExtensionHandler}.
@@ -83,12 +82,14 @@ import org.coliper.ibean.proxy.handler.StatelessExtensionHandler;
  * {@link #interceptSetterCall(IBeanContext, IBeanFieldMetaInfo, Object, Object)}
  * for hooking into getter and setter calls.
  * <p>
- * Handlers for built-in extension interfaces (found in
- * {@org.coliper.ibean.proxy.handler}) do not implement {@link ExtensionHandler}
- * directly but extend either {@link StatefulExtensionHandler} or
- * {@link StatelessExtensionHandler}. This is recommended for custom handlers as
- * well.
+ * Handlers for built-in extension interfaces do not implement
+ * {@link ExtensionHandler} directly but extend either
+ * {@link StatefulExtensionHandler} or {@link StatelessExtensionHandler}. This
+ * is recommended for custom handlers as well.
  * 
+ * @see org.coliper.ibean.extension for samples of extension interfaces
+ * @see org.coliper.ibean.proxy.handler for handlers of built in extension
+ *      interfaces
  * @author alex@coliper.org
  *
  */
