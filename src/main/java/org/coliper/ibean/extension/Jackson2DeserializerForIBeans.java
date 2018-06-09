@@ -23,10 +23,15 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
+ * Jackson2 deserializer for converting JSON to IBeans that implement extension
+ * interface {@link Jackson2Support}. Needs to be configured in the Jackson2
+ * {@link ObjectMapper}. Most convenient way to do this is to use a
+ * {@link Jackson2ModuleForIBeans}.
+ * 
  * @author alex@coliper.org
- *
  */
 class Jackson2DeserializerForIBeans extends JsonDeserializer<Jackson2Support> {
 
@@ -34,10 +39,16 @@ class Jackson2DeserializerForIBeans extends JsonDeserializer<Jackson2Support> {
     private final Class<? extends Jackson2Support> beanType;
 
     /**
+     * Creates a {@code Jackson2DeserializerForIBeans} for a specific IBeans
+     * interface.
+     * 
      * @param factory
+     *            the factory to use for creating IBean instances during
+     *            deserialization
+     * @param beanType
+     *            the IBean interface
      */
-    public Jackson2DeserializerForIBeans(IBeanFactory factory,
-            Class<? extends Jackson2Support> beanType) {
+    Jackson2DeserializerForIBeans(IBeanFactory factory, Class<? extends Jackson2Support> beanType) {
         this.iBeanFactory = factory;
         this.beanType = beanType;
     }

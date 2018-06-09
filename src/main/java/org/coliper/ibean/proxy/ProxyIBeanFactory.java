@@ -260,9 +260,10 @@ public class ProxyIBeanFactory implements IBeanFactory {
          * provided.
          * 
          * @return the {@code Builder} instance itself to enable chained calls
-         * @see IBean for a general introduction into extension interfaces
+         * @see <a href="{@docRoot}/org/coliper/ibean/package-summary.html#package.description">
+         *      IBean overview</a> 
          * @see ExtensionSupport
-         * @see ExtensionHandler how to implement custom handlers
+         * @see ExtensionHandler ExtensionHandler (for how to implement custom handlers)
          */
         //@formatter:on     
         public Builder withInterfaceSupport(ExtensionSupport support) {

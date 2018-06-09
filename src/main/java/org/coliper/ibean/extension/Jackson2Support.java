@@ -17,13 +17,39 @@ package org.coliper.ibean.extension;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonSerializable;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
+ * Extension interface that makes IBeans serializable and deserializable with
+ * Jackson2. If an IBean interface extends {@code Jackson2Support} you are able
+ * to convert any IBean instance from and to JSON. For this to work you need
+ * another two prerequisites:
+ * <ul>
+ * <li>jackson-core and jackson-databind with version 2.6 or higher need to be
+ * in the classpath.</li>
+ * <li>{@link Jackson2ModuleForIBeans} needs to be registered in the used
+ * Jackson {@link ObjectMapper}. See {@link Jackson2ModuleForIBeans} for
+ * details.</li>
+ * </ul>
+ * 
+ * @see ObjectMapper
  * @author alex@coliper.org
- *
  */
 public interface Jackson2Support extends JsonSerializable {
 
+    /**
+     * Reads the field values from a {@link JsonParser} and sets the fields of
+     * this IBean to the retrieved values.
+     * <p>
+     * You normally do not use this method directly. It is mainly called from
+     * {@link Jackson2ModuleForIBeans} during JSON deserialization.
+     * 
+     * @param p
+     *            the {@link JsonParser} reading some JSON representation of
+     *            this IBean
+     * @param ctxt
+     *            the Jackson2 deserialization context
+     */
     void readFromJsonParser(JsonParser p, DeserializationContext ctxt);
 
 }

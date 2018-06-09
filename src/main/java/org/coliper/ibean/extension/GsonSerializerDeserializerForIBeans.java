@@ -19,6 +19,7 @@ import java.lang.reflect.Type;
 import org.coliper.ibean.IBean;
 import org.coliper.ibean.IBeanFactory;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -28,6 +29,34 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
+ * JSON serializer/deserializer used with {@link Gson} to convert IBeans with
+ * extension interface {@link GsonSupport} from and to JSON.
+ * 
+ * Three prerequisites need to be fulfilled so that an IBean can be converted to
+ * and from JSON with Gson:
+ * <ul>
+ * <li>Gson version 2.4 or higher must be found on the classpath.</li>
+ * <li>IBean must implement extension interface {@link GsonSupport}.</li>
+ * <li>Gson used for convertion needs to have
+ * {@link GsonSerializerDeserializerForIBeans} added to its configuration.</li>
+ * </ul>
+ * <p>
+ * Following code snippets show an example usage:<br>
+ * <code><pre>
+ *    IBeanFactory factory = null;
+ *
+ *    // Create a Gson JSON converter with IBean serializer/deserializer configured
+ *    final Gson gson = new GsonBuilder().registerTypeHierarchyAdapter(GsonSupport.class,
+ *            new GsonSerializerDeserializerForIBeans(factory)).create();
+ *    
+ *    // BeanType must extend interface GsonSupport
+ *    BeanType someBean = factory.create(BeanType.class);
+ *    
+ *    // Serialize and deserialize IBean
+ *    String json = gson.toJson(someBean);
+ *    BeanType deserializedBean = gson.fromJson(json, BeanType.class);
+ * </pre></code>
+ * 
  * @author alex@coliper.org
  *
  */
@@ -37,14 +66,24 @@ public class GsonSerializerDeserializerForIBeans
     private final IBeanFactory iBeanFactory;
 
     /**
-     * 
+     * Creates a new {@code GsonSerializerDeserializerForIBeans} with no
+     * {@link IBeanFactory} preset. In this case default factory in
+     * {@link IBean} will be used for creation of new IBeans during
+     * deserializaion.
      */
     public GsonSerializerDeserializerForIBeans() {
         this(null);
     }
 
     /**
+     * Creates a new {@code GsonSerializerDeserializerForIBeans} with a given
+     * {@link IBeanFactory} preset. In this case the provided factory will be
+     * used for creation of new IBeans during deserializaion.
+     * 
      * @param iBeanFactory
+     *            the factory to use by the deserializer to create new IBeans.
+     *            If <code>null</code> default factory in {@link IBean} will be
+     *            used for creation of new IBeans during deserializaion.
      */
     public GsonSerializerDeserializerForIBeans(IBeanFactory iBeanFactory) {
         this.iBeanFactory = iBeanFactory;

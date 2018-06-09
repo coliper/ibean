@@ -87,9 +87,11 @@ import org.coliper.ibean.proxy.handler.StatelessExtensionHandler;
  * {@link StatefulExtensionHandler} or {@link StatelessExtensionHandler}. This
  * is recommended for custom handlers as well.
  * 
- * @see org.coliper.ibean.extension for samples of extension interfaces
- * @see org.coliper.ibean.proxy.handler for handlers of built in extension
- *      interfaces
+ * @see <a href="{@docRoot}/org/coliper/ibean/extension/package-summary.html">
+ *      org.coliper.ibean.extension (built in extension interfaces)</a>
+ * @see <a href=
+ *      "{@docRoot}/org/coliper/ibean/proxy/handler/package-summary.html">
+ *      org.coliper.ibean.proxy.handler (built in handlers)</a>
  * @author alex@coliper.org
  *
  */
