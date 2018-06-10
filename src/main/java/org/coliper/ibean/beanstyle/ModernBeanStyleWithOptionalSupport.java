@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.coliper.ibean.BeanStyle;
-import org.coliper.ibean.extension.OptionalSupport;
 
 /**
  * A {@link BeanStyle} implementation that is identical to the
@@ -29,10 +28,6 @@ import org.coliper.ibean.extension.OptionalSupport;
  * to the {@link ModernBeanStyle} is that for a property of type <code>T</code>
  * it allows a getter method that either returns <code>T</code> or
  * <code>Optional&lt;T&gt;</code>.
- * <p>
- * This bean style is only allowed for bean types that implement extension
- * interface {@link OptionalSupport}. See {@link OptionalSupport} for more
- * information.
  * 
  * @author alex@coliper.org
  */
@@ -59,8 +54,8 @@ public class ModernBeanStyleWithOptionalSupport extends ModernBeanStyle {
         String fieldNameFromSetter = this.convertSetterNameToFieldName(setterMethod.getName());
         Class<?> typeFromSetter = setterMethod.getParameterTypes()[0];
         Class<?> typeFromGetter = getterMethod.getReturnType();
-        final boolean getterAndSetterTypesCompatible = typeFromGetter == typeFromSetter
-                || isAllowedOptionalReturnTypeForGetter(beanType, typeFromGetter);
+        final boolean getterAndSetterTypesCompatible =
+                typeFromGetter == typeFromSetter || typeFromGetter == Optional.class;
         return fieldNameFromGetter.equals(fieldNameFromSetter) && getterAndSetterTypesCompatible;
     }
 
@@ -73,26 +68,26 @@ public class ModernBeanStyleWithOptionalSupport extends ModernBeanStyle {
         checkArgument(argTypes.length == 1, "unexpected no of arguments in setter " + setterMethod);
         final Class<?> getterRetType = getterMethod.getReturnType();
         final Class<?> setterArgType = argTypes[0];
-        checkArgument(
-                setterArgType == getterRetType
-                        || isAllowedOptionalReturnTypeForGetter(beanType, getterRetType),
+        checkArgument(setterArgType == getterRetType || getterRetType == Optional.class,
                 "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
         return setterArgType;
-    }
-
-    /**
-     * @param beanType
-     * @param typeFromGetter
-     * @return
-     */
-    private boolean isAllowedOptionalReturnTypeForGetter(Class<?> beanType,
-            Class<?> typeFromGetter) {
-        return OptionalSupport.class.isAssignableFrom(beanType) && typeFromGetter == Optional.class;
     }
 
     @Override
     protected boolean hasGetterMethodSignature(Method method) {
         return super.hasGetterMethodSignature(method) || method.getReturnType() == Optional.class;
+    }
+
+    @Override
+    public Object convertReturnValueOfGetterCall(Class<?> expectedReturnType,
+            Object returnValueWithWrongType) {
+        checkArgument(Optional.class == expectedReturnType, "unexpected return type %s for getter",
+                expectedReturnType);
+        if (returnValueWithWrongType != null) {
+            return Optional.of(returnValueWithWrongType);
+        } else {
+            return Optional.empty();
+        }
     }
 
 }

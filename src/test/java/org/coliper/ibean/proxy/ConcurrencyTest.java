@@ -25,11 +25,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.extension.Completable;
+import org.coliper.ibean.extension.GsonSupport;
+import org.coliper.ibean.extension.Jackson2Support;
 import org.coliper.ibean.extension.ModificationAwareExt;
-import org.coliper.ibean.extension.NullSafe;
-import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.extension.TempFreezable;
 import org.junit.After;
 import org.junit.Assert;
@@ -42,7 +43,7 @@ import org.junit.Test;
 public class ConcurrencyTest {
 
     public static interface BeanType extends Completable<BeanType>, TempFreezable<BeanType>,
-            ModificationAwareExt, OptionalSupport, NullSafe {
+            ModificationAwareExt, Jackson2Support, GsonSupport {
       //@formatter:off 
           void setBooleanPrimitive(boolean b);
           boolean isBooleanPrimitive();
@@ -50,7 +51,7 @@ public class ConcurrencyTest {
           void setString(String s);
           String getString();
           
-          void setDate(Optional<Date> d);
+          void setDate(Date d);
           Optional<Date> getDate();
 
       //@formatter:on    
@@ -64,7 +65,8 @@ public class ConcurrencyTest {
     private final ExecutorService executor = Executors.newFixedThreadPool(NO_OF_THREADS);
 
     public ConcurrencyTest() {
-        this.factory = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build();
+        this.factory = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
+                .withBeanStyle(BeanStyle.CLASSIC_WITH_OPTIONAL).build();
         this.bean = this.factory.create(BeanType.class);
     }
 

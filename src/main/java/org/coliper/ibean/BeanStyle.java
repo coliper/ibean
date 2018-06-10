@@ -98,6 +98,11 @@ public abstract class BeanStyle {
         return null;
     }
 
+    public Object convertReturnValueOfGetterCall(Class<?> expectedReturnType,
+            Object returnValueWithWrongType) {
+        throw new IllegalStateException("unexpected call of convertReturnValueOfGetterCall()");
+    }
+
     /**
      * As stateless we treat all instances of one {@link BeanStyle} class as
      * equal.

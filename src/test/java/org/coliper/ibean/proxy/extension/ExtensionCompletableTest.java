@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import java.util.Optional;
 
+import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.extension.BeanIncompleteException;
 import org.coliper.ibean.extension.Completable;
-import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Test;
 
@@ -44,11 +44,8 @@ public class ExtensionCompletableTest {
       //@formatter:on
     }
 
-    public static interface BeanTypeWithOptionalSupport extends BeanType, OptionalSupport {
-    }
-
     @Test
-    public void testIsComplete() throws Exception {
+    public void testIsCompleteWithNoOptionalSupportStyle() throws Exception {
         BeanType bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
                 .create(BeanType.class);
         assertThat(bean.isComplete()).isFalse();
@@ -83,9 +80,24 @@ public class ExtensionCompletableTest {
         assertThat(bean.assertComplete()).isSameAs(bean);
     }
 
+    public static interface BeanTypeWithOptionalSupport
+            extends Completable<BeanTypeWithOptionalSupport> {
+      //@formatter:off
+        String getString();
+        void setString(String s);
+
+        int getInt();
+        void setInt(int i);
+
+        void setDouble(Double d);
+        Optional<Double> getDouble();
+      //@formatter:on
+    }
+
     @Test
-    public void testIsCompleteWithOptionalSupport() throws Exception {
-        BeanType bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
+    public void testIsCompleteWithOptionalSupportStyle() throws Exception {
+        BeanTypeWithOptionalSupport bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
+                .withBeanStyle(BeanStyle.CLASSIC_WITH_OPTIONAL).build()
                 .create(BeanTypeWithOptionalSupport.class);
         assertThat(bean.isComplete()).isFalse();
         assertThatExceptionOfType(BeanIncompleteException.class)
@@ -95,7 +107,7 @@ public class ExtensionCompletableTest {
         assertThat(bean.isComplete()).isTrue();
         assertThat(bean.assertComplete()).isSameAs(bean);
 
-        bean.setDouble(Optional.empty());
+        bean.setDouble(Double.valueOf(7.77));
         assertThat(bean.isComplete()).isTrue();
         assertThat(bean.assertComplete()).isSameAs(bean);
 
@@ -105,19 +117,8 @@ public class ExtensionCompletableTest {
 
         bean.setDouble(null);
         assertThat(bean.isComplete()).isTrue();
-        assertThat(bean.assertComplete()).isSameAs(bean);
 
         bean.setString(null);
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
-
-        bean.setInt(0);
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
-
-        bean.setDouble(Optional.of(Double.valueOf(3.4)));
         assertThat(bean.isComplete()).isFalse();
         assertThatExceptionOfType(BeanIncompleteException.class)
                 .isThrownBy(() -> bean.assertComplete());

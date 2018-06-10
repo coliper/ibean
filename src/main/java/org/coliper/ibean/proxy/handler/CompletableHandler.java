@@ -21,7 +21,6 @@ import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.extension.BeanIncompleteException;
 import org.coliper.ibean.extension.Completable;
-import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
@@ -89,15 +88,15 @@ public class CompletableHandler extends StatelessExtensionHandler {
     }
 
     private boolean isBeanComplete(IBeanContext<?> context, IBeanFieldAccess bean) {
-        final boolean optionalSupport =
-                OptionalSupport.class.isAssignableFrom(context.metaInfo().beanType());
         for (IBeanFieldMetaInfo fieldMeta : context.metaInfo().fieldMetaInfos()) {
             if (fieldMeta.fieldType().isPrimitive()) {
                 continue; // ignore primitive type fields
             }
-            if (optionalSupport && fieldMeta.getterMethod().getReturnType() == Optional.class) {
+            if (fieldMeta.getterMethod().getReturnType() == Optional.class
+                    && fieldMeta.fieldType() != Optional.class) {
                 continue; // we do not care if value is null when Optional is
-                          // returned from getter
+                          // returned from getter but field type itself is not
+                          // optional
             }
             if (bean.getFieldValue(fieldMeta) == null) {
                 return false;

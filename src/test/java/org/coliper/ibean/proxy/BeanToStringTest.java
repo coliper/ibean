@@ -104,28 +104,29 @@ public class BeanToStringTest {
         String expected;
         //@formatter:off
         expected = "PrimitivesBeanClassic["
-                + "booleanPrimitive=false,booleanObject=<null>,"
-                + "bytePrimitive=0,byteObject=<null>,"
-                + "charPrimitive=\u0000,charObject=<null>,"
-                + "doublePrimitive=0.0,doubleObject=<null>,"
-                + "floatPrimitive=0.0,floatObject=<null>,"
-                + "intPrimitive=0,intObject=<null>,"
-                + "longPrimitive=0,longObject=<null>,"
-                + "shortPrimitive=0,shortObject=<null>]";
+                + "booleanObject=<null>,booleanPrimitive=false,"
+                + "byteObject=<null>,bytePrimitive=0,"
+                + "charObject=<null>,charPrimitive=\u0000,"
+                + "doubleObject=<null>,doublePrimitive=0.0,"
+                + "floatObject=<null>,floatPrimitive=0.0,"
+                + "intObject=<null>,intPrimitive=0,"
+                + "longObject=<null>,longPrimitive=0,"
+                + "shortObject=<null>,shortPrimitive=0]";
         //@formatter:on
         assertEquals(expected, bean.toString());
 
         regularBean.copyTo(bean);
         //@formatter:off
         expected = "PrimitivesBeanClassic["
-                + "booleanPrimitive=true,booleanObject=true,"
-                + "bytePrimitive=-128,byteObject=127,"
-                + "charPrimitive=x,charObject=@,"
-                + "doublePrimitive=2.2250738585072014E-308,doubleObject=1.7976931348623157E308,"
-                + "floatPrimitive=-Infinity,floatObject=NaN,"
-                + "intPrimitive=-2147483648,intObject=-1,"
-                + "longPrimitive=9223372036854775807,longObject=-9223372036854775808,"
-                + "shortPrimitive=32767,shortObject=-32768]";
+                + "booleanObject=true,booleanPrimitive=true,"
+                + "byteObject=127,bytePrimitive=-128,"
+                + "charObject=@,charPrimitive=x,"
+                + "doubleObject=1.7976931348623157E308,"
+                + "doublePrimitive=2.2250738585072014E-308,"
+                + "floatObject=1.4E-45,floatPrimitive=3.4028235E38,"
+                + "intObject=-1,intPrimitive=-2147483648,"
+                + "longObject=-9223372036854775808,longPrimitive=9223372036854775807,"
+                + "shortObject=-32768,shortPrimitive=32767]";
         //@formatter:on
         assertEquals(expected, bean.toString());
     }

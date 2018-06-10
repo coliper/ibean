@@ -26,7 +26,6 @@ import org.coliper.ibean.extension.GsonSupport;
 import org.coliper.ibean.extension.Jackson2Support;
 import org.coliper.ibean.extension.ModificationAwareExt;
 import org.coliper.ibean.extension.NullSafe;
-import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.extension.TempFreezable;
 
 import com.google.common.collect.ImmutableList;
@@ -38,7 +37,7 @@ import com.google.common.collect.ImmutableList;
 public class BeanTestUtil {
     private static final List<Class<?>> EXTENSION_INTERFACES = ImmutableList.of(CloneableBean.class,
             Completable.class, TempFreezable.class, ModificationAwareExt.class, NullSafe.class,
-            OptionalSupport.class, GsonSupport.class, Jackson2Support.class);
+            GsonSupport.class, Jackson2Support.class);
 
     public static <T> void assertEqualsBean(Class<T> beanType, BeanStyle beanStyle, T bean1,
             T bean2) {

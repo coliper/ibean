@@ -16,7 +16,6 @@ import org.coliper.ibean.IBean;
 import org.coliper.ibean.extension.BeanIncompleteException;
 import org.coliper.ibean.extension.CloneableBean;
 import org.coliper.ibean.extension.Completable;
-import org.coliper.ibean.extension.OptionalSupport;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.After;
 import org.junit.Before;
@@ -63,7 +62,7 @@ public class ModernBeanStyleSample {
     // Therefore it is good practice if you create a common super interface 
     // for all your bean interfaces.
     public static interface CommonBeanSuperInterface<T>
-            extends CloneableBean<T>, Completable<T>, OptionalSupport {
+            extends CloneableBean<T>, Completable<T> {
     }
 
     // Interface Person is the bean type used in our example. It has mandatory and optional fields.

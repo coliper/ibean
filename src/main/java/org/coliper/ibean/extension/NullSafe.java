@@ -20,15 +20,15 @@ import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
 import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
 
 /**
- * Marker extension interface that injects getter calls in a way that if a getter is called
- * on a field with value <code>null</code> it throws an {@link NullSafetyException}.
+ * Marker extension interface that injects getter calls in a way that if a
+ * getter is called on a field with value <code>null</code> it throws an
+ * {@link NullSafetyException}.
  * <p>
  * This of course gives no real protection of null-pointer cases. It just gives
  * a sort of an early detection during runtime. A more recommended way to
  * prevent null errors is to work with mandatory and optional fields, for
  * example by using Java's {@link Optional} in conjunction with IBean's
- * {@link OptionalSupport}, {@link Completable},
- * {@link ClassicBeanStyleWithOptionalSupport},
+ * {@link Completable}, {@link ClassicBeanStyleWithOptionalSupport},
  * {@link ModernBeanStyleWithOptionalSupport}.
  * 
  * @author alex@coliper.org

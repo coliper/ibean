@@ -39,7 +39,6 @@ import org.coliper.ibean.proxy.handler.GsonSupportHandler;
 import org.coliper.ibean.proxy.handler.Jackson2SupportHandler;
 import org.coliper.ibean.proxy.handler.ModificationAwareHandler;
 import org.coliper.ibean.proxy.handler.NullSafeHandler;
-import org.coliper.ibean.proxy.handler.OptionalSupportHandler;
 
 import com.google.common.collect.ImmutableList;
 
@@ -85,7 +84,6 @@ public class ProxyIBeanFactory implements IBeanFactory {
   //@formatter:off     
     private static List<ExtensionSupport> DEFAULT_INTERFACE_SUPPORTS =
             ImmutableList.of(ModificationAwareHandler.SUPPORT, 
-                    OptionalSupportHandler.SUPPORT,
                     NullSafeHandler.SUPPORT,
                     FreezableHandler.SUPPORT,
                     CompletableHandler.SUPPORT,

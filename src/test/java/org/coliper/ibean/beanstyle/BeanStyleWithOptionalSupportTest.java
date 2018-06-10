@@ -28,7 +28,7 @@ import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
-import org.coliper.ibean.extension.OptionalSupport;
+import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -38,7 +38,7 @@ import org.junit.Test;
  */
 public class BeanStyleWithOptionalSupportTest {
 
-    public static interface ClassicBeanWithOptional extends OptionalSupport {
+    public static interface ClassicBeanWithOptional {
 
       //@formatter:off 
           void setIntObject(Integer i);
@@ -58,7 +58,7 @@ public class BeanStyleWithOptionalSupportTest {
       //@formatter:on    
     }
 
-    public static interface ModernBeanWithOptional extends OptionalSupport {
+    public static interface ModernBeanWithOptional {
 
       //@formatter:off 
           ModernBeanWithOptional intObject(Integer i);
@@ -147,4 +147,26 @@ public class BeanStyleWithOptionalSupportTest {
         checkFieldInfo(fields.get(3), "self", ModernBeanWithOptional.class, "self", "self");
         checkFieldInfo(fields.get(4), "string", String.class, "string", "string");
     }
+
+    @Test
+    public void testGetterSetter() throws Exception {
+        ModernBeanWithOptional bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
+                .withBeanStyle(BeanStyle.MODERN_WITH_OPTIONAL).build()
+                .create(ModernBeanWithOptional.class);
+        assertThat(bean.date()).isNull();
+        assertThat(bean.intObject().isPresent()).isFalse();
+        assertThat(bean.self().isPresent()).isFalse();
+
+        final Date now = new Date();
+        bean.date(now).self(bean).intObject(Integer.valueOf(7));
+        assertThat(bean.date()).isSameAs(now);
+        assertThat(bean.intObject().get().intValue()).isEqualTo(7);
+        assertThat(bean.self().get()).isSameAs(bean);
+
+        bean.date(null).self(null).intObject(null);
+        assertThat(bean.date()).isNull();
+        assertThat(bean.intObject().isPresent()).isFalse();
+        assertThat(bean.self().isPresent()).isFalse();
+    }
+
 }
