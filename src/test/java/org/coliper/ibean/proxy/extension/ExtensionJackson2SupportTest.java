@@ -23,7 +23,7 @@ public class ExtensionJackson2SupportTest {
             ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build();
     final ObjectMapper jackson2Classic = this.createObjectMapper(factoryClassic);
     final IBeanFactory factoryModern = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
-            .withBeanStyle(BeanStyle.MODERN_WITH_OPTIONAL).build();
+            .withBeanStyle(BeanStyle.MODERN).build();
     final ObjectMapper jackson2Modern = this.createObjectMapper(factoryModern);
 
     public static interface PrimitivesBeanClassicJackson2

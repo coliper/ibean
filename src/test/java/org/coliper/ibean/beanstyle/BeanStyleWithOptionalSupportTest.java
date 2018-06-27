@@ -132,12 +132,11 @@ public class BeanStyleWithOptionalSupportTest {
 
     @Test
     public void testModernBeanWithOptional() {
-        IBeanTypeMetaInfo<ModernBeanWithOptional> meta =
-                this.parser.parse(ModernBeanWithOptional.class, BeanStyle.MODERN_WITH_OPTIONAL,
-                        Collections.emptyList());
+        IBeanTypeMetaInfo<ModernBeanWithOptional> meta = this.parser
+                .parse(ModernBeanWithOptional.class, BeanStyle.MODERN, Collections.emptyList());
         assertNotNull(meta);
         assertSame(ModernBeanWithOptional.class, meta.beanType());
-        assertSame(BeanStyle.MODERN_WITH_OPTIONAL, meta.beanStyle());
+        assertSame(BeanStyle.MODERN, meta.beanStyle());
         List<IBeanFieldMetaInfo> fields = meta.fieldMetaInfos();
         assertEquals(5, fields.size());
         checkFieldInfo(fields.get(0), "booleanPrimitive", boolean.class, "booleanPrimitive",
@@ -151,8 +150,7 @@ public class BeanStyleWithOptionalSupportTest {
     @Test
     public void testGetterSetter() throws Exception {
         ModernBeanWithOptional bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
-                .withBeanStyle(BeanStyle.MODERN_WITH_OPTIONAL).build()
-                .create(ModernBeanWithOptional.class);
+                .withBeanStyle(BeanStyle.MODERN).build().create(ModernBeanWithOptional.class);
         assertThat(bean.date()).isNull();
         assertThat(bean.intObject().isPresent()).isFalse();
         assertThat(bean.self().isPresent()).isFalse();

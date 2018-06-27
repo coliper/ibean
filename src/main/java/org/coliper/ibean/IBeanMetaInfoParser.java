@@ -125,11 +125,11 @@ public class IBeanMetaInfoParser {
     private void addMethodToMetaMap(Class<?> beanType, BeanStyle beanStyle,
             Map<String, TempFieldMeta> metaMap, Method method) {
         boolean isSetterOrGetter = false;
-        if (beanStyle.isGetterMethod(beanType, method)) {
+        if (beanStyle.isGetterMethod(method)) {
             addGetterToMetaMap(beanType, beanStyle, metaMap, method);
             isSetterOrGetter = true;
         }
-        if (beanStyle.isSetterMethod(beanType, method)) {
+        if (beanStyle.isSetterMethod(method)) {
             addSetterToMetaMap(beanType, beanStyle, metaMap, method);
             isSetterOrGetter = true;
         }
@@ -172,11 +172,7 @@ public class IBeanMetaInfoParser {
             return; // already set, nothing to do
         }
         if (meta.getter != null && meta.setter != null) {
-            this.assertOrThrowException(
-                    beanStyle.isSetterForGetter(beanType, meta.getter, meta.setter), beanType,
-                    "getter %s and setter %s are not compatible", meta.getter, meta.getter);
-            meta.type = beanStyle.determineFieldTypeFromGetterAndSetter(beanType, meta.getter,
-                    meta.setter);
+            meta.type = beanStyle.determineFieldTypeFromGetterAndSetter(beanType, meta.getter, meta.setter);
         }
     }
 

@@ -55,7 +55,7 @@ public class ModernBeanStyleSample {
         // to set a custom factory into IBean. In real life you will do this
         // once during initialization of the application.
         IBean.setFactory(ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
-                .withBeanStyle(BeanStyle.MODERN_WITH_OPTIONAL).build());
+                .withBeanStyle(BeanStyle.MODERN).build());
     }
 
     // Usually you have a lot of bean classes that should all behave similar.

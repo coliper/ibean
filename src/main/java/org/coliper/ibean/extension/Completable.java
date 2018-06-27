@@ -17,7 +17,6 @@ package org.coliper.ibean.extension;
 import java.util.Optional;
 
 import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
-import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
 
 /**
  * Extension interface that allows runtime checking whether all fields of a bean

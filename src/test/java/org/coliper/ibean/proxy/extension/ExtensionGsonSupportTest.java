@@ -24,7 +24,7 @@ public class ExtensionGsonSupportTest {
     final Gson gsonClassic = new GsonBuilder().registerTypeHierarchyAdapter(GsonSupport.class,
             new GsonSerializerDeserializerForIBeans(factoryClassic)).create();
     final IBeanFactory factoryModern = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
-            .withBeanStyle(BeanStyle.MODERN_WITH_OPTIONAL).build();
+            .withBeanStyle(BeanStyle.MODERN).build();
     final Gson gsonModern = new GsonBuilder().registerTypeHierarchyAdapter(GsonSupport.class,
             new GsonSerializerDeserializerForIBeans(factoryModern)).create();
 

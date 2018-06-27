@@ -20,6 +20,7 @@ import static java.util.Objects.requireNonNull;
 import java.lang.reflect.Method;
 
 import org.coliper.ibean.BeanStyle;
+import org.coliper.ibean.InvalidIBeanTypeException;
 
 /**
  * A {@link org.coliper.ibean.BeanStyle} implementation that reflects beans of
@@ -70,15 +71,12 @@ public class ClassicBeanStyle extends BeanStyle {
      * "get" or "is" for boolean properties</li>
      * </ul>
      * 
-     * @see org.coliper.ibean.BeanStyle#isGetterMethod(java.lang.Class,
-     *      java.lang.reflect.Method)
+     * @see org.coliper.ibean.BeanStyle#isGetterMethod(java.lang.reflect.Method)
      */
     @Override
-    public boolean isGetterMethod(Class<?> beanType, Method method) {
-        requireNonNull(beanType, "beanType");
+    public boolean isGetterMethod(Method method) {
         requireNonNull(method, "method");
-        assertMethodBelongsToType(method, beanType);
-        if (hasGetterMethodSignature(method)) {
+        if (this.hasGetterMethodSignature(method)) {
             return this.hasMethodNameRealPrefix(method, GETTER_PREFIX)
                     || isBoolGetterWithIsPrefix(method);
         }
@@ -102,14 +100,11 @@ public class ClassicBeanStyle extends BeanStyle {
      * "set"</li>
      * </ul>
      * 
-     * @see org.coliper.ibean.BeanStyle#isSetterMethod(java.lang.Class,
-     *      java.lang.reflect.Method)
+     * @see org.coliper.ibean.BeanStyle#isSetterMethod(java.lang.reflect.Method)
      */
     @Override
-    public boolean isSetterMethod(Class<?> beanType, Method method) {
-        requireNonNull(beanType, "beanType");
+    public boolean isSetterMethod(Method method) {
         requireNonNull(method, "method");
-        assertMethodBelongsToType(method, beanType);
         return hasSetterMethodSignature(method) && hasMethodNameRealPrefix(method, SETTER_PREFIX);
     }
 
@@ -117,9 +112,12 @@ public class ClassicBeanStyle extends BeanStyle {
         return method.getName().startsWith(prefix) && prefix.length() < method.getName().length();
     }
 
-    @Override
+    protected boolean hasGetterMethodSignature(Method method) {
+        return isNoParameterInMethod(method) && method.getReturnType() != void.class;
+    }
+
     protected boolean hasSetterMethodSignature(Method method) {
-        return super.hasSetterMethodSignature(method) && method.getReturnType() == void.class;
+        return isOneParameterInMethod(method) && method.getReturnType() == void.class;
     }
 
     /**
@@ -150,6 +148,19 @@ public class ClassicBeanStyle extends BeanStyle {
         checkArgument(setterName.startsWith(SETTER_PREFIX), "invalid setter method name '%s'",
                 setterName);
         return this.cutOffPrefixAndDecapitalize(setterName, SETTER_PREFIX);
+    }
+
+    @Override
+    public Class<?> determineFieldTypeFromGetterAndSetter(Class<?> beanType, Method getterMethod,
+            Method setterMethod) throws InvalidIBeanTypeException {
+        requireNonNull(getterMethod, "getterMethod");
+        requireNonNull(setterMethod, "setterMethod");
+        Class<?>[] argTypes = setterMethod.getParameterTypes();
+        assertForBeanType(beanType, argTypes.length == 1,
+                "unexpected no of arguments in setter " + setterMethod);
+        assertForBeanType(beanType, argTypes[0] == getterMethod.getReturnType(),
+                "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
+        return argTypes[0];
     }
 
     private String cutOffPrefixAndDecapitalize(String methodName, String prefix) {

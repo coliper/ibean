@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Optional;
 
 import org.coliper.ibean.BeanStyle;
+import org.coliper.ibean.InvalidIBeanTypeException;
 
 /**
  * A {@link BeanStyle} implementation that is identical to the
@@ -43,32 +44,17 @@ public class ClassicBeanStyleWithOptionalSupport extends ClassicBeanStyle {
     }
 
     @Override
-    public boolean isSetterForGetter(Class<?> beanType, Method getterMethod, Method setterMethod) {
-        requireNonNull(beanType, "beanType");
-        requireNonNull(getterMethod, "getterMethod");
-        requireNonNull(setterMethod, "setterMethod");
-        checkArgument(this.isGetterMethod(beanType, getterMethod), "not a getter: " + getterMethod);
-        checkArgument(this.isSetterMethod(beanType, setterMethod), "not a setter: " + setterMethod);
-
-        String fieldNameFromGetter = this.convertGetterNameToFieldName(getterMethod.getName());
-        String fieldNameFromSetter = this.convertSetterNameToFieldName(setterMethod.getName());
-        Class<?> typeFromSetter = setterMethod.getParameterTypes()[0];
-        Class<?> typeFromGetter = getterMethod.getReturnType();
-        final boolean getterAndSetterTypesCompatible =
-                typeFromGetter == typeFromSetter || typeFromGetter == Optional.class;
-        return fieldNameFromGetter.equals(fieldNameFromSetter) && getterAndSetterTypesCompatible;
-    }
-
-    @Override
     public Class<?> determineFieldTypeFromGetterAndSetter(Class<?> beanType, Method getterMethod,
-            Method setterMethod) throws IllegalArgumentException {
+            Method setterMethod) throws InvalidIBeanTypeException {
         requireNonNull(getterMethod, "getterMethod");
         requireNonNull(setterMethod, "setterMethod");
         Class<?>[] argTypes = setterMethod.getParameterTypes();
-        checkArgument(argTypes.length == 1, "unexpected no of arguments in setter " + setterMethod);
+        assertForBeanType(beanType, argTypes.length == 1,
+                "unexpected no of arguments in setter " + setterMethod);
         final Class<?> getterRetType = getterMethod.getReturnType();
         final Class<?> setterArgType = argTypes[0];
-        checkArgument(setterArgType == getterRetType || getterRetType == Optional.class,
+        assertForBeanType(beanType,
+                setterArgType == getterRetType || getterRetType == Optional.class,
                 "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
         return setterArgType;
     }

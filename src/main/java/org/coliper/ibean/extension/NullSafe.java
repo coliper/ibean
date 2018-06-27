@@ -17,7 +17,6 @@ package org.coliper.ibean.extension;
 import java.util.Optional;
 
 import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
-import org.coliper.ibean.beanstyle.ModernBeanStyleWithOptionalSupport;
 
 /**
  * Marker extension interface that injects getter calls in a way that if a
