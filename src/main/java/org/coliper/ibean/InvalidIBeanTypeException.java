@@ -15,14 +15,24 @@
 package org.coliper.ibean;
 
 /**
+ * Thrown when a class is provided to be used as an IBean type but the class
+ * does not match the necessary criteria. For example if the class is not an
+ * interface or it does not comply to the used {@link BeanStyle}.
+ * 
+ * @see IBeanMetaInfoParser#parse(Class, BeanStyle, java.util.List)
+ * @see IBeanFactory#create(Class)
  * @author alex@coliper.org
- *
  */
 public class InvalidIBeanTypeException extends RuntimeException {
     private static final long serialVersionUID = 8825285745860015228L;
 
     /**
+     * Creates a new {@code InvalidIBeanTypeException}.
+     * 
+     * @param beanType
+     *            the class that does not match the bean type criteria
      * @param message
+     *            a description why the bean type does not match
      */
     public InvalidIBeanTypeException(Class<?> beanType, String message) {
         super("invalid type " + beanType + ": " + message);

@@ -23,8 +23,12 @@ import java.util.Optional;
 import com.google.common.collect.ImmutableList;
 
 /**
+ * Class that holds all IBean relevant meta information about a specific bean
+ * type, mainly a list of all contained fields.
+ * <p>
+ * This class is created once via constructor and is then immutable afterwards.
+ * 
  * @author alex@coliper.org
- *
  */
 public class IBeanTypeMetaInfo<T> {
     private final Class<T> beanType;
@@ -32,9 +36,15 @@ public class IBeanTypeMetaInfo<T> {
     private final List<IBeanFieldMetaInfo> fieldMetaInfos;
 
     /**
+     * Creates a new {@code IBeanTypeMetaInfo} with all contained information.
+     * 
      * @param beanType
+     *            the IBean type the meta information is related to
      * @param beanStyle
+     *            the bean style that was used for parsing the bean type
      * @param fieldMetaInfos
+     *            meta information about all fields contained in the bean type;
+     *            may not be <code>null</code> but may be an empty list
      */
     public IBeanTypeMetaInfo(Class<T> beanType, BeanStyle beanStyle,
             List<IBeanFieldMetaInfo> fieldMetaInfos) {
@@ -47,30 +57,52 @@ public class IBeanTypeMetaInfo<T> {
     }
 
     /**
-     * @return the beanType
+     * Gives the related bean type.
+     * 
+     * @return the bean class this meta information is related to
      */
     public Class<T> beanType() {
         return beanType;
     }
 
     /**
-     * @return the beanStyle
+     * Gives the bean style the bean type complies to.
+     * 
+     * @return the {@link BeanStyle} that was used for parsing the bean type
      */
     public BeanStyle beanStyle() {
         return beanStyle;
     }
 
     /**
-     * @return the fieldMetaInfos
+     * Provides {@link IBeanFieldMetaInfo} for all fields of the bean type.
+     * 
+     * @return the meta information about all contained fields of the bean type
      */
     public List<IBeanFieldMetaInfo> fieldMetaInfos() {
         return fieldMetaInfos;
     }
 
+    /**
+     * Convenience method returning the number of fields contained in the bean
+     * type.
+     * 
+     * @return same as {@code this.fieldMetaInfos.size()}
+     */
     public int noOfFields() {
         return this.fieldMetaInfos.size();
     }
 
+    /**
+     * Iterates over all contained {@code IBeanFieldMetaInfo} and returns the
+     * field meta info that contains the given method either as setter or as
+     * getter.
+     * 
+     * @param method
+     *            the getter or setter to search for
+     * @return the field meta info or an empty {@code Optional} if no field info
+     *         matches
+     */
     public Optional<IBeanFieldMetaInfo> findFieldMetaWithMethod(Method method) {
         requireNonNull(method, "method");
         for (IBeanFieldMetaInfo fieldMeta : fieldMetaInfos) {
@@ -82,6 +114,15 @@ public class IBeanTypeMetaInfo<T> {
         return Optional.empty();
     }
 
+    /**
+     * Iterates over all contained {@code IBeanFieldMetaInfo} and returns the
+     * field meta info that belongs to a field with a given name.
+     * 
+     * @param fieldName
+     *            the name of a field to search for
+     * @return the field meta info or an empty {@code Optional} if no field name
+     *         matches
+     */
     public Optional<IBeanFieldMetaInfo> findFieldMetaWithFieldName(String fieldName) {
         requireNonNull(fieldName, "fieldName");
         for (IBeanFieldMetaInfo fieldMeta : fieldMetaInfos) {
@@ -116,8 +157,10 @@ public class IBeanTypeMetaInfo<T> {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Compares this instance with any other object preferably with another
+     * {@code IBeanTypeMetaInfo}. Two {@code IBeanTypeMetaInfo} are equal if
+     * they have the same bean type and the same bean style.
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
@@ -130,11 +173,12 @@ public class IBeanTypeMetaInfo<T> {
         if (getClass() != obj.getClass())
             return false;
         IBeanTypeMetaInfo<?> other = (IBeanTypeMetaInfo<?>) obj;
-        if (beanType == null) {
-            if (other.beanType != null)
-                return false;
-        } else if (!beanType.equals(other.beanType))
+        if (!beanType.equals(other.beanType)) {
             return false;
+        }
+        if (!beanStyle.equals(other.beanStyle)) {
+            return false;
+        }
         return true;
     }
 

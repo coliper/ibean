@@ -27,16 +27,48 @@ import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.util.ReflectionUtil;
 
 /**
+ * Used for creating IBean relevant meta information for a given IBean
+ * interface. See {@link #parse(Class, BeanStyle, List)} for details.
+ * 
  * @author alex@coliper.org
- *
  */
 public class IBeanMetaInfoParser {
 
+    /**
+     * Validates if a given class matches all criteria for being an IBean
+     * interface and if that is the case then retrieves all relevant information
+     * about the all fields contained in the class. See
+     * {@link IBeanFieldMetaInfo} about what information is gathered for each
+     * field.
+     * <p>
+     * A given type is a valid IBean interface if following criteria match:
+     * <ul>
+     * <li>The bean type contains no methods other setters and getters, with the
+     * exception of methods of some specifically excluded super interfaces.</li>
+     * <li>All getters and setters match to the used {@link BeanStyle}.</li>
+     * <li>Every getter method has a matching setter and vice versa.</li>
+     * </ul>
+     * 
+     * @param beanType
+     *            the IBean interface candidate to parse
+     * @param beanStyle
+     *            the bean style to use for parsing
+     * @param ignorableSuperInterfaces
+     *            a list of super interfaces of the provided {@code beanType}
+     *            whose methods should be excluded from being considered as
+     *            getters and setters. These interfaces are typically extension
+     *            interfaces like {@link Freezable}.
+     * @return the meta information for the IBean interface
+     * @throws InvalidIBeanTypeException
+     *             if the given {@code beanType} does not match the criteria for
+     *             being a valid IBean interface
+     */
     public <T> IBeanTypeMetaInfo<T> parse(Class<T> beanType, BeanStyle beanStyle,
-            List<Class<?>> ignorableSuperInterfaces) {
+            List<Class<?>> ignorableSuperInterfaces) throws InvalidIBeanTypeException {
         requireNonNull(beanType, "beanType");
         requireNonNull(beanStyle, "beanStyle");
         requireNonNull(ignorableSuperInterfaces, "ignorableSuperInterfaces");
@@ -172,7 +204,8 @@ public class IBeanMetaInfoParser {
             return; // already set, nothing to do
         }
         if (meta.getter != null && meta.setter != null) {
-            meta.type = beanStyle.determineFieldTypeFromGetterAndSetter(beanType, meta.getter, meta.setter);
+            meta.type = beanStyle.determineFieldTypeFromGetterAndSetter(beanType, meta.getter,
+                    meta.setter);
         }
     }
 

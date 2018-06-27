@@ -19,11 +19,16 @@ import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Method;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.coliper.ibean.util.ReflectionUtil;
 
 /**
+ * Meta description of a field belonging to an IBean, more precisely does it
+ * provide name, type, getter method and setter method of the field.
+ * <p>
+ * This class is created via constructor and is then immutable.
+ * 
  * @author alex@coliper.org
- *
  */
 public class IBeanFieldMetaInfo {
     private final String fieldName;
@@ -33,9 +38,20 @@ public class IBeanFieldMetaInfo {
     private final int ordinal;
 
     /**
+     * Creates a new {@code IBeanFieldMetaInfo} by providing all required meta
+     * information.
+     * 
      * @param fieldName
+     *            the case-sensitive name of the field
+     * @param fieldType
+     *            the type of the field
      * @param getterMethod
+     *            the related getter method in the bean type
      * @param setterMethod
+     *            the related setter method in the bean type
+     * @param ordinal
+     *            the sorting index of the field within its
+     *            {@link IBeanTypeMetaInfo}
      */
     public IBeanFieldMetaInfo(String fieldName, Class<?> fieldType, Method getterMethod,
             Method setterMethod, int ordinal) {
@@ -57,30 +73,37 @@ public class IBeanFieldMetaInfo {
     }
 
     /**
-     * @return the fieldName
+     * Provides the name of the field belonging to the IBean type.
      */
     public String fieldName() {
         return fieldName;
     }
 
     /**
-     * @return the getterMethod
+     * Provides the getter method in the bean type related to the field.
      */
     public Method getterMethod() {
         return getterMethod;
     }
 
     /**
-     * @return the setterMethod
+     * Provides the setter method in the bean type related to the field.
      */
     public Method setterMethod() {
         return setterMethod;
     }
 
+    /**
+     * Provides the type of the field.
+     */
     public Class<?> fieldType() {
         return this.fieldType;
     }
 
+    /**
+     * Provides the sorting index of the field within its
+     * {@link IBeanTypeMetaInfo}.
+     */
     public int ordinal() {
         return this.ordinal;
     }
@@ -112,34 +135,16 @@ public class IBeanFieldMetaInfo {
         return result;
     }
 
-    /*
-     * (non-Javadoc)
+    /**
+     * Compares this instance with any other object, preferably with another
+     * {@code IBeanFieldMetaInfo}. Two {@code IBeanFieldMetaInfo} are considered
+     * equal if field name, field type and ordinal are equal.
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        IBeanFieldMetaInfo other = (IBeanFieldMetaInfo) obj;
-        if (other.ordinal != this.ordinal) {
-            return false;
-        }
-        if (fieldName == null) {
-            if (other.fieldName != null)
-                return false;
-        } else if (!fieldName.equals(other.fieldName))
-            return false;
-        if (fieldType == null) {
-            if (other.fieldType != null)
-                return false;
-        } else if (!fieldType.equals(other.fieldType))
-            return false;
-        return true;
+        return EqualsBuilder.reflectionEquals(this, obj, "getterMethod", "setterMethod");
     }
 
 }
