@@ -17,6 +17,7 @@ package org.coliper.ibean.extension;
 import java.util.Optional;
 
 import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
+import org.coliper.ibean.beanstyle.ModernBeanStyle;
 
 /**
  * Marker extension interface that injects getter calls in a way that if a
@@ -28,7 +29,7 @@ import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
  * prevent null errors is to work with mandatory and optional fields, for
  * example by using Java's {@link Optional} in conjunction with IBean's
  * {@link Completable}, {@link ClassicBeanStyleWithOptionalSupport},
- * {@link ModernBeanStyleWithOptionalSupport}.
+ * {@link ModernBeanStyle}.
  * 
  * @author alex@coliper.org
  */

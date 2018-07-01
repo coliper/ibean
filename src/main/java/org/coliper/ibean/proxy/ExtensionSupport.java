@@ -80,6 +80,8 @@ public class ExtensionSupport {
 
     /**
      * Provides the interface that is covered by the corresponding handler.
+     * 
+     * @return the extension interface type
      */
     public Class<?> supportedInterface() {
         return this.supportedInterface;
@@ -88,6 +90,8 @@ public class ExtensionSupport {
     /**
      * Provides the {@link ExtensionHandler} implementation responsible for the
      * supported interface.
+     * 
+     * @return the {@code ExtensionHandler} implementation
      */
     public Class<? extends ExtensionHandler> handlerType() {
         return handlerType;
@@ -96,6 +100,9 @@ public class ExtensionSupport {
     /**
      * Returns <code>true</code> if the handler is stateful and needs to have an
      * individual instance per IBean object.
+     * 
+     * @return <code>false</code> if a single handler instance can handle all
+     *         bean objects
      */
     public boolean handlerStateful() {
         return handlerStateful;
@@ -104,6 +111,9 @@ public class ExtensionSupport {
     /**
      * Returns the {@link #supportedInterface()} together with all
      * sub-interfaces of that interface.
+     * 
+     * @return a list of interface types. Never <code>null</code> but might be
+     *         empty.
      */
     public List<Class<?>> supportedInterfaceAndSuperInterfaces() {
         return ReflectionUtil.getSuperTypesInclRoot(this.supportedInterface);

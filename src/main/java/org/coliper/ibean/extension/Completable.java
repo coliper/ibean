@@ -17,6 +17,7 @@ package org.coliper.ibean.extension;
 import java.util.Optional;
 
 import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
+import org.coliper.ibean.beanstyle.ModernBeanStyle;
 
 /**
  * Extension interface that allows runtime checking whether all fields of a bean
@@ -27,11 +28,11 @@ import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
  * below.
  * <p>
  * If used together with a bean style with {@link Optional} support (
- * {@link ClassicBeanStyleWithOptionalSupport} and
- * {@link ModernBeanStyleWithOptionalSupport}) some bean fields can be set to
- * not mandatory and will be left out of the not-null check.<br>
+ * {@link ClassicBeanStyleWithOptionalSupport} and {@link ModernBeanStyle}) some
+ * bean fields can be set to not mandatory and will be left out of the not-null
+ * check.<br>
  * Here you find an example that also uses modern bean style (see
- * {@link ModernBeanStyleWithOptionalSupport}): <code>
+ * {@link ModernBeanStyle}): <code>
  * public interface Person extends Completable&lt;Person&gt; {
  *     String firstName();
  *     Person firstName(String s);
@@ -69,8 +70,7 @@ import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
  * if any setter was called. And for declaring a field as non-mandatory it is
  * not enough to just return {@link Optional} from the getter, you also have to
  * use a bean style with optional support like
- * {@link ClassicBeanStyleWithOptionalSupport} and
- * {@link ModernBeanStyleWithOptionalSupport}.
+ * {@link ClassicBeanStyleWithOptionalSupport} and {@link ModernBeanStyle}.
  * 
  * @author alex@coliper.org
  */

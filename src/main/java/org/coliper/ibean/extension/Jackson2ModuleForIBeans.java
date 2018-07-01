@@ -41,7 +41,9 @@ import com.fasterxml.jackson.databind.deser.Deserializers;
  * </ul>
  * <p>
  * Following code snippets show an example usage:<br>
- * <code><pre>
+ * 
+ * <pre>
+ * <code>
  *     IBeanFactory factory = ...;
  *     // Interface BeanType needs to extend Jackson2Support
  *     BeanType someBean = factory.create(BeanType.class);
@@ -54,7 +56,8 @@ import com.fasterxml.jackson.databind.deser.Deserializers;
  *     // Serialize to JSON and back
  *     String json = mapper.writeValueAsString(someBean);
  *     BeanType deserializedBean = mapper.readValue(json, BeanType.class);
- * </pre></code>
+ * </code>
+ * </pre>
  * 
  * @author alex@coliper.org
  */

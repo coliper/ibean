@@ -140,8 +140,8 @@ public class ProxyIBeanFactory implements IBeanFactory {
      * Used for creating new instances of {@link ProxyIBeanFactory}.
      * {@code Builder}s are not created by constructor, they are exclusively
      * created by calling {@link ProxyIBeanFactory#builder()}.
-     * <p>
      * <pre>
+     * <code>
      * ProxyIBeanFactory factory = ProxyIBeanFactory.builder()
      *         .withBeanStyle(BeanStyle.MODERN_WITH_OPTIONAL)
      *         .withToStringStyle(myToStringStyle)
@@ -149,6 +149,7 @@ public class ProxyIBeanFactory implements IBeanFactory {
      *         .withInterfaceSupport(extensionSupport1)
      *         .withInterfaceSupport(extensionSupport2)
      *         .build();
+     * </code>
      * </pre>
      * <p>
      * Please note that a newly built {@code ProxyIBeanFactory} does not contain any

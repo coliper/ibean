@@ -52,7 +52,7 @@ import org.coliper.ibean.util.ReflectionUtil;
  * <code>
  * public interface BeanInterface {
  *     BeanInterface setValue(String val);
- *     Optional<String> getValue();
+ *     Optional&lt;String&gt; getValue();
  * }
  * </code> If the field value is <code>null</code> then an empty Optional
  * instance will be returned.
@@ -80,7 +80,7 @@ public class ModernBeanStyle extends BeanStyle {
     public boolean isGetterMethod(Method method) {
         requireNonNull(method, "method");
         return isNoParameterInMethod(method) && (method.getReturnType() != void.class
-        || method.getReturnType() == Optional.class);
+                || method.getReturnType() == Optional.class);
     }
 
     /*

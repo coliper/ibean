@@ -62,6 +62,9 @@ public class IBeanMetaInfoParser {
      *            whose methods should be excluded from being considered as
      *            getters and setters. These interfaces are typically extension
      *            interfaces like {@link Freezable}.
+     * @param <T>
+     *            generic type {@code T} is the bean class provided with
+     *            parameter {@code beanType}
      * @return the meta information for the IBean interface
      * @throws InvalidIBeanTypeException
      *             if the given {@code beanType} does not match the criteria for

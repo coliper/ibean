@@ -46,6 +46,9 @@ public class IBeanContext<T> {
     /**
      * Provides the factory that created the IBean. Especially useful if the
      * {@link ExtensionHandler} itself needs to create other IBeans.
+     * 
+     * @return the factory which is handling the method call this context
+     *         relates to
      */
     public ProxyIBeanFactory beanFactory() {
         return this.beanFactory;
@@ -53,6 +56,8 @@ public class IBeanContext<T> {
 
     /**
      * Provides the meta information about the IBean.
+     * 
+     * @return meta information about bean type {@code T}
      */
     public IBeanTypeMetaInfo<T> metaInfo() {
         return metaInfo;
@@ -60,6 +65,8 @@ public class IBeanContext<T> {
 
     /**
      * Provides the style used in IBean's {@link Object#toString()} method.
+     * 
+     * @return the {@code ToStringStyle}
      */
     public ToStringStyle toStringStyle() {
         return toStringStyle;
@@ -67,6 +74,8 @@ public class IBeanContext<T> {
 
     /**
      * Provides the {@link BeanStyle} of the IBean.
+     * 
+     * @return the bean style this bean complies to
      */
     public BeanStyle beanStyle() {
         return beanStyle;

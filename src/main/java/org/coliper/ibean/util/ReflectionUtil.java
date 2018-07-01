@@ -171,6 +171,14 @@ public class ReflectionUtil {
      * Returnes the default value for a given primitive type, basically all
      * flavours of zero for the number types and <code>false</code> for
      * <code>boolean.class</code>.
+     * 
+     * @param primitiveType
+     *            a Java primitive type like {@code boolean.class},
+     *            {@code int.class} or {@code float.class}
+     * @return zero of <code>false</code> value of type matching to given
+     *         {@code primitiveType}. If for example {@code primitiveType} is
+     *         {@code double.class} the returned value will have type
+     *         {@code Double.class} and value 0.0.
      */
     public static Object primitiveTypeDefaultValue(Class<?> primitiveType) {
         requireNonNull(primitiveType, "primitiveType");

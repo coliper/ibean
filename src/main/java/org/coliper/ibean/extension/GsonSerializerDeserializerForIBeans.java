@@ -42,7 +42,9 @@ import com.google.gson.JsonSerializer;
  * </ul>
  * <p>
  * Following code snippets show an example usage:<br>
- * <code><pre>
+ * 
+ * <pre>
+ * <code>
  *    IBeanFactory factory = null;
  *
  *    // Create a Gson JSON converter with IBean serializer/deserializer configured
@@ -55,7 +57,8 @@ import com.google.gson.JsonSerializer;
  *    // Serialize and deserialize IBean
  *    String json = gson.toJson(someBean);
  *    BeanType deserializedBean = gson.fromJson(json, BeanType.class);
- * </pre></code>
+ * </code>
+ * </pre>
  * 
  * @author alex@coliper.org
  *

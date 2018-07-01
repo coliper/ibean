@@ -74,6 +74,9 @@ public class IBeanFieldMetaInfo {
 
     /**
      * Provides the name of the field belonging to the IBean type.
+     * 
+     * @return some label that complies to the rules for field names defined in
+     *         the bean style; usually some camel case string
      */
     public String fieldName() {
         return fieldName;
@@ -81,6 +84,8 @@ public class IBeanFieldMetaInfo {
 
     /**
      * Provides the getter method in the bean type related to the field.
+     * 
+     * @return a {@code Method} contained in the bean interface
      */
     public Method getterMethod() {
         return getterMethod;
@@ -88,6 +93,8 @@ public class IBeanFieldMetaInfo {
 
     /**
      * Provides the setter method in the bean type related to the field.
+     * 
+     * @return a {@code Method} contained in the bean interface
      */
     public Method setterMethod() {
         return setterMethod;
@@ -95,6 +102,9 @@ public class IBeanFieldMetaInfo {
 
     /**
      * Provides the type of the field.
+     * 
+     * @return any allowed primitive or object type that complies to the bean
+     *         style. Usually only {@code void} is forbidden.
      */
     public Class<?> fieldType() {
         return this.fieldType;
@@ -103,6 +113,8 @@ public class IBeanFieldMetaInfo {
     /**
      * Provides the sorting index of the field within its
      * {@link IBeanTypeMetaInfo}.
+     * 
+     * @return some zero based positive integer
      */
     public int ordinal() {
         return this.ordinal;
