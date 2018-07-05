@@ -122,7 +122,7 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         parser.nextToken();
         final IBeanFieldMetaInfo meta =
                 context.metaInfo().findFieldMetaWithFieldName(fieldName)
-                        .orElseThrow(() -> new JsonParseException(
+                        .orElseThrow(() -> new JsonParseException(parser,
                                 "unknown property " + fieldName + " for type "
                                         + context.metaInfo().beanType(),
                                 parser.getCurrentLocation()));
@@ -172,6 +172,7 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         throw new RuntimeException("unexpected type " + fieldType);
     }
 
+    @SuppressWarnings("deprecation")
     private void serializeWithType(JsonGenerator gen, SerializerProvider serializers,
             TypeSerializer typeSer, Object proxyInstance, IBeanContext<?> context,
             IBeanFieldAccess bean) throws IOException {

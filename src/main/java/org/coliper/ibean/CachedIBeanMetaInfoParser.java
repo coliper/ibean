@@ -19,8 +19,16 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * Extension of {@link IBeanMetaInfoParser} using an internal cache to reuse
+ * meta information once created with {@link #parse(Class, BeanStyle, List)}.
+ * This is the default implementation of {@link IBeanMetaInfoParser} used by
+ * IBean framework.
+ * <p>
+ * The internal cache is very simple and does not have a timeout or size limit
+ * assuming meta informations do not change over runtime and assuming a limited
+ * number of bean types.
+ * 
  * @author alex@coliper.org
- *
  */
 public class CachedIBeanMetaInfoParser extends IBeanMetaInfoParser {
 
