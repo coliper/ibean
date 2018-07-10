@@ -16,6 +16,7 @@ package org.coliper.ibean;
 
 import static java.util.Objects.requireNonNull;
 
+import org.apache.commons.lang3.builder.ToStringStyle;
 import org.coliper.ibean.beanstyle.ClassicBeanStyle;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
@@ -56,8 +57,9 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
  * <li>It is of type {@link ProxyIBeanFactory}.</li>
  * <li>It supports bean interfaces using the default Java bean style
  * ({@link ClassicBeanStyle})</li>
- * <li></li>
- * <li></li>
+ * <li>It supports all built in extension interfaces.</li>
+ * <li>It uses default {@link ToStringStyle}.</li>
+ * </ul>
  * 
  * @author alex@coliper.org
  */
