@@ -1,7 +1,7 @@
 # Coliper IBean
 
 *IBean* is a Java library that allows to declare [Java beans][_JavaBeansSpec] - or 
-DTOs and ValueObjects in general - as interfaces.
+[DTOs][_DTO] and [ValueObjects][_ValueObject] in general - as interfaces.
 
 For example a JavaBean like
 
@@ -31,17 +31,18 @@ public interface Person {
 And for creating a new instance of the bean, instead of saying ```new Person()``` you would
 write ```IBean.newOf(Person.class)```.
 
-IBean internally creates an implementation of the provided interface  
+IBean internally creates an implementation of the provided interface with expected behavior of
+getter and setter methods and also with Object methods `toString`, `hashCode` and 
+`equals` working as desired.
 
-for an interface based way to deal with Java beans or other forms of 
-logicless data-only classes like 
-[data transfer objects](http://en.wikipedia.org/wiki/Data_Transfer_Object)
-(DTO) or [value objects](http://martinfowler.com/bliki/ValueObject.html).
+## Why *IBean*?
+
+Main purpose of *IBean* is to free the developer of writing boilerplate code for Java beans or other
+value object classes. 
 
 ## Description
 
-Main purpose of IBean is to free the developer of writing boilerplate code for Java beans or other
-value object classes. In contrast to other libraries with the same purpose - like 
+In contrast to other libraries with the same purpose - like 
 [AutoValue](https://github.com/google/auto/tree/master/value), 
 [Joda-Bean](http://www.joda.org/joda-beans/), 
 [Immutables](http://immutables.org/),
@@ -65,3 +66,6 @@ Let's dig into an example. Classic way to represent a person by a good old Java 
 ## Quick Start
 
 [_JavaBeansSpec](http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html)
+[_DTO](http://en.wikipedia.org/wiki/Data_Transfer_Object)
+[_ValueObject](http://martinfowler.com/bliki/ValueObject.html).
+
