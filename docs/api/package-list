@@ -1,0 +1,6 @@
+org.coliper.ibean
+org.coliper.ibean.beanstyle
+org.coliper.ibean.extension
+org.coliper.ibean.proxy
+org.coliper.ibean.proxy.handler
+org.coliper.ibean.util

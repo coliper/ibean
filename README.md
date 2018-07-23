@@ -53,6 +53,31 @@ If you want to use JSON convertion via *Gson* or
 higher, included in your project's dependencies.
 
 
+## Quick Start
+
+### Read This README
+
+Gives you a good first overview.
+
+### Include *IBean* In Your Project
+
+#### Gradle
+
+tbd
+
+#### Maven
+
+tbd
+
+### Read the Developer Guide
+
+We have integrated the developer guide into the [API docs][_PkgIbeanAPI].
+
+### See an Extended Sample
+
+
+
+
 ## Why *IBean*?
 
 * Main purpose of *IBean* is to free the developer of writing boilerplate code for Java beans 
@@ -66,7 +91,7 @@ higher, included in your project's dependencies.
 * *IBean* allows to declare beans not only with the JavaBean way. It also allows more modern
   techniques that are nowadays used for value object declaration, for example builders,
   immutability, Optional-support or different signatures for getter and setter methods.
-  See [Bean Styles](#bean-styles) for an example.  
+  See chapter [Bean Styles](#bean-styles) below for an example.  
 * *IBean* provides JSON conversion support. *IBean* supports JSON frameworks
   [Jackson][_JacksonFramework] and [Gson][_GsonFramework]. How to use them with *IBean*
   refer to API documentation of [Jackson][_Jackson2ModuleForIBeans] and 
@@ -86,10 +111,12 @@ under [Alternative Frameworks](#alternative-frameworks).
 
 *IBean* has a very powerful mechanism to inject generic functionality into
 beans, so called *extension interfaces*. This mechanism is similar to
-aspect oriented programming. In Java you usually do this with
-annotations, so by labeling a method or a class with an annotation you
-inject behavior into this method or class. In *IBean* you do similar
-by having your bean type extend one or more extension interfaces.
+aspect oriented programming ([AOP][_AspectOrientedProgramming]). 
+In Java you usually do AOP with
+a framework like *AspectJ* or *Spring AOP* using annotations. That means, by 
+labeling a method or a class with an annotation you
+inject behavior into this method or class. In *IBean* you do similar, but instead
+of using annotations you have your bean type extend one or more extension interfaces.
 
 Let us see an example:
 
@@ -117,8 +144,8 @@ person.isModified();     // => false
 ```
 
 Methods `isModified` and `resetModified` are both supplied by interface
-`ModificationAware`. See [ModificationAware API docs]
-[_ModifcationAwareAPI] for more details.
+`ModificationAware`. See [ModificationAware API docs][_ModifcationAwareAPI] 
+for more details.
 
 On the other hand extension interfaces can also influence the behavior
 of getter or setter methods. For example extension interface `NullSafe`
@@ -221,12 +248,12 @@ There are several excellent frameworks out there with the same purpose,
 to free the user from writing boring boiler plate code for their
 value objects. In spite of similar purpose they all differ in their
 approaches and feature sets. These are probably the most important ones:
-* [AutoValue][_AutoValue] - provided and used by Google
-* [Joda-Bean][_JodaBean] - from the inventors of *Joda-Time*
-* [Immutables][_Immutables] - probably the most powerful of all these
+* [AutoValue][_AutoValueFramework] - provided and used by Google
+* [Joda-Bean][_JodaBeanFramework] - from the inventors of *Joda-Time*
+* [Immutables][_ImmutablesFramework] - probably the most powerful of all these
   frameworks
-* [Lombok][_Lombok] - the veteran in this list
-* [VALJOGen][_VALJOGen]
+* [Lombok][_LombokFramework] - the veteran in this list
+* [VALJOGen][_VALJOGenFramework]
 
 You find comparisons and descriptions of some of this frameworks in the
 net, for example on [DZone][_DzoneLessBetterCode] or in this
@@ -251,9 +278,12 @@ convertible to and from JSON you need to use a certain
 extension interface and you need to inject a handler into your
 conversion framework. See API documentation for
 [GsonSupport][_GsonSupportApi] and
-[Jackson2Support][_Jackson2SupportApi] about details.\
-If you use *Spring Framework* you normally have *Jackson2* under the
-hood by default.
+[Jackson2Support][_Jackson2SupportApi] about details. This project also contains some
+[sample code how to integrate Gson][_GsonSample].
+
+*Hint:* If you use *Spring Framework* you normally have *Jackson2* under the
+hood by default. In that case you only have to add the 
+[JacksonModuleForIBeans][_Jackson2ModuleForIBeans] to your Jackson `ObjectMapper`.
 
 
 [_JavaBeansSpec]: http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html
@@ -262,6 +292,11 @@ hood by default.
 [_AspectOrientedProgramming]: https://en.wikipedia.org/wiki/Aspect-oriented_programming
 [_GsonFramework]: https://github.com/google/gson
 [_JacksonFramework]: https://github.com/FasterXML/jackson
+[_AutoValueFramework]: https://github.com/google/auto/tree/master/value 
+[_Joda-BeanFramework]: http://www.joda.org/joda-beans 
+[_ImmutablesFramework]: http://immutables.org
+[_LombokFramework]: https://projectlombok.org
+[_VALJOGenFramework]: http://valjogen.41concepts.com
 [_GsonSerializerDeserializerForIBeans]: docs/api/org/coliper/ibean/extension/GsonSerializerDeserializerForIBeans.html
 [_Jackson2ModuleForIBeans]: docs/api/org/coliper/ibean/extension/Jackson2ModuleForIBeans.html
 [_GsonSupportApi]: docs/api/org/coliper/ibean/extension/GsonSupport.html
@@ -269,6 +304,7 @@ hood by default.
 [_ModifcationAwareAPI]: docs/api/org/coliper/ibean/extension/ModificationAware.html
 [_NullSafeAPI]: docs/api/org/coliper/ibean/extension/NullSafe.html
 [_PkgExtensionAPI]: docs/api/org/coliper/ibean/extension/package-summary.html
+[_PkgIbeanAPI]: docs/api/org/coliper/ibean/package-summary.html
 [_ExtensionHandlerAPI]: docs/api/org/coliper/ibean/proxy/ExtensionHandler.html
 [_BeanStyleApi]: docs/api/org/coliper/ibean/BeanStyle.html
 [_ClassicBeanStyleApi]: docs/api/org/coliper/ibean/beanstyle/ClassicBeanStyle.html
@@ -278,5 +314,7 @@ hood by default.
 [_GsonMaven]: https://mvnrepository.com/artifact/com.google.code.gson/gson
 [_JacksonCoreMaven]: https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
 [_JacksonDatabindMaven]: https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+[_CommonsLang3Maven]: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+[_GuavaMaven]: https://mvnrepository.com/artifact/com.google.guava/guava
 [_BlogBeanCodeGeneration]: http://blog.joda.org/2016/09/code-generating-beans.html
 [_DzoneLessBetterCode]: https://www.javacodegeeks.com/2018/03/lombok-autovalue-and-immutables-or-how-to-write-less-and-better-code-returns.html
