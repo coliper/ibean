@@ -53,5 +53,6 @@
  * {@link org.coliper.ibean.proxy.ExtensionHandler}</li>
  * </ul>
  * 
+ * <h2>Jackson and Gson Support</h2>
  */
 package org.coliper.ibean;
