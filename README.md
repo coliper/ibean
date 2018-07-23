@@ -293,7 +293,7 @@ hood by default. In that case you only have to add the
 [_GsonFramework]: https://github.com/google/gson
 [_JacksonFramework]: https://github.com/FasterXML/jackson
 [_AutoValueFramework]: https://github.com/google/auto/tree/master/value 
-[_Joda-BeanFramework]: http://www.joda.org/joda-beans 
+[_JodaBeanFramework]: http://www.joda.org/joda-beans 
 [_ImmutablesFramework]: http://immutables.org
 [_LombokFramework]: https://projectlombok.org
 [_VALJOGenFramework]: http://valjogen.41concepts.com
