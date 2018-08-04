@@ -43,9 +43,10 @@ getter and setter methods and also with Object methods `toString`, `hashCode` an
 *IBean* has dependencies to following frameworks:
 * [Apache Commons Lang][_CommonsLang3Maven], version 3.0 or higher
 * [Google Guava][_GuavaMaven], version 21 or higher
-If not present these dependencies are automatically loaded.
 
-If you want to use JSON convertion via *Gson* or
+If not already present in your project these dependencies are automatically loaded.
+
+If you want to use JSON convertion of *IBean* beans via *Gson* or
 *Jackson* you need to have
 [Gson][_GsonMaven], version 2.4 or higher, respectively
 [Jackson Core][_JacksonCoreMaven] and
