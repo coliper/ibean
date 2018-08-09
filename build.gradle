@@ -1,9 +1,13 @@
+
 def PROJECTNAME = "Coliper IBean"
 
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
-version = '0.4.0'
+group = "com.example.applications"
+version = '0.4.1'
 description = 'creates all artifacts of the Coliper IBean project'
 sourceCompatibility = 1.8
 
@@ -43,6 +47,12 @@ javadoc {
                          "./doc-src/gson-2.4-javadoc")
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Creation of upload artefacts.
+
+archivesBaseName = "ibean"
+
 task sourcesJar(type: Jar, dependsOn: classes) {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -57,3 +67,85 @@ artifacts {
     archives sourcesJar
     archives javadocJar
 }
+
+signing {
+    sign configurations.archives
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Maven Central upload.
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'Coliper IBean'
+        packaging 'jar'
+        // optionally artifactId can be defined here 
+        description 'Java library used to define beans as interfaces.'
+        url 'https://coliper.github.io/ibean'
+
+        scm {
+          connection 'scm:git:git://github.com/coliper/ibean.git'
+          developerConnection 'scm:git:ssh://github.com:coliper/ibean.git'
+          url 'http://github.com/coliper/ibean/tree/master'
+        }
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
+
+        developers {
+          developer {
+            id 'alex'
+            name 'Alexander Einhaeuser'
+            email 'alex@coliper.org'
+          }
+        }
+      }
+    }
+  }
+}
+
+/*
+
+Following steps need to be done to build and upload a new version:
+
+1) Do all changes in a separate branch.
+
+2) Adopt documentation in doc-src/intro.templ.md.
+
+3) Change version in build.gradle.
+
+4) Run build and tests.
+  > gradle clean assemble
+  
+5) Distribute documentation.
+  > gradle ???
+
+6) Commit and all changes.
+
+7) Create version tag.
+
+8) Push changes.
+
+9) Upload artefacts to Maven Central.
+  > gradle ???
+
+10) Merge branch into master.
+
+*/
