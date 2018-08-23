@@ -8,6 +8,8 @@ hs_err_pid*
 
 # gradle
 /.gradle/
+gradle.properties
+*.gpg
 
 # Eclipse
 .settings/

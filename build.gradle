@@ -36,6 +36,10 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.8.0'
 }
 
+
+//////////////////////////////////////////////////////////////////////////////////////////
+// Documentation related.
+
 javadoc {
     title = PROJECTNAME + ' API ' + version 
     options.stylesheetFile file('doc-src/javadoc-stylesheet.css', PathValidation.FILE)
@@ -47,6 +51,28 @@ javadoc {
                          "./doc-src/gson-2.4-javadoc")
 }
 
+task createPagesIntro(type: Copy) {
+    from 'doc-src/intro.templ.md'
+    into 'docs'
+    filter {l -> l.replace('$version$', version)
+                 .replace('$javadoc.url$', 'api')
+                 .replace('$source.url$', 'https://github.com/coliper/ibean/tree/master')}
+    rename '.*', 'index.md'
+}
+
+task createRootReadme(type: Copy) {
+    from 'doc-src/intro.templ.md'
+    into buildDir
+    filter {l -> l.replace('$version$', version)
+                 .replace('$javadoc.url$', "https://www.javadoc.io/doc/org.coliper/ibean/${version}")
+                 .replace('$source.url$', "https://github.com/coliper/ibean/tree/v${version}")}
+    rename '.*', 'README.md'
+}
+
+task createUserManuals {
+    dependsOn 'createPagesIntro'
+    dependsOn 'createRootReadme'
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Creation of upload artefacts.
@@ -135,7 +161,9 @@ Following steps need to be done to build and upload a new version:
   > gradle clean assemble
   
 5) Distribute documentation.
-  > gradle ???
+  > gradle createUserManuals
+  > copy build\README.md .
+  > cp build/README.md .
 
 6) Commit and all changes.
 
@@ -143,9 +171,11 @@ Following steps need to be done to build and upload a new version:
 
 8) Push changes.
 
-9) Upload artefacts to Maven Central.
+9) Upload artefacts to OSSRH.
   > gradle ???
 
-10) Merge branch into master.
+10) Release deployment to Central Repository  
+
+11) Merge branch into master.
 
 */

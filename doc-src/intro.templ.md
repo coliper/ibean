@@ -64,11 +64,23 @@ Gives you a good first overview.
 
 #### Gradle
 
-tbd
+Add following dependency to your *build.gradle*:
+
+```groovy
+    implementation 'org.coliper:ibean:$version$'
+```
 
 #### Maven
 
-tbd
+Add following dependency to your *pom.xml*
+
+```xml
+    <dependency>
+      <groupId>org.coliper</groupId>
+      <artifactId>ibean</artifactId>
+      <version>$version$</version>
+    </dependency>
+```
 
 ### Read the Developer Guide
 
@@ -298,20 +310,6 @@ hood by default. In that case you only have to add the
 [_ImmutablesFramework]: http://immutables.org
 [_LombokFramework]: https://projectlombok.org
 [_VALJOGenFramework]: http://valjogen.41concepts.com
-[_GsonSerializerDeserializerForIBeans]: https://coliper.github.io/ibean/api/org/coliper/ibean/extension/GsonSerializerDeserializerForIBeans.html
-[_Jackson2ModuleForIBeans]: https://coliper.github.io/ibean/api/org/coliper/ibean/extension/Jackson2ModuleForIBeans.html
-[_GsonSupportApi]: https://coliper.github.io/ibean/api/org/coliper/ibean/extension/GsonSupport.html
-[_Jackson2SupportApi]: https://coliper.github.io/ibean/api/org/coliper/ibean/extension/Jackson2Support.html
-[_ModifcationAwareAPI]: https://coliper.github.io/ibean/api/org/coliper/ibean/extension/ModificationAware.html
-[_NullSafeAPI]: https://coliper.github.io/ibean/api/org/coliper/ibean/extension/NullSafe.html
-[_PkgExtensionAPI]: https://coliper.github.io/ibean/api/org/coliper/ibean/extension/package-summary.html
-[_PkgIbeanAPI]: https://coliper.github.io/ibean/api/org/coliper/ibean/package-summary.html
-[_ExtensionHandlerAPI]: https://coliper.github.io/ibean/api/org/coliper/ibean/proxy/ExtensionHandler.html
-[_BeanStyleApi]: https://coliper.github.io/ibean/api/org/coliper/ibean/BeanStyle.html
-[_ClassicBeanStyleApi]: https://coliper.github.io/ibean/api/org/coliper/ibean/beanstyle/ClassicBeanStyle.html
-[_ModernBeanStyleApi]: https://coliper.github.io/ibean/api/org/coliper/ibean/beanstyle/ModernBeanStyle.html
-[_BeanStyleSample]: src/test/java/org/coliper/ibean/samples/BeanStyleSample.java
-[_GsonSample]: src/test/java/org/coliper/ibean/samples/GsonSample.java
 [_GsonMaven]: https://mvnrepository.com/artifact/com.google.code.gson/gson
 [_JacksonCoreMaven]: https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core
 [_JacksonDatabindMaven]: https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
@@ -319,3 +317,17 @@ hood by default. In that case you only have to add the
 [_GuavaMaven]: https://mvnrepository.com/artifact/com.google.guava/guava
 [_BlogBeanCodeGeneration]: http://blog.joda.org/2016/09/code-generating-beans.html
 [_DzoneLessBetterCode]: https://www.javacodegeeks.com/2018/03/lombok-autovalue-and-immutables-or-how-to-write-less-and-better-code-returns.html
+[_GsonSerializerDeserializerForIBeans]: $javadoc.url$/org/coliper/ibean/extension/GsonSerializerDeserializerForIBeans.html
+[_Jackson2ModuleForIBeans]: $javadoc.url$/org/coliper/ibean/extension/Jackson2ModuleForIBeans.html
+[_GsonSupportApi]: $javadoc.url$/org/coliper/ibean/extension/GsonSupport.html
+[_Jackson2SupportApi]: $javadoc.url$/org/coliper/ibean/extension/Jackson2Support.html
+[_ModifcationAwareAPI]: $javadoc.url$/org/coliper/ibean/extension/ModificationAware.html
+[_NullSafeAPI]: $javadoc.url$/org/coliper/ibean/extension/NullSafe.html
+[_PkgExtensionAPI]: $javadoc.url$/org/coliper/ibean/extension/package-summary.html
+[_PkgIbeanAPI]: $javadoc.url$/org/coliper/ibean/package-summary.html
+[_ExtensionHandlerAPI]: $javadoc.url$/org/coliper/ibean/proxy/ExtensionHandler.html
+[_BeanStyleApi]: $javadoc.url$/org/coliper/ibean/BeanStyle.html
+[_ClassicBeanStyleApi]: $javadoc.url$/org/coliper/ibean/beanstyle/ClassicBeanStyle.html
+[_ModernBeanStyleApi]: $javadoc.url$/org/coliper/ibean/beanstyle/ModernBeanStyle.html
+[_BeanStyleSample]: $source.url$/src/test/java/org/coliper/ibean/samples/BeanStyleSample.java
+[_GsonSample]: $source.url$/src/test/java/org/coliper/ibean/samples/GsonSample.java
