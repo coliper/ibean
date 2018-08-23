@@ -7,7 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "org.coliper"
-version = '0.4.2'
+version = '0.4.3'
 description = 'creates all artifacts of the Coliper IBean project'
 sourceCompatibility = 1.8
 
@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-lang3:3.+'
+    api 'org.apache.commons:commons-lang3:3.2'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:21.0'
@@ -173,10 +173,7 @@ Following steps need to be done to build and upload a new version:
   mv build/docs/javadoc docs/api
 
 6) Commit and all changes.
-  git commit -a -m ""
-
-7) Create version tag.
-  git tag -a v0.4.2 -m "release version 0.4.2"
+  git commit -a -m "created documentation for release 0.4.3"
 
 8) Push changes.
 
@@ -186,5 +183,10 @@ Following steps need to be done to build and upload a new version:
 10) Release deployment to Central Repository  
 
 11) Merge branch into master.
+
+12) Create version tag.
+  git tag -a v0.4.3 -m "release version 0.4.3"
+
+13) Create Github release
 
 */
