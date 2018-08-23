@@ -152,13 +152,14 @@ uploadArchives {
 Following steps need to be done to build and upload a new version:
 
 1) Do all changes in a separate branch.
+   git checkout v0.4.x
 
 2) Adopt documentation in doc-src/intro.templ.md.
 
 3) Change version in build.gradle.
 
 4) Run build and tests.
-  > gradle clean assemble
+  gradle clean assemble
   
 5) Distribute documentation.
   gradle createUserManuals
@@ -172,14 +173,15 @@ Following steps need to be done to build and upload a new version:
   mv build/docs/javadoc docs/api
 
 6) Commit and all changes.
+  git commit -a -m ""
 
 7) Create version tag.
-  > git tag -a 0.4.1 -m "release version 0.4.1"
+  git tag -a v0.4.2 -m "release version 0.4.2"
 
 8) Push changes.
 
 9) Upload artefacts to OSSRH.
-  > gradle uploadArchives
+  gradle uploadArchives
 
 10) Release deployment to Central Repository  
 
