@@ -3,12 +3,15 @@
  */
 package org.coliper.ibean.proxy;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.coliper.ibean.BeanStyle;
+import org.coliper.ibean.BeanTypeWithCustomEquals;
 import org.coliper.ibean.EmptyBean;
 import org.coliper.ibean.EmptyBeanImpl;
+import org.coliper.ibean.IBean;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.PrimitivesBeanClassic;
 import org.coliper.ibean.PrimitivesBeanClassicImpl;
@@ -223,5 +226,22 @@ public class BeanEqualsTest {
         assertTrue(bean1.equals(bean1));
         assertTrue(bean2.equals(bean2));
 
+    }
+
+    @Test
+    public void testCustomEquals() {
+        BeanTypeWithCustomEquals bean1 = IBean.newOf(BeanTypeWithCustomEquals.class);
+        bean1.setId("#1");
+        bean1.setName("John");
+
+        BeanTypeWithCustomEquals bean2 = IBean.newOf(BeanTypeWithCustomEquals.class);
+        bean2.setId("#2");
+        bean2.setName("John");
+
+        assertThat(bean1.equals(bean2)).isFalse();
+
+        bean2.setId("#1");
+        bean2.setName("Mary");
+        assertThat(bean1.equals(bean2)).isTrue();
     }
 }

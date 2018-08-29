@@ -21,6 +21,7 @@ import static java.util.Objects.requireNonNull;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -128,7 +129,8 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
         return method.getDeclaringClass() == Object.class;
     }
 
-    private Object handleRootObjectTypeMethod(Object proxy, Method method, Object[] args) {
+    private Object handleRootObjectTypeMethod(Object proxy, Method method, Object[] args)
+            throws Throwable {
         switch (method.getName()) {
         case METHOD_NAME_EQUALS:
             checkState(args.length == 1);
@@ -186,7 +188,11 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
         return false;
     }
 
-    private Object handleHashCodeMethod(Object proxy, Method method) {
+    private Object handleHashCodeMethod(Object proxy, Method method) throws Throwable {
+        if (this.context.metaInfo().customHashCodeMethod().isPresent()) {
+            return this.invokeBeanTypeDefaultMethod(proxy,
+                    this.context.metaInfo().customHashCodeMethod().get());
+        }
         return RECURSION_DETECTOR_HASHCODE.executeWithCycleDetection(proxy,
                 () -> this.handleHashCodeMethodWithCycleProtection(proxy, method));
     }
@@ -195,7 +201,11 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
         return Integer.valueOf(Arrays.hashCode(this.beanValues));
     }
 
-    private Object handleEqualsMethod(Object proxy, Method method, Object other) {
+    private Object handleEqualsMethod(Object proxy, Method method, Object other) throws Throwable {
+        if (this.context.metaInfo().customEqualsMethod().isPresent()) {
+            return this.invokeBeanTypeDefaultMethod(proxy,
+                    this.context.metaInfo().customEqualsMethod().get(), other);
+        }
         return RECURSION_DETECTOR_EQUALS.executeWithCycleDetection(proxy,
                 () -> this.handleEqualsMethodWithCycleProtection(proxy, method, other));
     }
@@ -220,6 +230,29 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
             }
         }
         return Boolean.TRUE;
+    }
+
+    private Object invokeBeanTypeDefaultMethod(Object bean, Method method) throws Throwable {
+        try {
+            return method.invoke(bean);
+        } catch (IllegalAccessException | IllegalArgumentException e) {
+            throw new IllegalStateException("unexpected exception calling default method " + method,
+                    e);
+        } catch (InvocationTargetException e) {
+            throw e.getTargetException();
+        }
+    }
+
+    private Object invokeBeanTypeDefaultMethod(Object bean, Method method, Object parameter)
+            throws Throwable {
+        try {
+            return method.invoke(bean, parameter);
+        } catch (IllegalAccessException | IllegalArgumentException e) {
+            throw new IllegalStateException("unexpected exception calling default method " + method,
+                    e);
+        } catch (InvocationTargetException e) {
+            throw e.getTargetException();
+        }
     }
 
     private Object handleGetterOrSetter(Object proxy, final Method method, Object[] args) {

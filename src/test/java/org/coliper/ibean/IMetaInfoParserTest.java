@@ -14,6 +14,7 @@
 
 package org.coliper.ibean;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
@@ -76,6 +77,8 @@ public class IMetaInfoParserTest {
         checkFieldInfo(fields.get(2), "intObject", Integer.class, "getIntObject", "setIntObject");
         checkFieldInfo(fields.get(3), "self", SampleBeanClassic.class, "getSelf", "setSelf");
         checkFieldInfo(fields.get(4), "string", String.class, "getString", "setString");
+        assertThat(meta.customEqualsMethod().isPresent()).isFalse();
+        assertThat(meta.customHashCodeMethod().isPresent()).isFalse();
     }
 
     @Test
@@ -93,6 +96,8 @@ public class IMetaInfoParserTest {
         checkFieldInfo(fields.get(2), "intObject", Integer.class, "intObject", "intObject");
         checkFieldInfo(fields.get(3), "self", SampleBeanModern.class, "self", "self");
         checkFieldInfo(fields.get(4), "string", String.class, "string", "string");
+        assertThat(meta.customEqualsMethod().isPresent()).isFalse();
+        assertThat(meta.customHashCodeMethod().isPresent()).isFalse();
     }
 
     @Test
@@ -133,6 +138,8 @@ public class IMetaInfoParserTest {
                 "setShortPrimitive");
         checkFieldInfo(fields.get(14), "shortObject", Short.class, "getShortObject",
                 "setShortObject");
+        assertThat(meta.customEqualsMethod().isPresent()).isFalse();
+        assertThat(meta.customHashCodeMethod().isPresent()).isFalse();
     }
 
     @Test
@@ -144,6 +151,8 @@ public class IMetaInfoParserTest {
         assertSame(BeanStyle.CLASSIC, meta.beanStyle());
         List<IBeanFieldMetaInfo> fields = meta.fieldMetaInfos();
         assertEquals(0, fields.size());
+        assertThat(meta.customEqualsMethod().isPresent()).isFalse();
+        assertThat(meta.customHashCodeMethod().isPresent()).isFalse();
     }
 
     public static interface A {
@@ -190,6 +199,8 @@ public class IMetaInfoParserTest {
         checkFieldInfo(fields.get(2), "intObject", Integer.class, "getIntObject", "setIntObject");
         checkFieldInfo(fields.get(3), "self", SampleBeanClassic.class, "getSelf", "setSelf");
         checkFieldInfo(fields.get(4), "string", String.class, "getString", "setString");
+        assertThat(meta.customEqualsMethod().isPresent()).isFalse();
+        assertThat(meta.customHashCodeMethod().isPresent()).isFalse();
     }
 
     public static interface FancyList extends List<String> {
@@ -240,5 +251,13 @@ public class IMetaInfoParserTest {
         List<IBeanFieldMetaInfo> fields = meta.fieldMetaInfos();
         assertEquals(1, fields.size());
         checkFieldInfo(fields.get(0), "str", String.class, "getStr", "setStr");
+    }
+
+    @Test
+    public void testCustomEqualsAndHashCode() {
+        IBeanTypeMetaInfo<BeanTypeWithCustomEquals> meta = this.parser
+                .parse(BeanTypeWithCustomEquals.class, BeanStyle.CLASSIC, Collections.emptyList());
+        assertThat(meta.customEqualsMethod().get().getName()).isEqualTo("_equals");
+        assertThat(meta.customHashCodeMethod().get().getName()).isEqualTo("_hashCode");
     }
 }

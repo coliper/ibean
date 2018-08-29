@@ -29,7 +29,6 @@ import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -104,12 +103,6 @@ public class BeanStyleWithOptionalSupportTest {
      */
     public BeanStyleWithOptionalSupportTest() {
         this.parser = new IBeanMetaInfoParser();
-    }
-
-    @Test
-    @Ignore
-    public void test() {
-        assertThat("generate tests for all bean styles").isEmpty();
     }
 
     @Test

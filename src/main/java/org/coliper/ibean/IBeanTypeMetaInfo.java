@@ -34,6 +34,8 @@ public class IBeanTypeMetaInfo<T> {
     private final Class<T> beanType;
     private final BeanStyle beanStyle;
     private final List<IBeanFieldMetaInfo> fieldMetaInfos;
+    private final Optional<Method> customEqualsMethods;
+    private final Optional<Method> customHashCodeMethod;
 
     /**
      * Creates a new {@code IBeanTypeMetaInfo} with all contained information.
@@ -45,15 +47,26 @@ public class IBeanTypeMetaInfo<T> {
      * @param fieldMetaInfos
      *            meta information about all fields contained in the bean type;
      *            may not be <code>null</code> but may be an empty list
+     * @param customEqualsMethod
+     *            a {@code Method} that contains a bean type individual
+     *            implementation of {@code Object.equals()}; may be
+     *            <code>null</code>
+     * @param customHashCodeMethod
+     *            a {@code Method} that contains a bean type individual
+     *            implementation of {@code Object.hashCode()}; may be
+     *            <code>null</code>
      */
     public IBeanTypeMetaInfo(Class<T> beanType, BeanStyle beanStyle,
-            List<IBeanFieldMetaInfo> fieldMetaInfos) {
+            List<IBeanFieldMetaInfo> fieldMetaInfos, Method customEqualsMethod,
+            Method customHashCodeMethod) {
         requireNonNull(beanType, "beanType");
         requireNonNull(beanStyle, "beanStyle");
         requireNonNull(fieldMetaInfos);
         this.beanType = beanType;
         this.beanStyle = beanStyle;
         this.fieldMetaInfos = ImmutableList.copyOf(fieldMetaInfos);
+        this.customEqualsMethods = Optional.ofNullable(customEqualsMethod);
+        this.customHashCodeMethod = Optional.ofNullable(customHashCodeMethod);
     }
 
     /**
@@ -81,6 +94,28 @@ public class IBeanTypeMetaInfo<T> {
      */
     public List<IBeanFieldMetaInfo> fieldMetaInfos() {
         return fieldMetaInfos;
+    }
+
+    /**
+     * Provides a method containing custom implementation of
+     * {@code Object.equals()}. The method is named {@code _equals} by
+     * convention.
+     * 
+     * @return the optional method
+     */
+    public Optional<Method> customEqualsMethod() {
+        return customEqualsMethods;
+    }
+
+    /**
+     * Provides a method containing custom implementation of
+     * {@code Object.hashCode()}. The method is named {@code _hashCode} by
+     * convention.
+     * 
+     * @return the optional method
+     */
+    public Optional<Method> customHashCodeMethod() {
+        return customHashCodeMethod;
     }
 
     /**

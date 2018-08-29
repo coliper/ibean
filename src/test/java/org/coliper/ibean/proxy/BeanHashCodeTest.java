@@ -3,11 +3,14 @@
  */
 package org.coliper.ibean.proxy;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.coliper.ibean.BeanStyle;
+import org.coliper.ibean.BeanTypeWithCustomEquals;
 import org.coliper.ibean.EmptyBean;
+import org.coliper.ibean.IBean;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.PrimitivesBeanClassic;
 import org.coliper.ibean.PrimitivesBeanClassicImpl;
@@ -75,8 +78,7 @@ public class BeanHashCodeTest {
 
     @Test
     public void testPrimitivesBeanClassicWithValues() throws Exception {
-        PrimitivesBeanClassic regularBean =
-                new PrimitivesBeanClassicImpl().fillWithTestValues();
+        PrimitivesBeanClassic regularBean = new PrimitivesBeanClassicImpl().fillWithTestValues();
         PrimitivesBeanClassic bean1 = this.factory.create(PrimitivesBeanClassic.class);
         PrimitivesBeanClassic bean2 = this.factory.create(PrimitivesBeanClassic.class);
 
@@ -128,6 +130,23 @@ public class BeanHashCodeTest {
         bean2.setSelf(bean3);
         bean3.setSelf(bean3);
         assertEquals(bean1.hashCode(), bean2.hashCode());
+    }
+
+    @Test
+    public void testCustomHashCode() {
+        BeanTypeWithCustomEquals bean1 = IBean.newOf(BeanTypeWithCustomEquals.class);
+        bean1.setId("#1");
+        bean1.setName("John");
+
+        BeanTypeWithCustomEquals bean2 = IBean.newOf(BeanTypeWithCustomEquals.class);
+        bean2.setId("#2");
+        bean2.setName("John");
+
+        assertThat(bean1.hashCode() == bean2.hashCode()).isFalse();
+
+        bean2.setId("#1");
+        bean2.setName("Mary");
+        assertThat(bean1.hashCode() == bean2.hashCode()).isTrue();
     }
 
 }

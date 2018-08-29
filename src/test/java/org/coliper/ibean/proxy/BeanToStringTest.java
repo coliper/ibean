@@ -3,9 +3,11 @@
  */
 package org.coliper.ibean.proxy;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.EmptyBean;
@@ -133,30 +135,33 @@ public class BeanToStringTest {
 
     @Test
     public void testDifferentToStringStyle() throws Exception {
-        IBeanFactory otherFactory =
-                ProxyIBeanFactory.builder().withToStringStyle(ToStringStyle.JSON_STYLE).build();
-        SampleBeanClassic regularBean = new SampleBeanClassicImpl().fillWithTestValues();
+        final String NL = SystemUtils.LINE_SEPARATOR;
+        IBeanFactory otherFactory = ProxyIBeanFactory.builder()
+                .withToStringStyle(ToStringStyle.MULTI_LINE_STYLE).build();
 
         SampleBeanClassic bean = otherFactory.create(SampleBeanClassic.class);
         //@formatter:off
-        String expected = "{\"booleanPrimitive\":false,"
-                + "\"date\":null,"
-                + "\"intObject\":null,"
-                + "\"self\":null,"
-                + "\"string\":null}";
+        String expected = "org.coliper.ibean.SampleBeanClassic@[0-9a-f]+\\[" + NL +
+                "  booleanPrimitive=false" + NL +
+                "  date=<null>" + NL +
+                "  intObject=<null>" + NL +
+                "  self=<null>" + NL +
+                "  string=<null>" + NL + 
+                "\\]";
         //@formatter:on
-        assertEquals(expected, bean.toString());
+        assertThat(bean.toString()).matches(expected);
 
-        regularBean.copyTo(bean);
+        bean.fillWithTestValues();
         //@formatter:off
-        expected = "\\{\"booleanPrimitive\":true,"
-                + "\"date\":\"Thu Jan 01 01:00:00 CET 1970\","
-                + "\"intObject\":2147483647,"
-                + "\"self\":\"org\\.coliper\\.ibean\\.SampleBeanClassicImpl@[0-9a-z]+\","
-                + "\"string\":\"dummy 2134452\"\\}";
+        expected = "org.coliper.ibean.SampleBeanClassic@[0-9a-f]+\\[" + NL +
+                "  booleanPrimitive=true" + NL +
+                "  date=Thu Jan 01 01:00:00 CET 1970" + NL +
+                "  intObject=2147483647" + NL +
+                "  self=org.coliper.ibean.SampleBeanClassicImpl@[0-9a-f]+" + NL +
+                "  string=dummy 2134452" + NL + 
+                "\\]";
         //@formatter:on
-        final String string = bean.toString();
-        assertTrue("does not match: " + string, string.matches(expected));
+        assertThat(bean.toString()).matches(expected);
     }
 
     @Test

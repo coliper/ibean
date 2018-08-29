@@ -38,6 +38,9 @@ import org.coliper.ibean.util.ReflectionUtil;
  */
 public class IBeanMetaInfoParser {
 
+    private static final String CUSTOM_EQUALS_METHOD_NAME = "_equals";
+    private static final String CUSTOM_HASHCODE_METHOD_NAME = "_hashCode";
+
     /**
      * Validates if a given class matches all criteria for being an IBean
      * interface and if that is the case then retrieves all relevant information
@@ -77,11 +80,26 @@ public class IBeanMetaInfoParser {
         requireNonNull(ignorableSuperInterfaces, "ignorableSuperInterfaces");
         this.assertOrThrowException(beanType.isInterface(), beanType, "type is not an interface");
 
-        List<Method> getterSetterMethods =
+        final List<Method> getterSetterMethods =
                 this.lookupPotentialGettersAndSetters(beanType, ignorableSuperInterfaces);
-        List<IBeanFieldMetaInfo> fieldMetaList =
+        final List<IBeanFieldMetaInfo> fieldMetaList =
                 this.createFieldMetaInfo(beanType, beanStyle, getterSetterMethods);
-        return new IBeanTypeMetaInfo<>(beanType, beanStyle, fieldMetaList);
+        final Method customEqualsMethod = this.lookupCustomEqualsMethod(beanType);
+        final Method customHashCodeMethod = this.lookupCustomHashCodeMethod(beanType);
+        return new IBeanTypeMetaInfo<>(beanType, beanStyle, fieldMetaList, customEqualsMethod,
+                customHashCodeMethod);
+    }
+
+    private Method lookupCustomEqualsMethod(Class<?> beanType) {
+        final int noOfParams = 1;
+        return this.lookupUniqueDefaultMethodWithName(beanType, CUSTOM_EQUALS_METHOD_NAME,
+                noOfParams);
+    }
+
+    private Method lookupCustomHashCodeMethod(Class<?> beanType) {
+        final int noOfParams = 0;
+        return this.lookupUniqueDefaultMethodWithName(beanType, CUSTOM_HASHCODE_METHOD_NAME,
+                noOfParams);
     }
 
     private List<Method> lookupPotentialGettersAndSetters(Class<?> beanType,
@@ -228,6 +246,31 @@ public class IBeanMetaInfoParser {
         if (!condition) {
             throw new InvalidIBeanTypeException(beanType, String.format(message, args));
         }
+    }
+
+    private Method lookupUniqueDefaultMethodWithName(Class<?> beanType, String methodName,
+            int noOfParams) {
+        final Method[] allMethods = beanType.getMethods();
+        Method foundMethod = null;
+
+        for (Method method : allMethods) {
+            if (!method.isDefault()) {
+                continue;
+            }
+            if (!methodName.equals(method.getName())) {
+                continue;
+            }
+            if (method.getParameterCount() != noOfParams) {
+                continue;
+            }
+            if (foundMethod != null) {
+                throw new InvalidIBeanTypeException(beanType,
+                        "several default methods with name '" + methodName + "' found");
+            }
+            foundMethod = method;
+        }
+
+        return foundMethod;
     }
 
 }
