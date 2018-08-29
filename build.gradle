@@ -23,6 +23,7 @@ repositories {
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-lang3:3.2'
+    api 'com.squareup:javapoet:1.11.1'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:21.0'
@@ -159,7 +160,7 @@ Following steps need to be done to build and upload a new version:
 3) Change version in build.gradle.
 
 4) Run build and tests.
-  gradle clean assemble
+  gradle clean test assemble
   
 5) Distribute documentation.
   gradle createUserManuals
@@ -183,10 +184,14 @@ Following steps need to be done to build and upload a new version:
 10) Release deployment to Central Repository  
 
 11) Merge branch into master.
+  git pull origin v0.4.x --rebase
+
 
 12) Create version tag.
   git tag -a v0.4.3 -m "release version 0.4.3"
 
-13) Create Github release
+13) 
+  
+14) Create Github release
 
 */

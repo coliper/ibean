@@ -14,7 +14,6 @@
 
 package org.coliper.ibean.beanstyle;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Method;
@@ -57,18 +56,6 @@ public class ClassicBeanStyleWithOptionalSupport extends ClassicBeanStyle {
                 setterArgType == getterRetType || getterRetType == Optional.class,
                 "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
         return setterArgType;
-    }
-
-    @Override
-    public Object convertReturnValueOfGetterCall(Class<?> expectedReturnType,
-            Object returnValueWithWrongType) {
-        checkArgument(Optional.class == expectedReturnType, "unexpected return type %s for getter",
-                expectedReturnType);
-        if (returnValueWithWrongType != null) {
-            return Optional.of(returnValueWithWrongType);
-        } else {
-            return Optional.empty();
-        }
     }
 
 }

@@ -31,16 +31,18 @@ public class IBeanContext<T> {
     private final IBeanTypeMetaInfo<T> metaInfo;
     private final ToStringStyle toStringStyle;
     private final BeanStyle beanStyle;
+    private final BeanStyleHandler beanStyleHandler;
 
     /**
      * Internal constructor as only created by the framework itself.
      */
     IBeanContext(ProxyIBeanFactory beanFactory, IBeanTypeMetaInfo<T> metaInfo,
-            ToStringStyle toStringStyle, BeanStyle beanStyle) {
+            ToStringStyle toStringStyle, BeanStyle beanStyle, BeanStyleHandler beanStyleHandler) {
         this.beanFactory = beanFactory;
         this.metaInfo = metaInfo;
         this.toStringStyle = toStringStyle;
         this.beanStyle = beanStyle;
+        this.beanStyleHandler = beanStyleHandler;
     }
 
     /**
@@ -79,6 +81,16 @@ public class IBeanContext<T> {
      */
     public BeanStyle beanStyle() {
         return beanStyle;
+    }
+
+    /**
+     * Provides the {@link BeanStyleHandler} used by the bean factory to deal
+     * with the given <code>BeanStyle</code>.
+     * 
+     * @return the factory specific handler for the given bean style
+     */
+    public BeanStyleHandler beanStyleHandler() {
+        return beanStyleHandler;
     }
 
 }

@@ -21,6 +21,7 @@ import java.lang.reflect.Method;
 import org.coliper.ibean.beanstyle.ClassicBeanStyle;
 import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
 import org.coliper.ibean.beanstyle.ModernBeanStyle;
+import org.coliper.ibean.proxy.BeanStyleHandler;
 
 /**
  * {@code BeanStyle} defines general rules about the signatures of getter and
@@ -47,11 +48,10 @@ import org.coliper.ibean.beanstyle.ModernBeanStyle;
  * example {@link #MODERN} or {@link #CLASSIC_WITH_OPTIONAL}.
  * <p>
  * To create a custom style you need to create a new subclass of
- * {@code BeanStyle} which has five abstract methods to overwrite. Optionally
- * you might also overwrite some of the other methods that have a default
- * implementation. To better understand how to implement a {@code BeanStyle}
- * this paragraph describes how a {@code BeanStyle} is used to examine an IBean
- * interface and how it is even used during lifecycle of the bean.<br>
+ * {@code BeanStyle} which has five abstract methods to overwrite. To better
+ * understand how to implement a {@code BeanStyle} this paragraph describes how
+ * a {@code BeanStyle} is used to examine an IBean interface and how it is even
+ * used during lifecycle of the bean.<br>
  * {@link IBeanMetaInfoParser} is the class where a {@code BeanStyle} is used
  * most. It uses the {@code BeanStyle} to examine a new given interface
  * <ul>
@@ -74,13 +74,14 @@ import org.coliper.ibean.beanstyle.ModernBeanStyle;
  * </ul>
  * The methods mentioned in the previous steps are the abstract methods that
  * define a {@code BeanStyle} and that are called once for each bean interface
- * to collect the meta data.<br>
- * Bean style also contains two methods that are not used for meta parsing but
- * that are called during life time of a bean, more specific, during execution
- * of getters and setters. See
- * {@link #convertReturnValueOfGetterCall(Class, Object)} and
- * {@link #createReturnValueForSetterCall(Object, Method, Object)} for more
- * details.
+ * to collect the meta data.
+ * <p>
+ * Some bean styles also influence the runtime behavior of a bean.
+ * {@link ModernBeanStyle} for example has a return type for setters other than
+ * {@code void} and supports getters that return type {@code Optional} instead
+ * of the field type. In such cases you also need to implement a handler that
+ * helps the bean factory with the runtime behavior of the bean style. See
+ * {@link BeanStyleHandler} for more information about such handlers.
  * 
  * @author alex@coliper.org
  */
@@ -245,54 +246,6 @@ public abstract class BeanStyle {
      */
     public abstract Class<?> determineFieldTypeFromGetterAndSetter(Class<?> beanType,
             Method getterMethod, Method setterMethod) throws InvalidIBeanTypeException;
-
-    /**
-     * This method is called during runtime of a bean, more precisely, always
-     * when setters of a bean are called to assemble the return value of the
-     * setter method.<br>
-     * This method is only called for bean styles that allow setter methods that
-     * do not return {@code void}. Therefore this method only needs to be
-     * implemented for those type of bean styles. This default implementation
-     * throws {@code IllegalStateException}.
-     * <p>
-     * See {@link ModernBeanStyle} for a concrete implementation of this method.
-     * 
-     * @param instance
-     *            the IBean instance
-     * @param setterMethod
-     *            the setter method in whose return value should be created
-     * @param newValue
-     *            the new value of the field, given as a parameter to the setter
-     * @return the value that will then be returned from the setter
-     */
-    public Object createReturnValueForSetterCall(Object instance, Method setterMethod,
-            Object newValue) {
-        throw new IllegalStateException("createReturnValueForSetterCall() must not be called"
-                + "for bean style " + this.getClass().getName());
-    }
-
-    /**
-     * This method is called during runtime of a bean, more precisely, always
-     * when getters of a bean are called to adjust the type of the return value
-     * of the getter method.<br>
-     * This method is only called for bean styles that allow getter methods that
-     * do not match to the type of the field. Therefore this method only needs
-     * to be implemented for those type of bean styles. This default
-     * implementation throws {@code IllegalStateException}.
-     * <p>
-     * See {@link ModernBeanStyle} for a concrete implementation of this method.
-     * 
-     * @param expectedReturnType
-     *            the type the field value needs to be converted to
-     * @param returnValueWithWrongType
-     *            the field value that needs to be converted
-     * @return the value that will then be returned from the getter
-     */
-    public Object convertReturnValueOfGetterCall(Class<?> expectedReturnType,
-            Object returnValueWithWrongType) {
-        throw new IllegalStateException("unexpected call of convertReturnValueOfGetterCall()"
-                + "for bean style " + this.getClass().getName());
-    }
 
     /**
      * As stateless we treat all instances of one {@link BeanStyle} sub class as

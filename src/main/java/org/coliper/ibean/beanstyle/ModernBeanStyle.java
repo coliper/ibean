@@ -14,7 +14,6 @@
 
 package org.coliper.ibean.beanstyle;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Method;
@@ -123,19 +122,6 @@ public class ModernBeanStyle extends BeanStyle {
         return setterName;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.coliper.ibean.BeanStyle#createReturnValueForSetterCall(java.lang.
-     * Object, java.lang.reflect.Method, java.lang.Object[])
-     */
-    @Override
-    public Object createReturnValueForSetterCall(Object instance, Method setterMethod,
-            Object newValue) {
-        return instance;
-    }
-
     @Override
     public Class<?> determineFieldTypeFromGetterAndSetter(Class<?> beanType, Method getterMethod,
             Method setterMethod) throws InvalidIBeanTypeException {
@@ -150,18 +136,6 @@ public class ModernBeanStyle extends BeanStyle {
                 setterArgType == getterRetType || getterRetType == Optional.class,
                 "incompatible types of getter " + getterMethod + "with setter " + setterMethod);
         return setterArgType;
-    }
-
-    @Override
-    public Object convertReturnValueOfGetterCall(Class<?> expectedReturnType,
-            Object returnValueWithWrongType) {
-        checkArgument(Optional.class == expectedReturnType, "unexpected return type %s for getter",
-                expectedReturnType);
-        if (returnValueWithWrongType != null) {
-            return Optional.of(returnValueWithWrongType);
-        } else {
-            return Optional.empty();
-        }
     }
 
 }

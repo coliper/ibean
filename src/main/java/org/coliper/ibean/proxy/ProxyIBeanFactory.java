@@ -20,7 +20,6 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -30,6 +29,8 @@ import org.coliper.ibean.IBean;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
+import org.coliper.ibean.beanstyle.ClassicBeanStyleWithOptionalSupport;
+import org.coliper.ibean.beanstyle.ModernBeanStyle;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.proxy.handler.CloneableHandler;
@@ -95,15 +96,18 @@ public class ProxyIBeanFactory implements IBeanFactory {
     private final IBeanMetaInfoParser metaInfoParser;
     private final ToStringStyle toStringStyle;
     private final BeanStyle beanStyle;
+    private final BeanStyleHandler beanStyleHandler;
     private final ProxyIBeanFactoryExtensionKit extendedInterfacesKit;
 
     private final Map<Class<?>, IBeanContext<?>> contextCache = new ConcurrentHashMap<>();
 
     private ProxyIBeanFactory(IBeanMetaInfoParser metaInfoParser, ToStringStyle toStringStyle,
-            BeanStyle beanStyle, ProxyIBeanFactoryExtensionKit extendedInterfacesKit) {
+            BeanStyle beanStyle, BeanStyleHandler beanStyleHandler,
+            ProxyIBeanFactoryExtensionKit extendedInterfacesKit) {
         this.metaInfoParser = metaInfoParser;
         this.toStringStyle = toStringStyle;
         this.beanStyle = beanStyle;
+        this.beanStyleHandler = beanStyleHandler;
         this.extendedInterfacesKit = extendedInterfacesKit;
     }
 
@@ -159,9 +163,24 @@ public class ProxyIBeanFactory implements IBeanFactory {
      */
     //@formatter:on     
     public static class Builder {
-        private Optional<IBeanMetaInfoParser> metaInfoParser = Optional.empty();
-        private Optional<ToStringStyle> toStringStyle = Optional.empty();
-        private Optional<BeanStyle> beanStyle = Optional.empty();
+
+        /*
+         * Maps a given BeanStyle to its matching BeanStyleHandler.
+         */
+        private static BeanStyleHandler handlerForBeanStyle(BeanStyle beanStyle) {
+            if (beanStyle instanceof ClassicBeanStyleWithOptionalSupport) {
+                return BeanStyleHandler.CLASSIC_WITH_OPTIONAL_SUPPORT_HANDLER;
+            }
+            if (beanStyle instanceof ModernBeanStyle) {
+                return BeanStyleHandler.MODERN_HANDLER;
+            }
+            return BeanStyleHandler.DEFAULT_HANDLER;
+        }
+
+        private IBeanMetaInfoParser metaInfoParser = new CachedIBeanMetaInfoParser();
+        private ToStringStyle toStringStyle = ToStringStyle.SHORT_PREFIX_STYLE;
+        private BeanStyle beanStyle = BeanStyle.CLASSIC;
+        private BeanStyleHandler beanStyleHandler = BeanStyleHandler.DEFAULT_HANDLER;
         private List<ExtensionSupport> interfaceSupport = new ArrayList<>();
 
         private Builder() {
@@ -183,7 +202,7 @@ public class ProxyIBeanFactory implements IBeanFactory {
          */
         public Builder withMetaInfoParser(IBeanMetaInfoParser metaInfoParser) {
             requireNonNull(metaInfoParser);
-            this.metaInfoParser = Optional.of(metaInfoParser);
+            this.metaInfoParser = metaInfoParser;
             return this;
         }
 
@@ -202,7 +221,7 @@ public class ProxyIBeanFactory implements IBeanFactory {
          */
         public Builder withToStringStyle(ToStringStyle toStringStyle) {
             requireNonNull(toStringStyle);
-            this.toStringStyle = Optional.of(toStringStyle);
+            this.toStringStyle = toStringStyle;
             return this;
         }
 
@@ -212,6 +231,10 @@ public class ProxyIBeanFactory implements IBeanFactory {
          * As a factory uses only style this method should be called only once
          * for each {@code Builder}. If called multiple times only the last call
          * will take effect.
+         * <p>
+         * If you are using a custom <code>BeanStyle</code> that is not built
+         * in, you might need to provide a {@link BeanStyleHandler} as well. In
+         * that case use {@link #withBeanStyle(BeanStyle, BeanStyleHandler)}.
          * 
          * @param beanStyle
          *            one of the predefined styles in {@link BeanStyle} or a
@@ -220,7 +243,35 @@ public class ProxyIBeanFactory implements IBeanFactory {
          */
         public Builder withBeanStyle(BeanStyle beanStyle) {
             requireNonNull(beanStyle);
-            this.beanStyle = Optional.of(beanStyle);
+            return this.withBeanStyle(beanStyle, handlerForBeanStyle(beanStyle));
+        }
+
+        /**
+         * Determines the {@link BeanStyle} and its corresponding
+         * {@link BeanStyleHandler} to be used in the created factory. This
+         * method should only be used when providing a custom
+         * <code>BeanStyle</code> that is one of the predefined styles of the
+         * <em>IBean</em> framework. If you are using a predefined one like
+         * {@link BeanStyle#CLASSIC} or {@link BeanStyle#MODERN} used
+         * {@link #withBeanStyle(BeanStyle)} instead.
+         * <p>
+         * As a factory uses only style this method should be called only once
+         * for each {@code Builder}. If called multiple times only the last call
+         * will take effect.
+         * 
+         * @param beanStyle
+         *            one of the predefined styles in {@link BeanStyle} or a
+         *            custom {@link BeanStyle} implementation
+         * @param beanStyleHandler
+         *            the {@link BeanStyleHandler} that corresponds to the given
+         *            <code>beanStyle</code>
+         * @return the {@code Builder} instance itself to enable chained calls
+         */
+        public Builder withBeanStyle(BeanStyle beanStyle, BeanStyleHandler beanStyleHandler) {
+            requireNonNull(beanStyle);
+            requireNonNull(beanStyleHandler);
+            this.beanStyle = beanStyle;
+            this.beanStyleHandler = beanStyleHandler;
             return this;
         }
 
@@ -304,10 +355,8 @@ public class ProxyIBeanFactory implements IBeanFactory {
         public ProxyIBeanFactory build() {
             ProxyIBeanFactoryExtensionKit extendedInterfacesKit =
                     new ProxyIBeanFactoryExtensionKit(this.interfaceSupport);
-            return new ProxyIBeanFactory(
-                    this.metaInfoParser.orElseGet(() -> new CachedIBeanMetaInfoParser()),
-                    this.toStringStyle.orElse(ToStringStyle.SHORT_PREFIX_STYLE),
-                    this.beanStyle.orElse(BeanStyle.CLASSIC), extendedInterfacesKit);
+            return new ProxyIBeanFactory(this.metaInfoParser, this.toStringStyle, this.beanStyle,
+                    this.beanStyleHandler, extendedInterfacesKit);
         }
     }
 
@@ -322,6 +371,7 @@ public class ProxyIBeanFactory implements IBeanFactory {
                 this.extendedInterfacesKit.getSupportedExtendedInterfaces();
         IBeanTypeMetaInfo<T> meta =
                 this.metaInfoParser.parse(beanType, this.beanStyle, supportedExtendedInterfaces);
-        return new IBeanContext<>(this, meta, this.toStringStyle, this.beanStyle);
+        return new IBeanContext<>(this, meta, this.toStringStyle, this.beanStyle,
+                this.beanStyleHandler);
     }
 }
