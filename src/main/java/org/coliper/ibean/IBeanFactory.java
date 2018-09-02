@@ -16,6 +16,7 @@ package org.coliper.ibean;
 
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
+//@formatter:off 
 /**
  * Creates <em>IBean</em> instances for given bean interfaces. <br>
  * For example:<br>
@@ -48,14 +49,50 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
  * </pre>
  * 
  * <br>
+ * An {@code IBeanFactory} of course cannot create a bean instance from every kind of interface.
+ * An interface that can be handled by a factory needs to follow these criteria:<ul>
+ * <li>Every method declared in the interface must either be<ul>
+ *         <li>a getter or setter method,</li>
+ *         <li>a default method (interface method with a given default implementation) or</li>
+ *         <li>a method belonging to an extension interface.</li>
+ *     </ul>
+ * </li>
+ * <li>Always a tuple of a setter and a getter method virtually defines an interface field.
+ *     (<em>firstname</em> and <em>dateOfBirth</em> would be the fields of the example above.)
+ *     That means for each setter a getter must exist as well and vice versa.</li>
+ * <li>An {@code IBeanFactory} always looks on the complete list of methods including those
+ *     from super interfaces. The factory does not care in which hierarchy level a method is 
+ *     declared. That means for example that you can declare getter and setter methods in 
+ *     different parent or sub interfaces as long as they are complete in the final interface
+ *     that is provided to the {@link #create(Class)} method.</li>
+ * <li>Default methods are ignored by the {@code IBeanFactory}. You must therefore not have 
+ *     default implementations for getter or setter methods.</li>
+ * <li>Whether an interface method is a getter or setter method and whether a method pair builds 
+ *     up a valid setter-getter combination is defined by the so called
+ *     bean style. All built in bean styles for example require a consistent type to be used 
+ *     in both methods to unambiguously define the field type. If a setter for example has
+ *     a primitive {@code boolean} parameter, the getter should return the same type, not even
+ *     {@code Boolean} would be accepted instead. See {@link BeanStyle} for more information.</li>
+ * <li>A method can also belong to a so called extension interface. Extension interfaces
+ *     are a group of interfaces that are well known by the {@code IBeanFactory}. 
+ *     These interfaces are declared as super interfaces of the bean interface and 
+ *     add certain functionality to the beans. The {@code IBeanFactory} simply ignores all
+ *     methods from these extension super interfaces. 
+ *     See <a href="{@docRoot}/org/coliper/ibean/extension/package-summary.html"> for more
+ *     details about extension interfaces.</li>
+ * </ul> 
+ * If you try to create a bean instance from an interface that does not follow these set
+ * of conditions a {@link InvalidIBeanTypeException} will be thrown.
+ * <p>
  * See <a href="{@docRoot}/org/coliper/ibean/package-summary.html"> IBean
- * tutorial</a> for details about <em>IBean</em> interfaces.
+ * tutorial</a> for a more holistic view on <em>IBean</em>.
  * <p>
  * At the moment there is only one {@code IBeanFactory} implementation which is
  * {@link ProxyIBeanFactory}.
  * 
  * @author alex@coliper.org
  */
+//@formatter:on 
 public interface IBeanFactory {
 
     /**
