@@ -41,7 +41,7 @@ getter and setter methods and also with Object methods `toString`, `hashCode` an
 *IBean* requires Java 8 or greater.
 
 *IBean* has dependencies to following frameworks:
-* [Apache Commons Lang][_CommonsLang3Maven], version 3.0 or higher
+* [Apache Commons Lang][_CommonsLang3Maven], version 3.2 or higher
 * [Google Guava][_GuavaMaven], version 21 or higher
 
 If not already present in your project these dependencies are automatically loaded.
@@ -329,5 +329,5 @@ hood by default. In that case you only have to add the
 [_BeanStyleApi]: $javadoc.url$/org/coliper/ibean/BeanStyle.html
 [_ClassicBeanStyleApi]: $javadoc.url$/org/coliper/ibean/beanstyle/ClassicBeanStyle.html
 [_ModernBeanStyleApi]: $javadoc.url$/org/coliper/ibean/beanstyle/ModernBeanStyle.html
-[_BeanStyleSample]: $source.url$/src/test/java/org/coliper/ibean/samples/BeanStyleSample.java
+[_BeanStyleSample]: $source.url$/src/test/java/org/coliper/ibean/samples/ModernBeanStyleSample.java
 [_GsonSample]: $source.url$/src/test/java/org/coliper/ibean/samples/GsonSample.java

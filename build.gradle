@@ -57,7 +57,7 @@ task createPagesIntro(type: Copy) {
     into 'docs'
     filter {l -> l.replace('$version$', version)
                  .replace('$javadoc.url$', 'api')
-                 .replace('$source.url$', 'https://github.com/coliper/ibean/tree/master')}
+                 .replace('$source.url$', 'https://github.com/coliper/ibean/blob/master')}
     rename '.*', 'index.md'
 }
 
@@ -66,7 +66,7 @@ task createRootReadme(type: Copy) {
     into buildDir
     filter {l -> l.replace('$version$', version)
                  .replace('$javadoc.url$', "https://www.javadoc.io/doc/org.coliper/ibean/${version}")
-                 .replace('$source.url$', "https://github.com/coliper/ibean/tree/v${version}")}
+                 .replace('$source.url$', "https://github.com/coliper/ibean/blob/v${version}")}
     rename '.*', 'README.md'
 }
 
@@ -147,51 +147,3 @@ uploadArchives {
     }
   }
 }
-
-/*
-
-Following steps need to be done to build and upload a new version:
-
-1) Do all changes in a separate branch.
-   git checkout v0.4.x
-
-2) Adopt documentation in doc-src/intro.templ.md.
-
-3) Change version in build.gradle.
-
-4) Run build and tests.
-  gradle clean test assemble
-  
-5) Distribute documentation.
-  gradle createUserManuals
-  
-  copy /y build\README.md .
-  rmdir /s /q docs\api
-  move build\docs\javadoc docs\api
-  
-  cp build/README.md .
-  rm docs/api
-  mv build/docs/javadoc docs/api
-
-6) Commit and all changes.
-  git commit -a -m "created documentation for release 0.4.3"
-
-8) Push changes.
-
-9) Upload artefacts to OSSRH.
-  gradle uploadArchives
-
-10) Release deployment to Central Repository  
-
-11) Merge branch into master.
-  git pull origin v0.4.x --rebase
-
-
-12) Create version tag.
-  git tag -a v0.4.3 -m "release version 0.4.3"
-
-13) 
-  
-14) Create Github release
-
-*/
