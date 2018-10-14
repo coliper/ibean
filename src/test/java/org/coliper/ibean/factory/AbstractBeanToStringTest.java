@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.coliper.ibean.proxy;
+package org.coliper.ibean.factory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.EmptyBean;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.PrimitivesBeanClassic;
@@ -18,21 +17,17 @@ import org.coliper.ibean.SampleBeanClassic;
 import org.coliper.ibean.SampleBeanClassicImpl;
 import org.coliper.ibean.SampleBeanModern;
 import org.coliper.ibean.SampleBeanModernImpl;
-import org.coliper.ibean.factory.AbstractBeanToStringTest;
+import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Test;
 
-public class BeanToStringTest extends AbstractBeanToStringTest {
+public abstract class AbstractBeanToStringTest {
+    private IBeanFactory factory;
 
-    /**
-     * @param factory
-     */
-    public BeanToStringTest() {
-        this.factory = ProxyIBeanFactory.builder().build();
+    protected AbstractBeanToStringTest(IBeanFactory factory) {
+        this.factory = factory;
     }
 
-    private void switchToModernStyleBuilder() {
-        this.factory = ProxyIBeanFactory.builder().withBeanStyle(BeanStyle.MODERN).build();
-    }
+    protected abstract void switchToModernStyleBuilder();
 
     @Test
     public void testEmptyBean() {
