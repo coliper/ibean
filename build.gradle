@@ -24,12 +24,16 @@ dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-lang3:3.2'
     api 'com.squareup:javapoet:1.11.1'
+    api 'com.squareup:javapoet:1.9.0'
+    
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:21.0'
     implementation 'com.google.code.gson:gson:2.4'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.6.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
+    implementation 'org.codehaus.janino:janino:3.0.10'
+    
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
