@@ -7,7 +7,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "org.coliper"
-version = '0.4.5'
+version = '0.4.3'
 description = 'creates all artifacts of the Coliper IBean project'
 sourceCompatibility = 1.8
 
@@ -69,7 +69,7 @@ task createRootReadme(type: Copy) {
     from 'doc-src/intro.templ.md'
     into buildDir
     filter {l -> l.replace('$version$', version)
-                 .replace('$javadoc.url$', "https://static.javadoc.io/org.coliper/ibean/${version}")
+                 .replace('$javadoc.url$', "https://www.javadoc.io/doc/org.coliper/ibean/${version}")
                  .replace('$source.url$', "https://github.com/coliper/ibean/blob/v${version}")}
     rename '.*', 'README.md'
 }
