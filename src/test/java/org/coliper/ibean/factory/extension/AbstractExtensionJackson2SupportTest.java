@@ -21,9 +21,8 @@ public abstract class AbstractExtensionJackson2SupportTest {
 
     final IBeanFactory factoryClassic;
     final ObjectMapper jackson2Classic;
-    final IBeanFactory factoryModern = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
-            .withBeanStyle(BeanStyle.MODERN).build();
-    final ObjectMapper jackson2Modern = this.createObjectMapper(factoryModern);
+    final IBeanFactory factoryModern;
+    final ObjectMapper jackson2Modern;
 
     public static interface PrimitivesBeanClassicJackson2
             extends PrimitivesBeanClassic, Jackson2Support {
@@ -50,7 +49,7 @@ public abstract class AbstractExtensionJackson2SupportTest {
         Date date();
     }
 
-    protected AbstractExtensionJackson2SupportTest(IBeanFactory factory) {
+    protected AbstractExtensionJackson2SupportTest() {
         this.factoryClassic = this.createBeanFactory(BeanStyle.CLASSIC);
         this.factoryModern = this.createBeanFactory(BeanStyle.MODERN);
         this.jackson2Classic = this.createObjectMapper(factoryClassic);
