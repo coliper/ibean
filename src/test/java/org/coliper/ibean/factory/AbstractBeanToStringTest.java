@@ -7,7 +7,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.coliper.ibean.EmptyBean;
 import org.coliper.ibean.IBeanFactory;
@@ -21,7 +20,7 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Test;
 
 public abstract class AbstractBeanToStringTest {
-    private IBeanFactory factory;
+    protected IBeanFactory factory;
 
     protected AbstractBeanToStringTest(IBeanFactory factory) {
         this.factory = factory;
@@ -130,7 +129,7 @@ public abstract class AbstractBeanToStringTest {
 
     @Test
     public void testDifferentToStringStyle() throws Exception {
-        final String NL = SystemUtils.LINE_SEPARATOR;
+        final String NL = System.lineSeparator();
         IBeanFactory otherFactory = ProxyIBeanFactory.builder()
                 .withToStringStyle(ToStringStyle.MULTI_LINE_STYLE).build();
 

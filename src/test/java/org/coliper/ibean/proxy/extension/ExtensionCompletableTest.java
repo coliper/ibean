@@ -14,113 +14,19 @@
 
 package org.coliper.ibean.proxy.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-
-import java.util.Optional;
-
 import org.coliper.ibean.BeanStyle;
-import org.coliper.ibean.extension.BeanIncompleteException;
-import org.coliper.ibean.extension.Completable;
+import org.coliper.ibean.factory.extension.AbstractExtensionCompletableTest;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
-import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public class ExtensionCompletableTest {
+public class ExtensionCompletableTest extends AbstractExtensionCompletableTest {
 
-    public static interface BeanType extends Completable<BeanType> {
-      //@formatter:off
-        String getString();
-        void setString(String s);
-
-        int getInt();
-        void setInt(int i);
-
-        void setDouble(Optional<Double> d);
-        Optional<Double> getDouble();
-      //@formatter:on
-    }
-
-    @Test
-    public void testIsCompleteWithNoOptionalSupportStyle() throws Exception {
-        BeanType bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
-                .create(BeanType.class);
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
-
-        bean.setString("xx");
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
-
-        bean.setDouble(Optional.empty());
-        assertThat(bean.isComplete()).isTrue();
-        assertThat(bean.assertComplete()).isSameAs(bean);
-
-        bean.setInt(0);
-        assertThat(bean.isComplete()).isTrue();
-        assertThat(bean.assertComplete()).isSameAs(bean);
-
-        bean.setDouble(null);
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
-
-        bean.setInt(0);
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
-
-        bean.setDouble(Optional.of(Double.valueOf(3.4)));
-        assertThat(bean.isComplete()).isTrue();
-        assertThat(bean.assertComplete()).isSameAs(bean);
-    }
-
-    public static interface BeanTypeWithOptionalSupport
-            extends Completable<BeanTypeWithOptionalSupport> {
-      //@formatter:off
-        String getString();
-        void setString(String s);
-
-        int getInt();
-        void setInt(int i);
-
-        void setDouble(Double d);
-        Optional<Double> getDouble();
-      //@formatter:on
-    }
-
-    @Test
-    public void testIsCompleteWithOptionalSupportStyle() throws Exception {
-        BeanTypeWithOptionalSupport bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
-                .withBeanStyle(BeanStyle.CLASSIC_WITH_OPTIONAL).build()
-                .create(BeanTypeWithOptionalSupport.class);
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
-
-        bean.setString("xx");
-        assertThat(bean.isComplete()).isTrue();
-        assertThat(bean.assertComplete()).isSameAs(bean);
-
-        bean.setDouble(Double.valueOf(7.77));
-        assertThat(bean.isComplete()).isTrue();
-        assertThat(bean.assertComplete()).isSameAs(bean);
-
-        bean.setInt(0);
-        assertThat(bean.isComplete()).isTrue();
-        assertThat(bean.assertComplete()).isSameAs(bean);
-
-        bean.setDouble(null);
-        assertThat(bean.isComplete()).isTrue();
-
-        bean.setString(null);
-        assertThat(bean.isComplete()).isFalse();
-        assertThatExceptionOfType(BeanIncompleteException.class)
-                .isThrownBy(() -> bean.assertComplete());
+    @Override
+    protected ProxyIBeanFactory createBeanFactory(BeanStyle beanStyle) {
+        return ProxyIBeanFactory.builder().withDefaultInterfaceSupport().withBeanStyle(beanStyle)
+                .build();
     }
 }

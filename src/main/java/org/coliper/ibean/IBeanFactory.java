@@ -78,7 +78,7 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
  *     These interfaces are declared as super interfaces of the bean interface and 
  *     add certain functionality to the beans. The {@code IBeanFactory} simply ignores all
  *     methods from these extension super interfaces. 
- *     See <a href="{@docRoot}/org/coliper/ibean/extension/package-summary.html"> for more
+ *     See <a href="{@docRoot}/org/coliper/ibean/extension/package-summary.html"><code>org.coliper.ibean.extension</code> package</a> for more
  *     details about extension interfaces.</li>
  * </ul> 
  * If you try to create a bean instance from an interface that does not follow these set

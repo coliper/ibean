@@ -48,7 +48,7 @@ public abstract class AbstractExtensionGsonSupportTest {
         Date date();
     }
 
-    protected AbstractExtensionGsonSupportTest(IBeanFactory factory) {
+    protected AbstractExtensionGsonSupportTest() {
         this.factoryClassic = this.createBeanFactory(BeanStyle.CLASSIC);
         this.factoryModern = this.createBeanFactory(BeanStyle.MODERN);
         this.gsonClassic = new GsonBuilder().registerTypeHierarchyAdapter(GsonSupport.class,
