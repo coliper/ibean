@@ -14,96 +14,16 @@
 
 package org.coliper.ibean.proxy.extension;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-
-import org.coliper.ibean.extension.BeanFrozenException;
-import org.coliper.ibean.extension.Freezable;
-import org.coliper.ibean.extension.TempFreezable;
+import org.coliper.ibean.factory.extension.AbstractFreezableTest;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
-import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public class FreezableTest {
-
-    public static interface FreezableBean extends Freezable<FreezableBean> {
-      //@formatter:off
-        String getString();
-        void setString(String s);
-
-        int getInt();
-        void setInt(int i);
-      //@formatter:on
-    }
-
-    public static interface FreezableBeanTemp extends TempFreezable<FreezableBeanTemp> {
-        //@formatter:off
-        String getString();
-        void setString(String s);
-
-        int getInt();
-        void setInt(int i);
-      //@formatter:on
-    }
-
-    @Test
-    public void testIsFrozen() throws Exception {
-        FreezableBean bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
-                .create(FreezableBean.class);
-        assertThat(bean.isFrozen()).isFalse();
-
-        bean.setString("xx");
-        bean.getInt();
-        assertThat(bean.isFrozen()).isFalse();
-
-        bean.setInt(2093);
-        bean.getString();
-        assertThat(bean.isFrozen()).isFalse();
-
-        assertThat(bean.freeze()).isSameAs(bean);
-        assertThat(bean.isFrozen()).isTrue();
-        assertThatExceptionOfType(BeanFrozenException.class)
-                .isThrownBy(() -> bean.setString("slls"));
-
-        assertThat(bean.getInt()).isEqualTo(2093);
-        assertThat(bean.getString()).isEqualTo("xx");
-    }
-
-    @Test
-    public void testIsFrozenTemp() throws Exception {
-        FreezableBeanTemp bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
-                .create(FreezableBeanTemp.class);
-        assertThat(bean.isFrozen()).isFalse();
-
-        bean.setString("xx");
-        bean.getInt();
-        assertThat(bean.isFrozen()).isFalse();
-
-        bean.setInt(2093);
-        bean.getString();
-        assertThat(bean.isFrozen()).isFalse();
-
-        assertThat(bean.freeze()).isSameAs(bean);
-        assertThat(bean.isFrozen()).isTrue();
-        assertThatExceptionOfType(BeanFrozenException.class)
-                .isThrownBy(() -> bean.setString("slls"));
-
-        assertThat(bean.getInt()).isEqualTo(2093);
-        assertThat(bean.getString()).isEqualTo("xx");
-
-        assertThat(bean.unfreeze()).isSameAs(bean);
-        assertThat(bean.isFrozen()).isFalse();
-
-        bean.setInt(233);
-        bean.getString();
-        assertThat(bean.isFrozen()).isFalse();
-
-        assertThat(bean.freeze()).isSameAs(bean);
-        assertThat(bean.isFrozen()).isTrue();
-        assertThatExceptionOfType(BeanFrozenException.class)
-                .isThrownBy(() -> bean.setString("slls"));
+public class FreezableTest extends AbstractFreezableTest {
+    @Override
+    protected ProxyIBeanFactory createBeanFactory() {
+        return ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build();
     }
 }

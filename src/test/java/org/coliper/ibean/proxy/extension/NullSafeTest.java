@@ -14,45 +14,16 @@
 
 package org.coliper.ibean.proxy.extension;
 
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-
-import org.coliper.ibean.extension.NullSafe;
-import org.coliper.ibean.extension.NullSafetyException;
+import org.coliper.ibean.factory.extension.AbstractNullSafeTest;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
-import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public class NullSafeTest {
-
-    public static interface NullSafeBean extends NullSafe {
-      //@formatter:off
-        String getString();
-        void setString(String s);
-
-        int getInt();
-        void setInt(int i);
-      //@formatter:on
-    }
-
-    @Test()
-    public void testNullSafetyExceptionAfterCreation() throws Exception {
-        NullSafeBean bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
-                .create(NullSafeBean.class);
-        bean.getInt();
-        assertThatExceptionOfType(NullSafetyException.class).isThrownBy(() -> bean.getString());
-    }
-
-    @Test()
-    public void testNullSafetyExceptionFieldSetBackToNull() throws Exception {
-        NullSafeBean bean = ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build()
-                .create(NullSafeBean.class);
-        bean.getInt();
-        bean.setString("3242342");
-        bean.getString();
-        bean.setString(null);
-        assertThatExceptionOfType(NullSafetyException.class).isThrownBy(() -> bean.getString());
+public class NullSafeTest extends AbstractNullSafeTest {
+    @Override
+    protected ProxyIBeanFactory createBeanFactory() {
+        return ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build();
     }
 }
