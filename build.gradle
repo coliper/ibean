@@ -65,7 +65,7 @@ task createRootReadme(type: Copy) {
     from 'doc-src/intro.templ.md'
     into buildDir
     filter {l -> l.replace('$version$', version)
-                 .replace('$javadoc.url$', "https://static.javadoc.io/doc/org.coliper/ibean/${version}")
+                 .replace('$javadoc.url$', "https://static.javadoc.io/org.coliper/ibean/${version}")
                  .replace('$source.url$', "https://github.com/coliper/ibean/blob/v${version}")}
     rename '.*', 'README.md'
 }
