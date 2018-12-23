@@ -59,7 +59,8 @@ public class ModificationAwareHandler extends StatefulExtensionHandler
      * IBeanTypeMetaInfo)
      */
     @Override
-    public void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
+    public void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo,
+            IBeanFactory unused) {
         this.beanMetaInfo = metaInfo;
         if (beanTypeIncludesModificationAwareExt(metaInfo)) {
             this.fieldModified = new boolean[metaInfo.noOfFields()];

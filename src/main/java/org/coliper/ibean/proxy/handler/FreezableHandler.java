@@ -39,21 +39,15 @@ public class FreezableHandler extends StatefulExtensionHandler implements TempFr
      * configuring extension handlers in {@link IBeanFactory}s, for example in
      * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
      */
-    public static final ExtensionSupport SUPPORT =
-            new ExtensionSupport(TempFreezable.class, FreezableHandler.class, true/* stateful */);
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(TempFreezable.class,
+            FreezableHandler.class, true/* stateful */);
 
     private boolean frozen = false;
     private Object proxyInstance = null;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.coliper.ibean.proxy.IBeanInvocationHandler#onInitStateful(org.coliper
-     * .ibean.IBeanTypeMetaInfo)
-     */
     @Override
-    public void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
+    public void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo,
+            IBeanFactory unused) {
         requireNonNull(proxyInstance, "proxyInstance");
         this.proxyInstance = proxyInstance;
     }

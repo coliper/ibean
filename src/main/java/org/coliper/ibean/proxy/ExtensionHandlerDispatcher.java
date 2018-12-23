@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.Map;
 
+import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
@@ -118,9 +119,9 @@ class ExtensionHandlerDispatcher {
                 bean, proxyInstance, method, params);
     }
 
-    void initHandler(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
+    void initHandler(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo, IBeanFactory factory) {
         for (ExtensionHandler handler : this.handlerMap.values()) {
-            handler.onInitStateful(proxyInstance, metaInfo);
+            handler.onInitStateful(proxyInstance, metaInfo, factory);
         }
 
     }
