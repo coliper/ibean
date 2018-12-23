@@ -237,7 +237,10 @@ public interface ExtensionHandler {
      *            the IBean instance
      * @param metaInfo
      *            meta information about the IBean
+     * @param factory
+     *            the factory that creates the IBean instance
      */
-    default void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
+    default void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo,
+            IBeanFactory factory) {
     }
 }

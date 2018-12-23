@@ -38,6 +38,7 @@ import org.coliper.ibean.proxy.handler.CompletableHandler;
 import org.coliper.ibean.proxy.handler.FreezableHandler;
 import org.coliper.ibean.proxy.handler.GsonSupportHandler;
 import org.coliper.ibean.proxy.handler.Jackson2SupportHandler;
+import org.coliper.ibean.proxy.handler.LazyInitHandler;
 import org.coliper.ibean.proxy.handler.ModificationAwareHandler;
 import org.coliper.ibean.proxy.handler.NullSafeHandler;
 
@@ -86,6 +87,7 @@ public class ProxyIBeanFactory implements IBeanFactory {
     private static List<ExtensionSupport> DEFAULT_INTERFACE_SUPPORTS =
             ImmutableList.of(ModificationAwareHandler.SUPPORT, 
                     NullSafeHandler.SUPPORT,
+                    LazyInitHandler.SUPPORT,
                     FreezableHandler.SUPPORT,
                     CompletableHandler.SUPPORT,
                     CloneableHandler.SUPPORT,
@@ -125,7 +127,7 @@ public class ProxyIBeanFactory implements IBeanFactory {
         ProxyIBean<T> handler = new ProxyIBean<>(context, handlerDispatcher);
         final T proxy = beanType
                 .cast(Proxy.newProxyInstance(beanType.getClassLoader(), interfaces, handler));
-        handlerDispatcher.initHandler(proxy, context.metaInfo());
+        handlerDispatcher.initHandler(proxy, context.metaInfo(), this);
         return proxy;
     }
 
