@@ -14,11 +14,8 @@
 
 package org.coliper.ibean.codegen.extension;
 
-import static java.util.Objects.requireNonNull;
-
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
-import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.extension.BeanFrozenException;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.TempFreezable;
@@ -39,24 +36,11 @@ public class FreezableHandler extends StatefulExtensionHandler implements TempFr
      * configuring extension handlers in {@link IBeanFactory}s, for example in
      * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
      */
-    public static final ExtensionSupport SUPPORT =
-            new ExtensionSupport(TempFreezable.class, FreezableHandler.class, true/* stateful */);
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(TempFreezable.class,
+            FreezableHandler.class, true/* stateful */);
 
     private boolean frozen = false;
     private Object proxyInstance = null;
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.coliper.ibean.proxy.IBeanInvocationHandler#onInitStateful(org.coliper
-     * .ibean.IBeanTypeMetaInfo)
-     */
-    @Override
-    public void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
-        requireNonNull(proxyInstance, "proxyInstance");
-        this.proxyInstance = proxyInstance;
-    }
 
     /*
      * (non-Javadoc)

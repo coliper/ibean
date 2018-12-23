@@ -51,21 +51,6 @@ public class ModificationAwareHandler extends StatefulExtensionHandler
     private boolean[] fieldModified = null;
     private IBeanTypeMetaInfo<?> beanMetaInfo = null;
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.coliper.ibean.proxy.IBeanInvocationHandler#onInit(org.coliper.ibean.
-     * IBeanTypeMetaInfo)
-     */
-    @Override
-    public void onInitStateful(Object proxyInstance, IBeanTypeMetaInfo<?> metaInfo) {
-        this.beanMetaInfo = metaInfo;
-        if (beanTypeIncludesModificationAwareExt(metaInfo)) {
-            this.fieldModified = new boolean[metaInfo.noOfFields()];
-        }
-    }
-
     private boolean beanTypeIncludesModificationAwareExt(IBeanTypeMetaInfo<?> metaInfo) {
         return ModificationAwareExt.class.isAssignableFrom(metaInfo.beanType());
     }
