@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 
 import org.codehaus.janino.JavaSourceClassLoader;
-import org.codehaus.janino.util.ResourceFinderClassLoader;
+import org.codehaus.janino.util.resource.Resource;
 import org.codehaus.janino.util.resource.ResourceFinder;
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFactory;
@@ -86,14 +86,28 @@ public class CodegenIBeanFactory implements IBeanFactory {
     private final ClassLoader beanClassLoader;
     private final Map<Class<?>, Class<?>> implementationTypeMap =
             Collections.synchronizedMap(new HashMap<>());
+    private final Map<String, Resource> tempResourceMap = null;
+    private final String genCodePackageName = "codegen";
 
     /**
      * @param beanClassLoader
      */
-    CodegenIBeanFactory(JavaSourceClassLoader beanClassLoader) {
-        ResourceFinder resourceFinder = new Resou;
+    CodegenIBeanFactory() {
+        ResourceFinder resourceFinder = this.createResourceFinder();
         String characterEncoding = null;
-        this.beanClassLoader = new ResourceFinderClassLoader(resourceFinder, this.getClass().getClassLoader());
+        this.beanClassLoader = new JavaSourceClassLoader(this.getClass().getClassLoader(),
+                resourceFinder, characterEncoding);
+    }
+
+    private ResourceFinder createResourceFinder() {
+        return new ResourceFinder() {
+
+            @Override
+            public Resource findResource(String resourceName) {
+                System.out.println("resourceName: " + resourceName);
+                return null;
+            }
+        };
     }
 
     /*
@@ -103,8 +117,16 @@ public class CodegenIBeanFactory implements IBeanFactory {
      */
     @Override
     public <T> T create(Class<T> beanType) throws InvalidIBeanTypeException {
-        // TODO Auto-generated method stub
-        return null;
+        final String generatedClassName = this.createGeneratedClassName(beanType);
+        try {
+            return beanType.cast(this.beanClassLoader.loadClass(generatedClassName).newInstance());
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException e) {
+            throw new InvalidIBeanTypeException(beanType, e.toString());
+        }
+    }
+
+    private String createGeneratedClassName(Class<?> beanType) {
+        return this.genCodePackageName + "." + beanType.getName();
     }
 
     public static interface SimpleBean {

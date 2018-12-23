@@ -82,7 +82,7 @@ class BeanCodeGenerator {
             throws IOException {
         final BeanCodeElements codeElements = this.createBeanCodeElements(beanMeta, beanTypeName);
         final Builder typeBuilder =
-                TypeSpec.classBuilder(beanTypeName).addModifiers(Modifier.PUBLIC, Modifier.FINAL).;
+                TypeSpec.classBuilder(beanTypeName).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         this.addFields(typeBuilder, codeElements, beanMeta);
         this.addMethods(typeBuilder, codeElements, beanMeta);
 
