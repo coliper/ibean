@@ -41,7 +41,7 @@ getter and setter methods and also with Object methods `toString`, `hashCode` an
 *IBean* requires Java 8 or greater.
 
 *IBean* has dependencies to following frameworks:
-* [Apache Commons Lang][_CommonsLang3Maven], version 3.0 or higher
+* [Apache Commons Lang][_CommonsLang3Maven], version 3.2 or higher
 * [Google Guava][_GuavaMaven], version 21 or higher
 
 If not already present in your project these dependencies are automatically loaded.
@@ -67,7 +67,7 @@ Gives you a good first overview.
 Add following dependency to your *build.gradle*:
 
 ```groovy
-    implementation 'org.coliper:ibean:0.4.1'
+    implementation 'org.coliper:ibean:0.4.4'
 ```
 
 #### Maven
@@ -78,7 +78,7 @@ Add following dependency to your *pom.xml*
     <dependency>
       <groupId>org.coliper</groupId>
       <artifactId>ibean</artifactId>
-      <version>0.4.1</version>
+      <version>0.4.4</version>
     </dependency>
 ```
 
@@ -329,5 +329,5 @@ hood by default. In that case you only have to add the
 [_BeanStyleApi]: api/org/coliper/ibean/BeanStyle.html
 [_ClassicBeanStyleApi]: api/org/coliper/ibean/beanstyle/ClassicBeanStyle.html
 [_ModernBeanStyleApi]: api/org/coliper/ibean/beanstyle/ModernBeanStyle.html
-[_BeanStyleSample]: https://github.com/coliper/ibean/tree/master/src/test/java/org/coliper/ibean/samples/BeanStyleSample.java
-[_GsonSample]: https://github.com/coliper/ibean/tree/master/src/test/java/org/coliper/ibean/samples/GsonSample.java
+[_BeanStyleSample]: https://github.com/coliper/ibean/blob/master/src/test/java/org/coliper/ibean/samples/ModernBeanStyleSample.java
+[_GsonSample]: https://github.com/coliper/ibean/blob/master/src/test/java/org/coliper/ibean/samples/GsonSample.java
