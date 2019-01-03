@@ -28,7 +28,7 @@ import com.squareup.javapoet.FieldSpec;
  * @author alex@coliper.org
  *
  */
-class BeanFieldCodeGenerator {
+class BeanFieldsCodeGenerator {
 
     private final BeanCodeElements codeElements;
     private final IBeanTypeMetaInfo<?> metaInfo;
@@ -37,7 +37,7 @@ class BeanFieldCodeGenerator {
      * @param codeElements
      * @param metaInfo
      */
-    BeanFieldCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
+    BeanFieldsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
         this.codeElements = codeElements;
         this.metaInfo = metaInfo;
     }

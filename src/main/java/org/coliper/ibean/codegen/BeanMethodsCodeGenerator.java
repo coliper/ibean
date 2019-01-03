@@ -25,7 +25,7 @@ import com.squareup.javapoet.MethodSpec;
  * @author alex@coliper.org
  *
  */
-class BeanMethodCodeGenerator {
+class BeanMethodsCodeGenerator {
 
     private final BeanCodeElements codeElements;
     private final IBeanTypeMetaInfo<?> metaInfo;
@@ -34,7 +34,7 @@ class BeanMethodCodeGenerator {
      * @param codeElements
      * @param metaInfo
      */
-    BeanMethodCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
+    BeanMethodsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
         this.codeElements = codeElements;
         this.metaInfo = metaInfo;
     }
