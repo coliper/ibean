@@ -14,10 +14,8 @@
 
 package org.coliper.ibean.codegen;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -42,54 +40,67 @@ import com.squareup.javapoet.TypeSpec.Builder;
  */
 class BeanCodeGenerator {
 
-    private final File sourceFolder;
+    private static final UnaryOperator<String> DEFAULT_FIELD_NAME_BUILDER =
+            new UnaryOperator<String>() {
+
+                @Override
+                public String apply(String fieldName) {
+                    return "_" + fieldName;
+                }
+            };
+
     private final String packageName;
-    private final UnaryOperator<String> typeNameBuilder;
-    private final UnaryOperator<String> fieldNameBuilder;
+    private final UnaryOperator<String> fieldNameBuilder = DEFAULT_FIELD_NAME_BUILDER;
 
     /**
      * @param sourceFolder
      * @param classFolder
      * @param packageName
      */
-    BeanCodeGenerator(File sourceFolder, String packageName, UnaryOperator<String> typeNameBuilder,
-            UnaryOperator<String> fieldNameBuilder) {
-        requireNonNull(sourceFolder, "sourceFolder");
+    BeanCodeGenerator(String packageName) {
         requireNonNull(packageName, "packageName");
-        requireNonNull(typeNameBuilder, "typeNameBuilder");
-        requireNonNull(fieldNameBuilder, "fieldNameBuilder");
-        checkArgument(sourceFolder.isDirectory(), "folder %s is not a directory",
-                sourceFolder.getName());
 
-        this.sourceFolder = sourceFolder;
         this.packageName = packageName;
-        this.typeNameBuilder = typeNameBuilder;
-        this.fieldNameBuilder = fieldNameBuilder;
     }
 
-    String createBeanSourceFile(IBeanTypeMetaInfo<?> beanMeta) throws IOException {
-        requireNonNull(beanMeta, "beanMeta");
-        final String beanTypeName = typeNameBuilder.apply(beanMeta.beanType().getName());
-
-        return this.generateSourceCode(beanTypeName, beanMeta);
-    }
+    private static final String NL = System.lineSeparator();
+//@formatter:off    
+    private static final String CODE = 
+            "package $package;" + NL + 
+            "public class $className implements $beanType {" + NL + 
+            "  private int i;" + NL + 
+            "  public int getInt() { return i; }" + NL + 
+            "  public void setInt(int x) { this.i = x; }" + NL + 
+            "}" + NL + 
+//            "" + NL + 
+            "" + NL; 
+  //@formatter:on
 
     /**
      * @param sourceFile
      * @param beanMeta
      */
-    String generateSourceCode(final String beanTypeName, final IBeanTypeMetaInfo<?> beanMeta)
-            throws IOException {
-        final BeanCodeElements codeElements = this.createBeanCodeElements(beanMeta, beanTypeName);
-        final Builder typeBuilder =
-                TypeSpec.classBuilder(beanTypeName).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+    String generateSourceCode(final String implementationTypeName,
+            final IBeanTypeMetaInfo<?> beanMeta) {
+        // TODO Auto-generated method stub
+        // return CODE.replace("$package", this.packageName)
+        // .replace("$className", implementationTypeName)
+        // .replace("$beanType", beanMeta.beanType().getName());
+        final BeanCodeElements codeElements =
+                this.createBeanCodeElements(beanMeta, implementationTypeName);
+        final Builder typeBuilder = TypeSpec.classBuilder(implementationTypeName)
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         this.addFields(typeBuilder, codeElements, beanMeta);
         this.addMethods(typeBuilder, codeElements, beanMeta);
 
         JavaFile javaFile = JavaFile.builder(this.packageName, typeBuilder.build()).build();
 
         StringWriter codeBuffer = new StringWriter();
-        javaFile.writeTo(codeBuffer);
+        try {
+            javaFile.writeTo(codeBuffer);
+        } catch (IOException e) {
+            throw new IllegalStateException("unexpected IOException", e);
+        }
 
         return codeBuffer.toString();
     }
@@ -114,7 +125,7 @@ class BeanCodeGenerator {
      */
     private void addFields(Builder typeBuilder, BeanCodeElements codeElements,
             final IBeanTypeMetaInfo<?> beanMeta) {
-        BeanFieldCodeGenerator fieldGen = new BeanFieldCodeGenerator(codeElements, beanMeta);
+        BeanFieldsCodeGenerator fieldGen = new BeanFieldsCodeGenerator(codeElements, beanMeta);
         List<FieldSpec> fieldSpecs = fieldGen.createFields();
         for (FieldSpec fieldSpec : fieldSpecs) {
             typeBuilder.addField(fieldSpec);
@@ -129,7 +140,7 @@ class BeanCodeGenerator {
     private void addMethods(Builder typeBuilder, BeanCodeElements codeElements,
             IBeanTypeMetaInfo<?> beanMeta) {
         final List<MethodSpec> methodSpecs =
-                new BeanMethodCodeGenerator(codeElements, beanMeta).createMethods();
+                new BeanMethodsCodeGenerator(codeElements, beanMeta).createMethods();
         for (MethodSpec methodSpec : methodSpecs) {
             typeBuilder.addMethod(methodSpec);
         }
