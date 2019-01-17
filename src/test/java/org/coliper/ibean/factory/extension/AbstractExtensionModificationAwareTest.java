@@ -18,14 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.coliper.ibean.extension.ModificationAware;
 import org.coliper.ibean.extension.ModificationAwareExt;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.factory.AbstractFactoryTest;
 import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public abstract class AbstractExtensionModificationAwareTest {
+public abstract class AbstractExtensionModificationAwareTest extends AbstractFactoryTest {
 
     public static interface BeanType extends ModificationAware {
       //@formatter:off
@@ -43,11 +43,9 @@ public abstract class AbstractExtensionModificationAwareTest {
     public static interface BeanTypeExt extends BeanType, ModificationAwareExt {
     }
 
-    protected abstract ProxyIBeanFactory createBeanFactory();
-
     @Test
     public void test() throws Exception {
-        BeanType bean = this.createBeanFactory().create(BeanType.class);
+        BeanType bean = this.factoryClassic.create(BeanType.class);
         assertThat(bean.isModified()).isFalse();
 
         bean.resetModified();
@@ -83,7 +81,7 @@ public abstract class AbstractExtensionModificationAwareTest {
 
     @Test
     public void testExt() throws Exception {
-        BeanTypeExt bean = this.createBeanFactory().create(BeanTypeExt.class);
+        BeanTypeExt bean = this.factoryClassic.create(BeanTypeExt.class);
         assertThat(bean.isModified()).isFalse();
         assertThat(bean.getModifiedFieldNames()).isEmpty();
         assertThat(bean.allFieldsModified()).isFalse();

@@ -10,7 +10,6 @@ import java.util.List;
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.BeanTestUtil;
 import org.coliper.ibean.EmptyBean;
-import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.PrimitivesBeanClassic;
 import org.coliper.ibean.PrimitivesBeanClassicImpl;
 import org.coliper.ibean.SampleBeanClassic;
@@ -21,12 +20,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-public abstract class AbstractCloningTest {
-    private IBeanFactory factory;
-
-    protected AbstractCloningTest(IBeanFactory factory) {
-        this.factory = factory;
-    }
+public abstract class AbstractCloningTest extends AbstractFactoryTest {
 
     public static interface EmptyBeanCloneable
             extends EmptyBean, CloneableBean<EmptyBeanCloneable> {

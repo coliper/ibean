@@ -14,8 +14,10 @@
 
 package org.coliper.ibean.proxy.extension;
 
+import org.coliper.ibean.BeanStyle;
+import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.factory.extension.AbstractFreezableTest;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.proxy.ProxyFactoryUtil;
 
 /**
  * @author alex@coliper.org
@@ -23,7 +25,7 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
  */
 public class FreezableTest extends AbstractFreezableTest {
     @Override
-    protected ProxyIBeanFactory createBeanFactory() {
-        return ProxyIBeanFactory.builder().withDefaultInterfaceSupport().build();
+    protected IBeanFactory createBeanFactory(BeanStyle style) {
+        return ProxyFactoryUtil.factoryWithStyle(style);
     }
 }

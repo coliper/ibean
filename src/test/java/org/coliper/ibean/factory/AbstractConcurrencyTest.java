@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
-import org.coliper.ibean.IBeanFactory;
+import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.GsonSupport;
 import org.coliper.ibean.extension.Jackson2Support;
@@ -33,13 +33,14 @@ import org.coliper.ibean.extension.ModificationAwareExt;
 import org.coliper.ibean.extension.TempFreezable;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public abstract class AbstractConcurrencyTest {
+public abstract class AbstractConcurrencyTest extends AbstractFactoryTest {
 
     public static interface BeanType extends Completable<BeanType>, TempFreezable<BeanType>,
             ModificationAwareExt, Jackson2Support, GsonSupport {
@@ -59,12 +60,12 @@ public abstract class AbstractConcurrencyTest {
     private static final int NO_OF_THREADS = 100;
     private static final int NO_OF_LOOPS = 100000;
 
-    private final IBeanFactory factory;
-    private final BeanType bean;
+    private BeanType bean;
     private final ExecutorService executor = Executors.newFixedThreadPool(NO_OF_THREADS);
 
-    protected AbstractConcurrencyTest(IBeanFactory factory) {
-        this.factory = factory;
+    @Before
+    public void initFactoryAndBean() {
+        this.factory = this.createBeanFactory(BeanStyle.CLASSIC_WITH_OPTIONAL);
         this.bean = this.factory.create(BeanType.class);
     }
 

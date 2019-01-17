@@ -10,7 +10,6 @@ import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.BeanTestUtil;
 import org.coliper.ibean.EmptyBean;
 import org.coliper.ibean.EmptyBeanImpl;
-import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.PrimitivesBeanClassic;
 import org.coliper.ibean.PrimitivesBeanClassicImpl;
 import org.coliper.ibean.SampleBeanClassic;
@@ -19,14 +18,7 @@ import org.coliper.ibean.SampleBeanModern;
 import org.coliper.ibean.SampleBeanModernImpl;
 import org.junit.Test;
 
-public abstract class AbstractBeanSetterGetterTest {
-    protected IBeanFactory factory;
-
-    protected AbstractBeanSetterGetterTest(IBeanFactory factory) {
-        this.factory = factory;
-    }
-
-    protected abstract void switchToModernStyleBuilder();
+public abstract class AbstractBeanSetterGetterTest extends AbstractFactoryTest {
 
     @Test
     public void testEmptyBeanDefaultValues() {
@@ -52,9 +44,8 @@ public abstract class AbstractBeanSetterGetterTest {
 
     @Test
     public void testSampleBeanModernDefaultValues() {
-        this.switchToModernStyleBuilder();
         SampleBeanModernImpl expected = new SampleBeanModernImpl();
-        SampleBeanModern bean = this.factory.create(SampleBeanModern.class);
+        SampleBeanModern bean = this.factoryModern.create(SampleBeanModern.class);
         BeanTestUtil.assertEqualsBean(SampleBeanModern.class, BeanStyle.MODERN, expected, bean);
     }
 
@@ -74,9 +65,8 @@ public abstract class AbstractBeanSetterGetterTest {
 
     @Test
     public void testSampleBeanModernWithValues() throws Exception {
-        this.switchToModernStyleBuilder();
         SampleBeanModern expected = new SampleBeanModernImpl().fillWithTestValues();
-        SampleBeanModern bean = this.factory.create(SampleBeanModern.class);
+        SampleBeanModern bean = this.factoryModern.create(SampleBeanModern.class);
         assertNotNull(bean);
 
         expected.copyTo(bean);

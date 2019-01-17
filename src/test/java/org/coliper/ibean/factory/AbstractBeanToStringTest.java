@@ -19,14 +19,7 @@ import org.coliper.ibean.SampleBeanModernImpl;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.junit.Test;
 
-public abstract class AbstractBeanToStringTest {
-    protected IBeanFactory factory;
-
-    protected AbstractBeanToStringTest(IBeanFactory factory) {
-        this.factory = factory;
-    }
-
-    protected abstract void switchToModernStyleBuilder();
+public abstract class AbstractBeanToStringTest extends AbstractFactoryTest {
 
     @Test
     public void testEmptyBean() {
@@ -66,10 +59,9 @@ public abstract class AbstractBeanToStringTest {
 
     @Test
     public void testSampleBeanModern() throws Exception {
-        this.switchToModernStyleBuilder();
         SampleBeanModern regularBean = new SampleBeanModernImpl().fillWithTestValues();
 
-        SampleBeanModern bean = this.factory.create(SampleBeanModern.class);
+        SampleBeanModern bean = this.factoryModern.create(SampleBeanModern.class);
         //@formatter:off
         String expected = "SampleBeanModern["
                 + "booleanPrimitive=false,"

@@ -22,14 +22,14 @@ import java.util.Optional;
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.extension.BeanIncompleteException;
 import org.coliper.ibean.extension.Completable;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.factory.AbstractFactoryTest;
 import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public abstract class AbstractExtensionCompletableTest {
+public abstract class AbstractExtensionCompletableTest extends AbstractFactoryTest {
 
     public static interface BeanType extends Completable<BeanType> {
       //@formatter:off
@@ -43,8 +43,6 @@ public abstract class AbstractExtensionCompletableTest {
         Optional<Double> getDouble();
       //@formatter:on
     }
-
-    protected abstract ProxyIBeanFactory createBeanFactory(final BeanStyle beanStyle);
 
     @Test
     public void testIsCompleteWithNoOptionalSupportStyle() throws Exception {

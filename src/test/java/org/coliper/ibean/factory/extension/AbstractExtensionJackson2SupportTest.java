@@ -12,17 +12,16 @@ import org.coliper.ibean.PrimitivesBeanClassicImpl;
 import org.coliper.ibean.SampleBeanModern;
 import org.coliper.ibean.extension.Jackson2ModuleForIBeans;
 import org.coliper.ibean.extension.Jackson2Support;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.factory.AbstractFactoryTest;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public abstract class AbstractExtensionJackson2SupportTest {
+public abstract class AbstractExtensionJackson2SupportTest extends AbstractFactoryTest {
 
-    final IBeanFactory factoryClassic;
-    final ObjectMapper jackson2Classic;
-    final IBeanFactory factoryModern;
-    final ObjectMapper jackson2Modern;
+    private ObjectMapper jackson2Classic;
+    private ObjectMapper jackson2Modern;
 
     public static interface PrimitivesBeanClassicJackson2
             extends PrimitivesBeanClassic, Jackson2Support {
@@ -49,14 +48,11 @@ public abstract class AbstractExtensionJackson2SupportTest {
         Date date();
     }
 
-    protected AbstractExtensionJackson2SupportTest() {
-        this.factoryClassic = this.createBeanFactory(BeanStyle.CLASSIC);
-        this.factoryModern = this.createBeanFactory(BeanStyle.MODERN);
+    @Before
+    public void createObjectMappers() {
         this.jackson2Classic = this.createObjectMapper(factoryClassic);
         this.jackson2Modern = this.createObjectMapper(factoryModern);
     }
-
-    protected abstract ProxyIBeanFactory createBeanFactory(final BeanStyle beanStyle);
 
     private ObjectMapper createObjectMapper(IBeanFactory factory) {
         ObjectMapper mapper = new ObjectMapper();
