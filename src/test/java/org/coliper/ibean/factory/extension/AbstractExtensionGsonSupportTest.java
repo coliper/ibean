@@ -11,18 +11,17 @@ import org.coliper.ibean.SampleBeanModern;
 import org.coliper.ibean.SampleBeanModernImpl;
 import org.coliper.ibean.extension.GsonSerializerDeserializerForIBeans;
 import org.coliper.ibean.extension.GsonSupport;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.factory.AbstractFactoryTest;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public abstract class AbstractExtensionGsonSupportTest {
+public abstract class AbstractExtensionGsonSupportTest extends AbstractFactoryTest {
 
-    final IBeanFactory factoryClassic;
-    final Gson gsonClassic;
-    final IBeanFactory factoryModern;
-    final Gson gsonModern;
+    private Gson gsonClassic;
+    private Gson gsonModern;
 
     public static interface PrimitivesBeanClassicGson extends PrimitivesBeanClassic, GsonSupport {
     }
@@ -48,16 +47,15 @@ public abstract class AbstractExtensionGsonSupportTest {
         Date date();
     }
 
-    protected AbstractExtensionGsonSupportTest() {
-        this.factoryClassic = this.createBeanFactory(BeanStyle.CLASSIC);
-        this.factoryModern = this.createBeanFactory(BeanStyle.MODERN);
+    @Before
+    public void initGson() {
         this.gsonClassic = new GsonBuilder().registerTypeHierarchyAdapter(GsonSupport.class,
                 new GsonSerializerDeserializerForIBeans(factoryClassic)).create();
         this.gsonModern = new GsonBuilder().registerTypeHierarchyAdapter(GsonSupport.class,
                 new GsonSerializerDeserializerForIBeans(factoryModern)).create();
     }
 
-    protected abstract ProxyIBeanFactory createBeanFactory(final BeanStyle beanStyle);
+    protected abstract IBeanFactory createBeanFactory(final BeanStyle beanStyle);
 
     @Test
     public void testPrimitivesTestValuesIBeanRoot() {

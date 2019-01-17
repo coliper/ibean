@@ -15,6 +15,7 @@
 package org.coliper.ibean.proxy;
 
 import org.coliper.ibean.BeanStyle;
+import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.factory.AbstractConcurrencyTest;
 
 /**
@@ -22,10 +23,8 @@ import org.coliper.ibean.factory.AbstractConcurrencyTest;
  *
  */
 public class ConcurrencyTest extends AbstractConcurrencyTest {
-
-    public ConcurrencyTest() {
-        super(ProxyIBeanFactory.builder().withDefaultInterfaceSupport()
-                .withBeanStyle(BeanStyle.CLASSIC_WITH_OPTIONAL).build());
+    @Override
+    protected IBeanFactory createBeanFactory(BeanStyle style) {
+        return ProxyFactoryUtil.factoryWithStyle(style);
     }
-
 }

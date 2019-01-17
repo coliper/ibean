@@ -18,14 +18,14 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.NullSafetyException;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.factory.AbstractFactoryTest;
 import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public abstract class AbstractNullSafeTest {
+public abstract class AbstractNullSafeTest extends AbstractFactoryTest {
 
     public static interface NullSafeBean extends NullSafe {
       //@formatter:off
@@ -37,18 +37,16 @@ public abstract class AbstractNullSafeTest {
       //@formatter:on
     }
 
-    protected abstract ProxyIBeanFactory createBeanFactory();
-
     @Test()
     public void testNullSafetyExceptionAfterCreation() throws Exception {
-        NullSafeBean bean = this.createBeanFactory().create(NullSafeBean.class);
+        NullSafeBean bean = this.factoryClassic.create(NullSafeBean.class);
         bean.getInt();
         assertThatExceptionOfType(NullSafetyException.class).isThrownBy(() -> bean.getString());
     }
 
     @Test()
     public void testNullSafetyExceptionFieldSetBackToNull() throws Exception {
-        NullSafeBean bean = this.createBeanFactory().create(NullSafeBean.class);
+        NullSafeBean bean = this.factoryClassic.create(NullSafeBean.class);
         bean.getInt();
         bean.setString("3242342");
         bean.getString();

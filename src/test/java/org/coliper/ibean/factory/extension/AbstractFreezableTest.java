@@ -20,14 +20,14 @@ import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import org.coliper.ibean.extension.BeanFrozenException;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.TempFreezable;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.factory.AbstractFactoryTest;
 import org.junit.Test;
 
 /**
  * @author alex@coliper.org
  *
  */
-public abstract class AbstractFreezableTest {
+public abstract class AbstractFreezableTest extends AbstractFactoryTest {
 
     public static interface FreezableBean extends Freezable<FreezableBean> {
       //@formatter:off
@@ -49,11 +49,9 @@ public abstract class AbstractFreezableTest {
       //@formatter:on
     }
 
-    protected abstract ProxyIBeanFactory createBeanFactory();
-
     @Test
     public void testIsFrozen() throws Exception {
-        FreezableBean bean = this.createBeanFactory().create(FreezableBean.class);
+        FreezableBean bean = this.factoryClassic.create(FreezableBean.class);
         assertThat(bean.isFrozen()).isFalse();
 
         bean.setString("xx");
@@ -75,7 +73,7 @@ public abstract class AbstractFreezableTest {
 
     @Test
     public void testIsFrozenTemp() throws Exception {
-        FreezableBeanTemp bean = this.createBeanFactory().create(FreezableBeanTemp.class);
+        FreezableBeanTemp bean = this.factoryClassic.create(FreezableBeanTemp.class);
         assertThat(bean.isFrozen()).isFalse();
 
         bean.setString("xx");

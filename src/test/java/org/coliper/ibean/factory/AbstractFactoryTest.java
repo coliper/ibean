@@ -12,20 +12,28 @@
  * the License.
  */
 
-package org.coliper.ibean.proxy.extension;
+package org.coliper.ibean.factory;
 
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFactory;
-import org.coliper.ibean.factory.extension.AbstractExtensionCompletableTest;
-import org.coliper.ibean.proxy.ProxyFactoryUtil;
+import org.junit.Before;
 
 /**
  * @author alex@coliper.org
  *
  */
-public class ExtensionCompletableTest extends AbstractExtensionCompletableTest {
-    @Override
-    protected IBeanFactory createBeanFactory(BeanStyle style) {
-        return ProxyFactoryUtil.factoryWithStyle(style);
+public abstract class AbstractFactoryTest {
+
+    protected IBeanFactory factory;
+    protected IBeanFactory factoryClassic;
+    protected IBeanFactory factoryModern;
+
+    @Before
+    public void setup() {
+        this.factory = createBeanFactory(BeanStyle.CLASSIC);
+        this.factoryClassic = this.factory;
+        this.factoryModern = createBeanFactory(BeanStyle.MODERN);
     }
+
+    protected abstract IBeanFactory createBeanFactory(final BeanStyle beanStyle);
 }

@@ -11,7 +11,6 @@ import org.coliper.ibean.BeanTypeWithCustomEquals;
 import org.coliper.ibean.EmptyBean;
 import org.coliper.ibean.EmptyBeanImpl;
 import org.coliper.ibean.IBean;
-import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.PrimitivesBeanClassic;
 import org.coliper.ibean.PrimitivesBeanClassicImpl;
 import org.coliper.ibean.SampleBeanClassic;
@@ -20,14 +19,7 @@ import org.coliper.ibean.SampleBeanModern;
 import org.coliper.ibean.SampleBeanModernImpl;
 import org.junit.Test;
 
-public abstract class AbstractBeanEqualsTest {
-    protected IBeanFactory factory;
-
-    protected AbstractBeanEqualsTest(IBeanFactory factory) {
-        this.factory = factory;
-    }
-
-    protected abstract void switchToModernStyleBuilder();
+public abstract class AbstractBeanEqualsTest extends AbstractFactoryTest {
 
     @Test
     public void testEmptyBean() {
@@ -70,10 +62,9 @@ public abstract class AbstractBeanEqualsTest {
 
     @Test
     public void testSampleBeanModern() throws Exception {
-        this.switchToModernStyleBuilder();
         SampleBeanModernImpl regularBean = new SampleBeanModernImpl();
-        SampleBeanModern bean1 = this.factory.create(SampleBeanModern.class);
-        SampleBeanModern bean2 = this.factory.create(SampleBeanModern.class);
+        SampleBeanModern bean1 = this.factoryModern.create(SampleBeanModern.class);
+        SampleBeanModern bean2 = this.factoryModern.create(SampleBeanModern.class);
 
         assertTrue(bean1.equals(bean2)); // initially both beans are empty:
                                          // beans equal
