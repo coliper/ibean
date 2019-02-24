@@ -28,7 +28,7 @@ import com.squareup.javapoet.MethodSpec.Builder;
  * @author alex@coliper.org
  *
  */
-class GetterMethodsCodeGenerator {
+class SetterMethodsCodeGenerator {
 
     private final BeanCodeElements codeElements;
     private final IBeanTypeMetaInfo<?> metaInfo;
@@ -37,7 +37,7 @@ class GetterMethodsCodeGenerator {
      * @param codeElements
      * @param metaInfo
      */
-    GetterMethodsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
+    SetterMethodsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
         this.codeElements = codeElements;
         this.metaInfo = metaInfo;
     }
@@ -52,17 +52,18 @@ class GetterMethodsCodeGenerator {
     }
 
     private static final String INIT_STATEMENT = "$T $L = $L";
-    private static final String RETURN_STATEMENT = "return $L";
+    private static final String RETURN_STATEMENT = "$L = $L";
 
     private void createGetterForField(final List<MethodSpec> methods,
             IBeanFieldMetaInfo fieldMeta) {
         final String fieldName = codeElements.fieldNameFromPropertyName(fieldMeta.fieldName());
-        Builder methodBuilder =
-                JavaPoetUtil.methodSpecBuilderFromOverride(fieldMeta.getterMethod());
+        Builder methodBuilder = JavaPoetUtil.methodSpecBuilderFromOverride(fieldMeta.setterMethod(),
+                CommonCodeSnippets.SETTER_ARGUMENT_NAME);
         CodeBlock.Builder codeBlockBuilder = CodeBlock.builder();
         codeBlockBuilder.addStatement(INIT_STATEMENT, fieldMeta.fieldType(),
-                CommonCodeSnippets.TEMP_VALUE_FIELD_NAME, fieldName);
-        codeBlockBuilder.addStatement(RETURN_STATEMENT, CommonCodeSnippets.TEMP_VALUE_FIELD_NAME);
+                CommonCodeSnippets.TEMP_VALUE_FIELD_NAME, CommonCodeSnippets.SETTER_ARGUMENT_NAME);
+        codeBlockBuilder.addStatement(RETURN_STATEMENT, fieldName,
+                CommonCodeSnippets.TEMP_VALUE_FIELD_NAME);
         methodBuilder.addCode(codeBlockBuilder.build());
         methods.add(methodBuilder.build());
     }
