@@ -14,8 +14,6 @@
 
 package org.coliper.ibean.codegen;
 
-import static java.util.Objects.requireNonNull;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -49,51 +47,37 @@ class BeanCodeGenerator {
                 }
             };
 
-    private final String packageName;
     private final UnaryOperator<String> fieldNameBuilder = DEFAULT_FIELD_NAME_BUILDER;
+    final String packageName;
+    final String implementationTypeName;
+    final IBeanTypeMetaInfo<?> beanMeta;
 
-    /**
-     * @param sourceFolder
-     * @param classFolder
-     * @param packageName
-     */
-    BeanCodeGenerator(String packageName) {
-        requireNonNull(packageName, "packageName");
-
+    BeanCodeGenerator(String packageName, String implementationTypeName,
+            IBeanTypeMetaInfo<?> beanMeta) {
         this.packageName = packageName;
+        this.implementationTypeName = implementationTypeName;
+        this.beanMeta = beanMeta;
     }
 
     private static final String NL = System.lineSeparator();
-//@formatter:off    
-    private static final String CODE = 
-            "package $package;" + NL + 
-            "public class $className implements $beanType {" + NL + 
-            "  private int i;" + NL + 
-            "  public int getInt() { return i; }" + NL + 
-            "  public void setInt(int x) { this.i = x; }" + NL + 
-            "}" + NL + 
-//            "" + NL + 
-            "" + NL; 
-  //@formatter:on
 
     /**
      * @param sourceFile
      * @param beanMeta
      */
-    String generateSourceCode(final String implementationTypeName,
-            final IBeanTypeMetaInfo<?> beanMeta) {
-        // TODO Auto-generated method stub
-        // return CODE.replace("$package", this.packageName)
-        // .replace("$className", implementationTypeName)
-        // .replace("$beanType", beanMeta.beanType().getName());
-        final BeanCodeElements codeElements =
-                this.createBeanCodeElements(beanMeta, implementationTypeName);
+    String generateSourceCode() {
+        final BeanCodeElements codeElements = this.createBeanCodeElements();
         final Builder typeBuilder = TypeSpec.classBuilder(implementationTypeName)
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-        this.addFields(typeBuilder, codeElements, beanMeta);
-        this.addMethods(typeBuilder, codeElements, beanMeta);
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .addSuperinterface(beanMeta.beanType());
+        this.addFields(typeBuilder, codeElements);
+        this.addMethods(typeBuilder, codeElements);
 
-        JavaFile javaFile = JavaFile.builder(this.packageName, typeBuilder.build()).build();
+        return buildCode(typeBuilder);
+    }
+
+    private String buildCode(final Builder typeBuilder) {
+        JavaFile javaFile = JavaFile.builder(packageName, typeBuilder.build()).build();
 
         StringWriter codeBuffer = new StringWriter();
         try {
@@ -108,8 +92,7 @@ class BeanCodeGenerator {
     /**
      * @return
      */
-    private BeanCodeElements createBeanCodeElements(final IBeanTypeMetaInfo<?> beanMeta,
-            String beanTypeName) {
+    private BeanCodeElements createBeanCodeElements() {
         Map<String, String> fieldNameMap = new HashMap<>();
         List<IBeanFieldMetaInfo> fieldMetas = beanMeta.fieldMetaInfos();
         for (IBeanFieldMetaInfo fieldMeta : fieldMetas) {
@@ -117,14 +100,13 @@ class BeanCodeGenerator {
             fieldNameMap.put(fieldName, this.fieldNameBuilder.apply(fieldName));
         }
 
-        return new BeanCodeElements(beanTypeName, this.packageName, fieldNameMap);
+        return new BeanCodeElements(this.packageName, this.implementationTypeName, fieldNameMap);
     }
 
     /**
      * @param typeBuilder
      */
-    private void addFields(Builder typeBuilder, BeanCodeElements codeElements,
-            final IBeanTypeMetaInfo<?> beanMeta) {
+    private void addFields(Builder typeBuilder, BeanCodeElements codeElements) {
         BeanFieldsCodeGenerator fieldGen = new BeanFieldsCodeGenerator(codeElements, beanMeta);
         List<FieldSpec> fieldSpecs = fieldGen.createFields();
         for (FieldSpec fieldSpec : fieldSpecs) {
@@ -137,8 +119,7 @@ class BeanCodeGenerator {
      * @param codeElements
      * @param beanMeta
      */
-    private void addMethods(Builder typeBuilder, BeanCodeElements codeElements,
-            IBeanTypeMetaInfo<?> beanMeta) {
+    private void addMethods(Builder typeBuilder, BeanCodeElements codeElements) {
         final List<MethodSpec> methodSpecs =
                 new BeanMethodsCodeGenerator(codeElements, beanMeta).createMethods();
         for (MethodSpec methodSpec : methodSpecs) {

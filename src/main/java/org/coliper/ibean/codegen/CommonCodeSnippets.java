@@ -18,13 +18,8 @@ package org.coliper.ibean.codegen;
  * @author alex@coliper.org
  *
  */
-public final class CommonCodeSnippets {
+public abstract class CommonCodeSnippets {
 
-    public static final String SETTER_VALUE_FIELD_NAME = "newValue";
-    public static final String GETTER_VALUE_FIELD_NAME = "returnValue";
-
-    // No instances
-    private CommonCodeSnippets() {
-    }
-
+    public static final String SETTER_ARGUMENT_NAME = "newValue";
+    public static final String TEMP_VALUE_FIELD_NAME = "value";
 }

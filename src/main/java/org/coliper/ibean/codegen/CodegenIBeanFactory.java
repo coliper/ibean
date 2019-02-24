@@ -14,9 +14,8 @@
 
 package org.coliper.ibean.codegen;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -25,23 +24,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import org.codehaus.janino.JavaSourceClassLoader;
-import org.codehaus.janino.util.resource.Resource;
-import org.codehaus.janino.util.resource.ResourceFinder;
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.InvalidIBeanTypeException;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Charsets;
 
 /**
  * @author alex@coliper.org
  *
  */
 public class CodegenIBeanFactory implements IBeanFactory {
-
-    private static final String JAVA_FILE_NAME_EXTENSION = ".java";
 
     public static final String DEFAULT_PACKAGE_NAME =
             CodegenIBeanFactory.class.getPackage().getName() + ".generated";
@@ -89,33 +84,19 @@ public class CodegenIBeanFactory implements IBeanFactory {
 
     private final ClassLoader beanClassLoader;
     private final Map<Class<?>, Class<?>> implementationTypeMap = new ConcurrentHashMap<>();
-    private final Map<String, Resource> tempResourceMap = new ConcurrentHashMap<>();
+    private final SourceCodeStore sourceCodeStore;
     private final String genCodePackageName = "codegen";
     private final Function<Class<?>, String> implTypeNameFunc = DEFAULT_TYPE_NAME_BUILDER;
-    private final String streamEncoding = "UTF-8";
+    private final Charset streamEncoding = Charsets.UTF_8;
+    private final BeanStyle beanStyle = BeanStyle.CLASSIC;
 
     /**
      * @param beanClassLoader
      */
     CodegenIBeanFactory() {
-        ResourceFinder resourceFinder = this.createResourceFinder();
+        this.sourceCodeStore = new SourceCodeStore(this.streamEncoding);
         this.beanClassLoader = new JavaSourceClassLoader(this.getClass().getClassLoader(),
-                resourceFinder, this.streamEncoding);
-    }
-
-    private ResourceFinder createResourceFinder() {
-        return new ResourceFinder() {
-            @Override
-            public Resource findResource(String javaFilePath) {
-                Objects.requireNonNull(javaFilePath, "javaFilePath");
-                Preconditions.checkArgument(javaFilePath.endsWith(JAVA_FILE_NAME_EXTENSION),
-                        "illegal Java file path: %s", javaFilePath);
-                final int startIndex = javaFilePath.lastIndexOf('/') + 1;
-                final int endIndex = javaFilePath.length() - JAVA_FILE_NAME_EXTENSION.length();
-                final String resourceName = javaFilePath.substring(startIndex, endIndex);
-                return CodegenIBeanFactory.this.tempResourceMap.get(resourceName);
-            }
-        };
+                this.sourceCodeStore, this.streamEncoding.name());
     }
 
     /*
@@ -144,19 +125,17 @@ public class CodegenIBeanFactory implements IBeanFactory {
                 this.createImplementationClassName(beanInterfaceType);
         final String fullImplementationClassName =
                 this.genCodePackageName + "." + implementationClassName;
-        final String sourceFileName = implementationClassName + JAVA_FILE_NAME_EXTENSION;
         final String beanSourceCode =
                 this.createBeanSource(beanInterfaceType, implementationClassName);
-        final Resource sourceCodeResource =
-                this.createStringResource(sourceFileName, beanSourceCode);
-        this.tempResourceMap.put(implementationClassName, sourceCodeResource);
+        System.out.println(beanSourceCode);
+        this.sourceCodeStore.addCode(fullImplementationClassName, beanSourceCode);
         try {
             return this.beanClassLoader.loadClass(fullImplementationClassName);
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("failed creating implementation class '"
                     + fullImplementationClassName + "' for bean type " + beanInterfaceType, e);
         } finally {
-            this.tempResourceMap.remove(implementationClassName);
+            this.sourceCodeStore.removeCode(fullImplementationClassName);
         }
     }
 
@@ -166,34 +145,11 @@ public class CodegenIBeanFactory implements IBeanFactory {
      * @return
      */
     private String createBeanSource(Class<?> beanInterfaceType, String implementationTypeName) {
-        BeanStyle beanStyle = BeanStyle.CLASSIC;
         List<Class<?>> ignorableSuperInterfaces = Collections.emptyList();
         IBeanTypeMetaInfo<?> meta = new IBeanMetaInfoParser().parse(beanInterfaceType, beanStyle,
                 ignorableSuperInterfaces);
-        return new BeanCodeGenerator(this.genCodePackageName)
-                .generateSourceCode(implementationTypeName, meta);
-    }
-
-    private Resource createStringResource(final String fileName, final String code) {
-        return new Resource() {
-            private final long UNDETERMINED_MODIFICATION_TIME = 0;
-
-            @Override
-            public InputStream open() throws IOException {
-                return new ByteArrayInputStream(
-                        code.getBytes(CodegenIBeanFactory.this.streamEncoding));
-            }
-
-            @Override
-            public long lastModified() {
-                return UNDETERMINED_MODIFICATION_TIME;
-            }
-
-            @Override
-            public String getFileName() {
-                return fileName;
-            }
-        };
+        return new BeanCodeGenerator(this.genCodePackageName, implementationTypeName, meta)
+                .generateSourceCode();
     }
 
     public static interface SimpleBean {

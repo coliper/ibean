@@ -14,10 +14,12 @@
 
 package org.coliper.ibean.codegen;
 
-import javax.lang.model.element.Modifier;
+import java.lang.reflect.Method;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 
@@ -27,15 +29,8 @@ import com.squareup.javapoet.MethodSpec.Builder;
  */
 class HashCodeMethodCodeGenerator {
 
-    // TODO: move to ReflectionUtil
-    private static final String TO_STRING_METHOD_NAME;
-    static {
-        try {
-            TO_STRING_METHOD_NAME = Object.class.getMethod("hashCode").getName();
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static final Method HASH_CODE_METHOD =
+            MethodUtils.getMatchingAccessibleMethod(Object.class, "hashCode");
     private final BeanCodeElements codeElements;
     private final IBeanTypeMetaInfo<?> metaInfo;
 
@@ -49,10 +44,31 @@ class HashCodeMethodCodeGenerator {
     }
 
     MethodSpec createMethod() {
-        Builder methodBuilder = MethodSpec.methodBuilder(TO_STRING_METHOD_NAME)
-                .addModifiers(Modifier.PUBLIC).addAnnotation(Override.class);
-        methodBuilder.addStatement("return -23");
+        Builder methodBuilder = JavaPoetUtil.methodSpecBuilderFromOverride(HASH_CODE_METHOD);
+        final CodeBlock methodBlock;
+        if (this.metaInfo.customHashCodeMethod().isPresent()) {
+            methodBlock = createCustomHashCallBlock();
+        } else {
+            methodBlock = createHashCalculationBlock();
+        }
+        methodBuilder.addCode(methodBlock);
         return methodBuilder.build();
+    }
+
+    private CodeBlock createCustomHashCallBlock() {
+        CodeBlock block =
+                CodeBlock.of("return $L()", this.metaInfo.customHashCodeMethod().get().getName());
+        return block;
+    }
+
+    private CodeBlock createHashCalculationBlock() {
+        final StringBuilder statement = new StringBuilder("return Objects.hash(");
+        // Collection<String> fields = this.codeElements.fieldNames();
+        // for (String field : fields) {
+        // final String fieldAsObject = CommonCodeSnippets.
+        // statement.append()
+        // }
+        return null;
     }
 
 }
