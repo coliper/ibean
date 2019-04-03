@@ -179,6 +179,10 @@ public class CodegenIBeanFactory implements IBeanFactory {
         return this.toStringStyle;
     }
 
+    public ToStringStyle toStringStyle() {
+        return this.toStringStyle;
+    }
+
     public static interface SimpleBean {
         int getInt();
 
