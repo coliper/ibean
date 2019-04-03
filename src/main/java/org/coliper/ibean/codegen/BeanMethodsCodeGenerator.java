@@ -29,14 +29,21 @@ class BeanMethodsCodeGenerator {
 
     private final BeanCodeElements codeElements;
     private final IBeanTypeMetaInfo<?> metaInfo;
+    private final BeanStyleSpecificCodeGenerator beanStyleHandler;
+    private final ExtensionCodeGenerator[] extensionCodeGenerators;
 
     /**
      * @param codeElements
      * @param metaInfo
+     * @param extensionCodeGenerators
      */
-    BeanMethodsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
+    BeanMethodsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo,
+            BeanStyleSpecificCodeGenerator beanStyleHandler,
+            ExtensionCodeGenerator[] extensionCodeGenerators) {
         this.codeElements = codeElements;
         this.metaInfo = metaInfo;
+        this.beanStyleHandler = beanStyleHandler;
+        this.extensionCodeGenerators = extensionCodeGenerators;
     }
 
     List<MethodSpec> createMethods() {
@@ -44,8 +51,14 @@ class BeanMethodsCodeGenerator {
         methodSpecs.add(new HashCodeMethodCodeGenerator(codeElements, metaInfo).createMethod());
         methodSpecs.add(new EqualsMethodCodeGenerator(codeElements, metaInfo).createMethod());
         methodSpecs.add(new ToStringMethodCodeGenerator(codeElements).createMethod());
-        methodSpecs.addAll(new GetterMethodsCodeGenerator(codeElements, metaInfo).createMethods());
-        methodSpecs.addAll(new SetterMethodsCodeGenerator(codeElements, metaInfo).createMethods());
+        methodSpecs.addAll(new GetterMethodsCodeGenerator(codeElements, metaInfo, beanStyleHandler,
+                extensionCodeGenerators).createMethods());
+        methodSpecs.addAll(new SetterMethodsCodeGenerator(codeElements, metaInfo, beanStyleHandler,
+                extensionCodeGenerators).createMethods());
+        for (ExtensionCodeGenerator extensionCodeGenerator : this.extensionCodeGenerators) {
+            methodSpecs.addAll(extensionCodeGenerator.createInterfaceMethodImplementations(metaInfo,
+                    codeElements));
+        }
         return methodSpecs;
     }
 }

@@ -92,6 +92,9 @@ public class CodegenIBeanFactory implements IBeanFactory {
     private final Charset streamEncoding = Charsets.UTF_8;
     private final BeanStyle beanStyle = BeanStyle.CLASSIC;
     private final ToStringStyle toStringStyle = ToStringStyle.SHORT_PREFIX_STYLE;
+    private final BeanStyleSpecificCodeGenerator beanStyleHandler =
+            BeanStyleSpecificCodeGenerator.CLASSIC;
+    private final Map<Class<?>, ExtensionCodeGenerator> extensionCodeGeneratorMap;
 
     /**
      * @param beanClassLoader
@@ -100,6 +103,11 @@ public class CodegenIBeanFactory implements IBeanFactory {
         this.sourceCodeStore = new SourceCodeStore(this.streamEncoding);
         this.beanClassLoader = new JavaSourceClassLoader(this.getClass().getClassLoader(),
                 this.sourceCodeStore, this.streamEncoding.name());
+        this.extensionCodeGeneratorMap = Collections.emptyMap();
+    }
+
+    public static CodegenIBeanFactory builder() {
+        return new CodegenIBeanFactory();
     }
 
     /*
@@ -156,8 +164,15 @@ public class CodegenIBeanFactory implements IBeanFactory {
         List<Class<?>> ignorableSuperInterfaces = Collections.emptyList();
         IBeanTypeMetaInfo<?> meta = new IBeanMetaInfoParser().parse(beanInterfaceType, beanStyle,
                 ignorableSuperInterfaces);
-        return new BeanCodeGenerator(this.genCodePackageName, implementationTypeName, meta)
-                .generateSourceCode();
+        return new BeanCodeGenerator(this.genCodePackageName, implementationTypeName, meta,
+                this.beanStyleHandler, this.extensionCodeGeneratorsForType(beanInterfaceType))
+                        .generateSourceCode();
+    }
+
+    private ExtensionCodeGenerator[] extensionCodeGeneratorsForType(Class<?> beanInterfaceType) {
+        return this.extensionCodeGeneratorMap.entrySet().stream()
+                .filter(entry -> entry.getKey().isAssignableFrom(beanInterfaceType))
+                .map(entry -> entry.getValue()).toArray(ExtensionCodeGenerator[]::new);
     }
 
     public ToStringStyle toStringStyle() {
