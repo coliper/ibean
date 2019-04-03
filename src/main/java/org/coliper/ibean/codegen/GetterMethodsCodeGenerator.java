@@ -32,14 +32,22 @@ class GetterMethodsCodeGenerator {
 
     private final BeanCodeElements codeElements;
     private final IBeanTypeMetaInfo<?> metaInfo;
+    private final BeanStyleSpecificCodeGenerator beanStyleHandler;
+    private final ExtensionCodeGenerator[] extensionCodeGenerators;
 
     /**
      * @param codeElements
      * @param metaInfo
+     * @param beanStyleHandler
+     * @param extensionCodeGenerators
      */
-    GetterMethodsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
+    GetterMethodsCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo,
+            BeanStyleSpecificCodeGenerator beanStyleHandler,
+            ExtensionCodeGenerator[] extensionCodeGenerators) {
         this.codeElements = codeElements;
         this.metaInfo = metaInfo;
+        this.beanStyleHandler = beanStyleHandler;
+        this.extensionCodeGenerators = extensionCodeGenerators;
     }
 
     List<MethodSpec> createMethods() {
@@ -51,18 +59,18 @@ class GetterMethodsCodeGenerator {
         return methods;
     }
 
-    private static final String INIT_STATEMENT = "$T $L = $L";
-    private static final String RETURN_STATEMENT = "return $L";
-
     private void createGetterForField(final List<MethodSpec> methods,
             IBeanFieldMetaInfo fieldMeta) {
         final String fieldName = codeElements.fieldNameFromPropertyName(fieldMeta.fieldName());
         Builder methodBuilder =
                 JavaPoetUtil.methodSpecBuilderFromOverride(fieldMeta.getterMethod());
         CodeBlock.Builder codeBlockBuilder = CodeBlock.builder();
-        codeBlockBuilder.addStatement(INIT_STATEMENT, fieldMeta.fieldType(),
+        codeBlockBuilder.addStatement("$T $L = $L", fieldMeta.fieldType(),
                 CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME, fieldName);
-        codeBlockBuilder.addStatement(RETURN_STATEMENT, CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME);
+        for (ExtensionCodeGenerator extensionCodeGenerator : this.extensionCodeGenerators) {
+            codeBlockBuilder.add(extensionCodeGenerator.createGetterCodeBlock(fieldMeta));
+        }
+        codeBlockBuilder.add(this.beanStyleHandler.createGetterEndBlock(fieldMeta));
         methodBuilder.addCode(codeBlockBuilder.build());
         methods.add(methodBuilder.build());
     }
