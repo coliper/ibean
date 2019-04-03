@@ -43,7 +43,12 @@ class BeanFieldsCodeGenerator {
     }
 
     List<FieldSpec> createFields() {
-        List<FieldSpec> fieldSpecs = new ArrayList<>();
+        final List<FieldSpec> fieldSpecs = new ArrayList<>();
+
+        // private CodegenIBeanFactory factory
+        fieldSpecs.add(FieldSpec.builder(CodegenIBeanFactory.class,
+                CommonCodeSnippets.FACTORY_FIELD_NAME, Modifier.PUBLIC).build());
+
         List<IBeanFieldMetaInfo> properties = this.metaInfo.fieldMetaInfos();
         for (IBeanFieldMetaInfo fieldMeta : properties) {
             fieldSpecs.add(this.createFieldSpec(fieldMeta));

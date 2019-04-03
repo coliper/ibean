@@ -61,8 +61,8 @@ class GetterMethodsCodeGenerator {
                 JavaPoetUtil.methodSpecBuilderFromOverride(fieldMeta.getterMethod());
         CodeBlock.Builder codeBlockBuilder = CodeBlock.builder();
         codeBlockBuilder.addStatement(INIT_STATEMENT, fieldMeta.fieldType(),
-                CommonCodeSnippets.TEMP_VALUE_FIELD_NAME, fieldName);
-        codeBlockBuilder.addStatement(RETURN_STATEMENT, CommonCodeSnippets.TEMP_VALUE_FIELD_NAME);
+                CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME, fieldName);
+        codeBlockBuilder.addStatement(RETURN_STATEMENT, CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME);
         methodBuilder.addCode(codeBlockBuilder.build());
         methods.add(methodBuilder.build());
     }

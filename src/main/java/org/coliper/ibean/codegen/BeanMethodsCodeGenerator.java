@@ -42,6 +42,8 @@ class BeanMethodsCodeGenerator {
     List<MethodSpec> createMethods() {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(new HashCodeMethodCodeGenerator(codeElements, metaInfo).createMethod());
+        methodSpecs.add(new EqualsMethodCodeGenerator(codeElements, metaInfo).createMethod());
+        methodSpecs.add(new ToStringMethodCodeGenerator(codeElements).createMethod());
         methodSpecs.addAll(new GetterMethodsCodeGenerator(codeElements, metaInfo).createMethods());
         methodSpecs.addAll(new SetterMethodsCodeGenerator(codeElements, metaInfo).createMethods());
         return methodSpecs;

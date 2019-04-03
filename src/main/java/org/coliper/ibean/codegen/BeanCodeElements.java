@@ -16,6 +16,7 @@ package org.coliper.ibean.codegen;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.util.Collection;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -53,5 +54,9 @@ public class BeanCodeElements {
         final String ret = this.fieldNameMap.get(propertyName);
         checkArgument(ret != null, "invalid property name %s", propertyName);
         return ret;
+    }
+
+    public Collection<String> fieldNames() {
+        return this.fieldNameMap.values();
     }
 }
