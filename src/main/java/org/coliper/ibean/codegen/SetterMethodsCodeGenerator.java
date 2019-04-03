@@ -61,9 +61,9 @@ class SetterMethodsCodeGenerator {
                 CommonCodeSnippets.SETTER_ARGUMENT_NAME);
         CodeBlock.Builder codeBlockBuilder = CodeBlock.builder();
         codeBlockBuilder.addStatement(INIT_STATEMENT, fieldMeta.fieldType(),
-                CommonCodeSnippets.TEMP_VALUE_FIELD_NAME, CommonCodeSnippets.SETTER_ARGUMENT_NAME);
+                CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME, CommonCodeSnippets.SETTER_ARGUMENT_NAME);
         codeBlockBuilder.addStatement(RETURN_STATEMENT, fieldName,
-                CommonCodeSnippets.TEMP_VALUE_FIELD_NAME);
+                CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME);
         methodBuilder.addCode(codeBlockBuilder.build());
         methods.add(methodBuilder.build());
     }

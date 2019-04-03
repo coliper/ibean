@@ -17,9 +17,8 @@ package org.coliper.ibean.codegen;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.coliper.ibean.IBeanTypeMetaInfo;
 
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
@@ -29,50 +28,38 @@ import com.squareup.javapoet.MethodSpec.Builder;
  * @author alex@coliper.org
  *
  */
-class HashCodeMethodCodeGenerator {
+class ToStringMethodCodeGenerator {
 
-    private static final Method HASH_CODE_METHOD =
-            MethodUtils.getMatchingAccessibleMethod(Object.class, "hashCode");
+    private static final Method TO_STRING_METHOD =
+            MethodUtils.getMatchingAccessibleMethod(Object.class, "toString");
     private final BeanCodeElements codeElements;
-    private final IBeanTypeMetaInfo<?> metaInfo;
 
     /**
      * @param codeElements
      * @param metaInfo
      */
-    HashCodeMethodCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
+    ToStringMethodCodeGenerator(BeanCodeElements codeElements) {
         this.codeElements = codeElements;
-        this.metaInfo = metaInfo;
     }
 
     MethodSpec createMethod() {
-        Builder methodBuilder = JavaPoetUtil.methodSpecBuilderFromOverride(HASH_CODE_METHOD);
-        final CodeBlock methodBlock;
-        if (this.metaInfo.customHashCodeMethod().isPresent()) {
-            methodBlock = createCustomHashCallBlock();
-        } else {
-            methodBlock = createHashCalculationBlock();
-        }
-        methodBuilder.addCode(methodBlock);
+        Builder methodBuilder = JavaPoetUtil.methodSpecBuilderFromOverride(TO_STRING_METHOD);
+        final CodeBlock.Builder methodBlock = CodeBlock.builder();
+        this.addStatement(methodBlock);
+        methodBuilder.addCode(methodBlock.build());
         return methodBuilder.build();
     }
 
-    private CodeBlock createCustomHashCallBlock() {
-        CodeBlock block = CodeBlock.builder()
-                .addStatement("return $L()", this.metaInfo.customHashCodeMethod().get().getName())
-                .build();
-        return block;
-    }
-
-    private CodeBlock createHashCalculationBlock() {
-        final StringBuilder statement = new StringBuilder("return new $T()");
+    private void addStatement(CodeBlock.Builder builder) {
+        final StringBuilder statement =
+                new StringBuilder("return new $T(this, this.$L.toStringStyle())");
         Collection<String> fields = this.codeElements.fieldNames();
         for (String field : fields) {
             statement.append("$Z.append(").append(field).append(")");
         }
-        statement.append("$Z.toHashCode()");
-        return CodeBlock.builder().addStatement(statement.toString(), HashCodeBuilder.class)
-                .build();
+        statement.append("$Z.toString()");
+        builder.addStatement(statement.toString(), ToStringBuilder.class,
+                CommonCodeSnippets.FACTORY_FIELD_NAME);
     }
 
 }
