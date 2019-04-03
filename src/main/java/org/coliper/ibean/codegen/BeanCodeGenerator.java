@@ -48,15 +48,20 @@ class BeanCodeGenerator {
             };
 
     private final UnaryOperator<String> fieldNameBuilder = DEFAULT_FIELD_NAME_BUILDER;
-    final String packageName;
-    final String implementationTypeName;
-    final IBeanTypeMetaInfo<?> beanMeta;
+    private final String packageName;
+    private final String implementationTypeName;
+    private final IBeanTypeMetaInfo<?> beanMeta;
+    private final BeanStyleSpecificCodeGenerator beanStyleHandler;
+    private final ExtensionCodeGenerator[] extensionCodeGenerators;
 
     BeanCodeGenerator(String packageName, String implementationTypeName,
-            IBeanTypeMetaInfo<?> beanMeta) {
+            IBeanTypeMetaInfo<?> beanMeta, BeanStyleSpecificCodeGenerator beanStyleHandler,
+            ExtensionCodeGenerator[] extensionCodeGenerators) {
         this.packageName = packageName;
         this.implementationTypeName = implementationTypeName;
         this.beanMeta = beanMeta;
+        this.beanStyleHandler = beanStyleHandler;
+        this.extensionCodeGenerators = extensionCodeGenerators;
     }
 
     private static final String NL = System.lineSeparator();
@@ -120,8 +125,8 @@ class BeanCodeGenerator {
      * @param beanMeta
      */
     private void addMethods(Builder typeBuilder, BeanCodeElements codeElements) {
-        final List<MethodSpec> methodSpecs =
-                new BeanMethodsCodeGenerator(codeElements, beanMeta).createMethods();
+        final List<MethodSpec> methodSpecs = new BeanMethodsCodeGenerator(codeElements, beanMeta,
+                beanStyleHandler, extensionCodeGenerators).createMethods();
         for (MethodSpec methodSpec : methodSpecs) {
             typeBuilder.addMethod(methodSpec);
         }
