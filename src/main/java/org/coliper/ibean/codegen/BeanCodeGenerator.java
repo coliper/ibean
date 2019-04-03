@@ -100,7 +100,7 @@ class BeanCodeGenerator {
             fieldNameMap.put(fieldName, this.fieldNameBuilder.apply(fieldName));
         }
 
-        return new BeanCodeElements(this.packageName, this.implementationTypeName, fieldNameMap);
+        return new BeanCodeElements(this.implementationTypeName, this.packageName, fieldNameMap);
     }
 
     /**

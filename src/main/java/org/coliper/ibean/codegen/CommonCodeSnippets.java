@@ -21,5 +21,6 @@ package org.coliper.ibean.codegen;
 public abstract class CommonCodeSnippets {
 
     public static final String SETTER_ARGUMENT_NAME = "newValue";
-    public static final String TEMP_VALUE_FIELD_NAME = "value";
+    public static final String TEMP_VALUE_VARIABLE_NAME = "value";
+    public static final String FACTORY_FIELD_NAME = "factory";
 }

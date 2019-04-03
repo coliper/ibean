@@ -23,6 +23,8 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
+import org.apache.commons.lang3.builder.ToStringStyle;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.codehaus.janino.JavaSourceClassLoader;
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFactory;
@@ -89,6 +91,7 @@ public class CodegenIBeanFactory implements IBeanFactory {
     private final Function<Class<?>, String> implTypeNameFunc = DEFAULT_TYPE_NAME_BUILDER;
     private final Charset streamEncoding = Charsets.UTF_8;
     private final BeanStyle beanStyle = BeanStyle.CLASSIC;
+    private final ToStringStyle toStringStyle = ToStringStyle.SHORT_PREFIX_STYLE;
 
     /**
      * @param beanClassLoader
@@ -109,11 +112,16 @@ public class CodegenIBeanFactory implements IBeanFactory {
         Objects.requireNonNull(beanType, "beanType");
         Class<?> implementationType = this.implementationTypeMap.computeIfAbsent(beanType,
                 this::createIBeanImplementation);
+
+        T bean;
         try {
-            return beanType.cast(implementationType.newInstance());
+            bean = beanType.cast(implementationType.newInstance());
+            FieldUtils.writeDeclaredField(bean, CommonCodeSnippets.FACTORY_FIELD_NAME, this);
         } catch (InstantiationException | IllegalAccessException e) {
             throw new InvalidIBeanTypeException(beanType, e.toString());
         }
+
+        return bean;
     }
 
     private String createImplementationClassName(Class<?> beanType) {
@@ -152,6 +160,10 @@ public class CodegenIBeanFactory implements IBeanFactory {
                 .generateSourceCode();
     }
 
+    public ToStringStyle toStringStyle() {
+        return this.toStringStyle;
+    }
+
     public static interface SimpleBean {
         int getInt();
 
@@ -171,7 +183,13 @@ public class CodegenIBeanFactory implements IBeanFactory {
 
         CodegenIBeanFactory factory = new CodegenIBeanFactory();
         SimpleBean bean = factory.create(SimpleBean.class);
+        SimpleBean bean2 = factory.create(SimpleBean.class);
         bean.setInt(9238748);
         System.out.println("int: " + bean.getInt());
+        System.out.println("hash: " + bean.hashCode());
+        System.out.println("toString: " + bean.toString());
+        System.out.println("equals: " + bean.equals(bean2));
+        bean2.setInt(9238748);
+        System.out.println("equals: " + bean.equals(bean2));
     }
 }
