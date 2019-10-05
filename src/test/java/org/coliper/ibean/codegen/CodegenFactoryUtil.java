@@ -21,10 +21,10 @@ import org.coliper.ibean.IBeanFactory;
  * @author alex@coliper.org
  *
  */
-public interface CodegenFactoryUtil {
+public abstract class CodegenFactoryUtil {
 
     public static IBeanFactory factoryWithStyle(BeanStyle style) {
-        throw new RuntimeException("implementation missing");
+        return new CodegenIBeanFactory();
     }
 
 }
