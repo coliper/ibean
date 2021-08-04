@@ -3,11 +3,11 @@ def PROJECTNAME = "Coliper IBean"
 
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
-apply plugin: 'maven'
+//apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "org.coliper"
-version = '0.4.3'
+version = '0.4.5'
 description = 'creates all artifacts of the Coliper IBean project'
 sourceCompatibility = 1.8
 
@@ -24,16 +24,12 @@ dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     api 'org.apache.commons:commons-lang3:3.2'
     api 'com.squareup:javapoet:1.11.1'
-    api 'com.squareup:javapoet:1.9.0'
-    
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:21.0'
     implementation 'com.google.code.gson:gson:2.4'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.6.1'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
-    implementation 'org.codehaus.janino:janino:3.0.10'
-    
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
@@ -69,7 +65,7 @@ task createRootReadme(type: Copy) {
     from 'doc-src/intro.templ.md'
     into buildDir
     filter {l -> l.replace('$version$', version)
-                 .replace('$javadoc.url$', "https://www.javadoc.io/doc/org.coliper/ibean/${version}")
+                 .replace('$javadoc.url$', "https://static.javadoc.io/org.coliper/ibean/${version}")
                  .replace('$source.url$', "https://github.com/coliper/ibean/blob/v${version}")}
     rename '.*', 'README.md'
 }
@@ -106,7 +102,7 @@ signing {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Maven Central upload.
-
+/*
 uploadArchives {
   repositories {
     mavenDeployer {
@@ -151,3 +147,4 @@ uploadArchives {
     }
   }
 }
+*/
