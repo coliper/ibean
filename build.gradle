@@ -3,7 +3,7 @@ def PROJECTNAME = "Coliper IBean"
 
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
-apply plugin: 'maven'
+//apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "org.coliper"
@@ -102,7 +102,7 @@ signing {
 
 //////////////////////////////////////////////////////////////////////////////////////////
 // Maven Central upload.
-
+/*
 uploadArchives {
   repositories {
     mavenDeployer {
@@ -147,3 +147,4 @@ uploadArchives {
     }
   }
 }
+*/
