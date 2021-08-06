@@ -15,6 +15,7 @@
 package org.coliper.ibean.codegen;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
@@ -123,9 +124,9 @@ public class CodegenIBeanFactory implements IBeanFactory {
 
         T bean;
         try {
-            bean = beanType.cast(implementationType.newInstance());
+            bean = beanType.cast(implementationType.getDeclaredConstructor().newInstance());
             FieldUtils.writeDeclaredField(bean, CommonCodeSnippets.FACTORY_FIELD_NAME, this);
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new InvalidIBeanTypeException(beanType, e.toString());
         }
 
