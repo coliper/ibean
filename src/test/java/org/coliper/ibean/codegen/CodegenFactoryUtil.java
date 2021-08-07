@@ -24,7 +24,16 @@ import org.coliper.ibean.IBeanFactory;
 public abstract class CodegenFactoryUtil {
 
     public static IBeanFactory factoryWithStyle(BeanStyle style) {
-        return new CodegenIBeanFactory();
+        if (style == BeanStyle.CLASSIC) {
+            return CodegenIBeanFactory.builder().beanStyleClassic().build();
+        }
+        if (style == BeanStyle.CLASSIC_WITH_OPTIONAL) {
+            return CodegenIBeanFactory.builder().beanStyleClassicWithOptional().build();
+        }
+        if (style == BeanStyle.MODERN) {
+            return CodegenIBeanFactory.builder().beanStyleModern().build();
+        }
+        throw new RuntimeException("unexpected bean style " + style);
     }
 
 }
