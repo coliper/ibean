@@ -68,11 +68,11 @@ class SetterMethodsCodeGenerator {
         codeBlockBuilder.addStatement("$T $L = $L", fieldMeta.fieldType(),
                 CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME,
                 CommonCodeSnippets.SETTER_ARGUMENT_NAME);
+        for (ExtensionCodeGenerator extensionCodeGenerator : this.extensionCodeGenerators) {
+            codeBlockBuilder.add(extensionCodeGenerator.createSetterCodeBlock(fieldMeta));
+        }
         codeBlockBuilder.addStatement("$L = $L", fieldName,
                 CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME);
-        for (ExtensionCodeGenerator extensionCodeGenerator : this.extensionCodeGenerators) {
-            codeBlockBuilder.add(extensionCodeGenerator.createGetterCodeBlock(fieldMeta));
-        }
         codeBlockBuilder.add(this.beanStyleHandler.createSetterEndBlock(fieldMeta));
         methodBuilder.addCode(codeBlockBuilder.build());
         methods.add(methodBuilder.build());
