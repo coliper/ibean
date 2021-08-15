@@ -1,5 +1,7 @@
 package org.coliper.ibean.codegen;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.coliper.ibean.IBeanFieldMetaInfo;
@@ -10,10 +12,18 @@ import com.squareup.javapoet.MethodSpec;
 
 public interface ExtensionCodeGenerator {
 
-    List<MethodSpec> createInterfaceMethodImplementations(IBeanTypeMetaInfo<?> beanMeta,
-            BeanCodeElements beanCodeElements);
+    public static final CodeBlock EMPTY_BLOCK = CodeBlock.of("");
 
-    CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta);
+    default List<MethodSpec> createInterfaceMethodImplementations(IBeanTypeMetaInfo<?> beanMeta,
+            BeanCodeElements beanCodeElements) {
+        return Collections.emptyList();
+    }
 
-    CodeBlock createSetterCodeBlock(IBeanFieldMetaInfo fieldMeta);
+    default CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta) {
+        return EMPTY_BLOCK;
+    }
+
+    default CodeBlock createSetterCodeBlock(IBeanFieldMetaInfo fieldMeta) {
+        return EMPTY_BLOCK;
+    }
 }

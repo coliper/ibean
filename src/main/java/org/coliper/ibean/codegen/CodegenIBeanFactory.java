@@ -37,6 +37,7 @@ import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.InvalidIBeanTypeException;
+import org.coliper.ibean.codegen.extension.NullSafeExtensionCodeGenerator;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.proxy.ExtensionSupport;
@@ -154,31 +155,31 @@ public class CodegenIBeanFactory implements IBeanFactory {
          *            implementation
          * @return the {@code Builder} instance itself to enable chained calls
          */
-        public Builder toStringStyle(ToStringStyle toStringStyle) {
+        public Builder withToStringStyle(ToStringStyle toStringStyle) {
             requireNonNull(toStringStyle);
             this.toStringStyle = toStringStyle;
             return this;
         }
 
-        public Builder beanStyleClassic() {
+        public Builder withBeanStyleClassic() {
             this.beanStyle = BeanStyle.CLASSIC;
             this.beanStyleHandler = BeanStyleSpecificCodeGenerator.CLASSIC;
             return this;
         }
 
-        public Builder beanStyleModern() {
+        public Builder withBeanStyleModern() {
             this.beanStyle = BeanStyle.MODERN;
             this.beanStyleHandler = BeanStyleSpecificCodeGenerator.MODERN;
             return this;
         }
 
-        public Builder beanStyleClassicWithOptional() {
+        public Builder withBeanStyleClassicWithOptional() {
             this.beanStyle = BeanStyle.CLASSIC_WITH_OPTIONAL;
             this.beanStyleHandler = BeanStyleSpecificCodeGenerator.CLASSIC_WITH_OPTIONAL_SUPPORT;
             return this;
         }
 
-        public Builder beanStyleCustom(BeanStyle beanStyle,
+        public Builder withBeanStyleCustom(BeanStyle beanStyle,
                 BeanStyleSpecificCodeGenerator beanStyleHandler) {
             this.beanStyle = beanStyle;
             this.beanStyleHandler = beanStyleHandler;
@@ -248,7 +249,17 @@ public class CodegenIBeanFactory implements IBeanFactory {
          * @return the {@code Builder} instance itself to enable chained calls
          */
         public Builder withDefaultInterfaceSupport() {
+            this.withBuiltInInterfaceSupport(NullSafe.class);
             return this;
+        }
+
+        public Builder withBuiltInInterfaceSupport(Class<?> builtInExtensionInterface) {
+            if (builtInExtensionInterface == NullSafe.class) {
+                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
+                        new NullSafeExtensionCodeGenerator());
+            }
+            return this;
+
         }
 
         /**

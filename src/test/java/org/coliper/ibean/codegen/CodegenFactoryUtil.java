@@ -25,13 +25,16 @@ public abstract class CodegenFactoryUtil {
 
     public static IBeanFactory factoryWithStyle(BeanStyle style) {
         if (style == BeanStyle.CLASSIC) {
-            return CodegenIBeanFactory.builder().beanStyleClassic().build();
+            return CodegenIBeanFactory.builder().withBeanStyleClassic()
+                    .withDefaultInterfaceSupport().build();
         }
         if (style == BeanStyle.CLASSIC_WITH_OPTIONAL) {
-            return CodegenIBeanFactory.builder().beanStyleClassicWithOptional().build();
+            return CodegenIBeanFactory.builder().withBeanStyleClassicWithOptional()
+                    .withDefaultInterfaceSupport().build();
         }
         if (style == BeanStyle.MODERN) {
-            return CodegenIBeanFactory.builder().beanStyleModern().build();
+            return CodegenIBeanFactory.builder().withBeanStyleModern().withDefaultInterfaceSupport()
+                    .build();
         }
         throw new RuntimeException("unexpected bean style " + style);
     }
