@@ -16,7 +16,9 @@ package org.coliper.ibean.codegen;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -27,21 +29,32 @@ import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
-import com.google.common.base.Charsets;
-
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.codehaus.commons.compiler.util.resource.DirectoryResourceCreator;
+import org.codehaus.commons.compiler.util.resource.DirectoryResourceFinder;
+import org.codehaus.commons.compiler.util.resource.MapResourceCreator;
+import org.codehaus.commons.compiler.util.resource.MapResourceFinder;
+import org.codehaus.commons.compiler.util.resource.Resource;
+import org.codehaus.commons.compiler.util.resource.ResourceCreator;
+import org.codehaus.commons.compiler.util.resource.ResourceFinder;
 import org.codehaus.janino.JavaSourceClassLoader;
+import org.codehaus.janino.util.ClassFile;
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.InvalidIBeanTypeException;
+import org.coliper.ibean.codegen.extension.CloneableBeanExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.NullSafeExtensionCodeGenerator;
+import org.coliper.ibean.extension.CloneableBean;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
+
+import com.google.common.base.Charsets;
 
 /**
  * @author alex@coliper.org
@@ -49,7 +62,7 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
  */
 public class CodegenIBeanFactory implements IBeanFactory {
 
-    private final Charset INTERNAL_CODE_CHARSET = Charsets.UTF_8;
+    private static final Charset INTERNAL_CODE_CHARSET = Charsets.UTF_8;
 
     public static final String DEFAULT_PACKAGE_NAME =
             CodegenIBeanFactory.class.getPackage().getName() + ".generated";
@@ -138,6 +151,8 @@ public class CodegenIBeanFactory implements IBeanFactory {
         private ToStringStyle toStringStyle = ToStringStyle.SHORT_PREFIX_STYLE;
         private BeanStyleSpecificCodeGenerator beanStyleHandler =
                 BeanStyleSpecificCodeGenerator.CLASSIC;
+        private File sourceDirectory;
+        private Charset sourceCharset;
 
         private Builder() {
         }
@@ -183,6 +198,18 @@ public class CodegenIBeanFactory implements IBeanFactory {
                 BeanStyleSpecificCodeGenerator beanStyleHandler) {
             this.beanStyle = beanStyle;
             this.beanStyleHandler = beanStyleHandler;
+            return this;
+        }
+
+        public Builder withPersistentSourceCode(File sourceDirectory, Charset sourceCharset) {
+            this.sourceDirectory = sourceDirectory;
+            this.sourceCharset = ObjectUtils.defaultIfNull(sourceCharset, Charsets.UTF_8);
+            return this;
+        }
+
+        public Builder withInMemorySourceCode() {
+            this.sourceDirectory = null;
+            this.sourceCharset = null;
             return this;
         }
 
@@ -250,6 +277,7 @@ public class CodegenIBeanFactory implements IBeanFactory {
          */
         public Builder withDefaultInterfaceSupport() {
             this.withBuiltInInterfaceSupport(NullSafe.class);
+            this.withBuiltInInterfaceSupport(CloneableBean.class);
             return this;
         }
 
@@ -257,6 +285,10 @@ public class CodegenIBeanFactory implements IBeanFactory {
             if (builtInExtensionInterface == NullSafe.class) {
                 this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
                         new NullSafeExtensionCodeGenerator());
+            }
+            if (builtInExtensionInterface == CloneableBean.class) {
+                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
+                        new CloneableBeanExtensionCodeGenerator());
             }
             return this;
 
@@ -275,19 +307,21 @@ public class CodegenIBeanFactory implements IBeanFactory {
         public CodegenIBeanFactory build() {
             return new CodegenIBeanFactory(this.extensionCodeGeneratorMap, this.genCodePackageName,
                     this.implTypeNameFunc, this.beanStyle, this.toStringStyle,
-                    this.beanStyleHandler);
+                    this.beanStyleHandler, this.sourceDirectory, this.sourceCharset);
         }
     }
 
     private final ClassLoader beanClassLoader;
     private final Map<Class<?>, Class<?>> implementationTypeMap = new ConcurrentHashMap<>();
-    private final SourceCodeStore sourceCodeStore;
+    private final ResourceCreator resourceCreator;
     private final Map<Class<?>, ExtensionCodeGenerator> extensionCodeGeneratorMap;
     private final String genCodePackageName;
     private final Function<Class<?>, String> implTypeNameFunc;
     private final BeanStyle beanStyle;
     private final ToStringStyle toStringStyle;
     private final BeanStyleSpecificCodeGenerator beanStyleHandler;
+    private final Charset sourceCharset;
+    private final boolean removeCodeAfterCompilation;
 
     /**
      * @param beanClassLoader
@@ -295,10 +329,30 @@ public class CodegenIBeanFactory implements IBeanFactory {
     CodegenIBeanFactory(Map<Class<?>, ExtensionCodeGenerator> extensionCodeGeneratorMap,
             String genCodePackageName, Function<Class<?>, String> implTypeNameFunc,
             BeanStyle beanStyle, ToStringStyle toStringStyle,
-            BeanStyleSpecificCodeGenerator beanStyleHandler) {
-        this.sourceCodeStore = new SourceCodeStore(INTERNAL_CODE_CHARSET);
+            BeanStyleSpecificCodeGenerator beanStyleHandler, File sourceDirectory,
+            Charset sourceCharset) {
+
+        final ResourceFinder resourceFinder;
+        if (sourceDirectory != null) {
+            resourceFinder = new DirectoryResourceFinder(sourceDirectory);
+            this.resourceCreator = new DirectoryResourceCreator(sourceDirectory);
+            this.sourceCharset = sourceCharset;
+            this.removeCodeAfterCompilation = false;
+        } else {
+            final MapResourceCreator mapResourceCreator = new MapResourceCreator();
+            this.resourceCreator = mapResourceCreator;
+            resourceFinder = new ResourceFinder() {
+                @Override
+                public Resource findResource(String resourceName) {
+                    return new MapResourceFinder(mapResourceCreator.getMap())
+                            .findResource(resourceName);
+                }
+            };
+            this.sourceCharset = INTERNAL_CODE_CHARSET;
+            this.removeCodeAfterCompilation = true;
+        }
         this.beanClassLoader = new JavaSourceClassLoader(this.getClass().getClassLoader(),
-                this.sourceCodeStore, INTERNAL_CODE_CHARSET.name());
+                resourceFinder, this.sourceCharset.name());
         this.extensionCodeGeneratorMap = extensionCodeGeneratorMap;
         this.genCodePackageName = genCodePackageName;
         this.implTypeNameFunc = implTypeNameFunc;
@@ -341,15 +395,30 @@ public class CodegenIBeanFactory implements IBeanFactory {
                 this.genCodePackageName + "." + implementationClassName;
         final String beanSourceCode =
                 this.createBeanSource(beanInterfaceType, implementationClassName);
+        final String resourceName = ClassFile.getSourceResourceName(fullImplementationClassName);
         System.out.println(beanSourceCode);
-        this.sourceCodeStore.addCode(fullImplementationClassName, beanSourceCode);
+        // this.resourceCreator.
+        this.addCode(resourceName, beanSourceCode);
         try {
             return this.beanClassLoader.loadClass(fullImplementationClassName);
         } catch (ClassNotFoundException e) {
             throw new IllegalStateException("failed creating implementation class '"
                     + fullImplementationClassName + "' for bean type " + beanInterfaceType, e);
         } finally {
-            this.sourceCodeStore.removeCode(fullImplementationClassName);
+            if (this.removeCodeAfterCompilation) {
+                this.resourceCreator.deleteResource(resourceName);
+            }
+        }
+    }
+
+    private void addCode(String fullImplementationClassName, String beanSourceCode) {
+        try {
+            try (OutputStream os =
+                    this.resourceCreator.createResource(fullImplementationClassName)) {
+                os.write(beanSourceCode.getBytes(this.sourceCharset));
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException("unable to create bean sources", e);
         }
     }
 
@@ -378,10 +447,14 @@ public class CodegenIBeanFactory implements IBeanFactory {
         return this.toStringStyle;
     }
 
-    public static interface SimpleBean {
+    public static interface SimpleBean extends CloneableBean<SimpleBean> {
         int getInt();
 
         void setInt(int i);
+
+        String getStr();
+
+        void setStr(String s);
     }
 
     public static void main(String[] args) throws IOException {
@@ -395,7 +468,10 @@ public class CodegenIBeanFactory implements IBeanFactory {
         // DEFAULT_TYPE_NAME_BUILDER, DEFAULT_FIELD_NAME_BUILDER);
         // generator.createBeanSourceFile(beanMeta);
 
-        CodegenIBeanFactory factory = CodegenIBeanFactory.builder().build();
+        File srcDir = new File("src/test/java");
+        // srcDir.mkdirs();
+        CodegenIBeanFactory factory = CodegenIBeanFactory.builder().withDefaultInterfaceSupport()
+                .withPersistentSourceCode(srcDir, null).build();
         SimpleBean bean = factory.create(SimpleBean.class);
         SimpleBean bean2 = factory.create(SimpleBean.class);
         bean.setInt(9238748);
