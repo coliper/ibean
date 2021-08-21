@@ -2,6 +2,7 @@
 
 *IBean* is a Java library that allows to declare [Java beans][_JavaBeansSpec] - or 
 data transfer objects ([DTOs][_DTO]) and [value objects][_ValueObject] in general - as interfaces.
+You can see it as an alternative to [Lombok][_LombokFramework].
 
 For example a JavaBean like
 

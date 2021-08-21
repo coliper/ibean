@@ -15,7 +15,9 @@ gradle.properties
 .settings/
 .classpath
 .project
+.workspace
 
 # Virtual Studio Code
 .vscode
 /bin/
+.code-workspace
