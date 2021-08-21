@@ -19,6 +19,7 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.util.RecursionCycleDetector;
@@ -116,6 +118,24 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     }
 
     private Object handleDefaultMethod(Object proxy, Method method, Object[] args)
+            throws Throwable {
+        if (SystemUtils.IS_JAVA_1_8) {
+            return this.handleDefaultMethodJava8(proxy, method, args);
+        } else {
+            return this.handleDefaultMethodJava9(proxy, method, args);
+        }
+    }
+
+    private Object handleDefaultMethodJava9(Object proxy, Method method, Object[] args)
+            throws Throwable {
+        return MethodHandles.lookup()
+                .findSpecial(method.getDeclaringClass(), method.getName(),
+                        MethodType.methodType(method.getReturnType(), method.getParameterTypes()),
+                        method.getDeclaringClass())
+                .bindTo(proxy).invokeWithArguments(args);
+    }
+
+    private Object handleDefaultMethodJava8(Object proxy, Method method, Object[] args)
             throws Throwable {
         final Class<?> declaringClass = method.getDeclaringClass();
         Constructor<MethodHandles.Lookup> constructor =
