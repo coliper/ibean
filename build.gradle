@@ -98,7 +98,7 @@ signing {
     sign configurations.archives
 }
 
-/*
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // Maven Central upload.
 
@@ -145,4 +145,4 @@ uploadArchives {
       }
     }
   }
-}*/
+}
