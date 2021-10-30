@@ -2,6 +2,7 @@
 
 *IBean* is a Java library that allows to declare [Java beans][_JavaBeansSpec] - or 
 data transfer objects ([DTOs][_DTO]) and [value objects][_ValueObject] in general - as interfaces.
+You can see it as an alternative to [Lombok][_LombokFramework].
 
 For example a JavaBean like
 
@@ -71,7 +72,7 @@ Gives you a good first overview.
 Add following dependency to your *build.gradle*:
 
 ```groovy
-    implementation 'org.coliper:ibean:0.4.5'
+    implementation 'org.coliper:ibean:0.4.6'
 ```
 
 #### Maven
@@ -82,7 +83,7 @@ Add following dependency to your *pom.xml*
     <dependency>
       <groupId>org.coliper</groupId>
       <artifactId>ibean</artifactId>
-      <version>0.4.5</version>
+      <version>0.4.6</version>
     </dependency>
 ```
 

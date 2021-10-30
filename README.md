@@ -2,6 +2,7 @@
 
 *IBean* is a Java library that allows to declare [Java beans][_JavaBeansSpec] - or 
 data transfer objects ([DTOs][_DTO]) and [value objects][_ValueObject] in general - as interfaces.
+You can see it as an alternative to [Lombok][_LombokFramework].
 
 For example a JavaBean like
 
@@ -71,7 +72,7 @@ Gives you a good first overview.
 Add following dependency to your *build.gradle*:
 
 ```groovy
-    implementation 'org.coliper:ibean:0.4.5'
+    implementation 'org.coliper:ibean:0.4.6'
 ```
 
 #### Maven
@@ -82,7 +83,7 @@ Add following dependency to your *pom.xml*
     <dependency>
       <groupId>org.coliper</groupId>
       <artifactId>ibean</artifactId>
-      <version>0.4.5</version>
+      <version>0.4.6</version>
     </dependency>
 ```
 
@@ -323,17 +324,17 @@ hood by default. In that case you only have to add the
 [_GuavaMaven]: https://mvnrepository.com/artifact/com.google.guava/guava
 [_BlogBeanCodeGeneration]: http://blog.joda.org/2016/09/code-generating-beans.html
 [_DzoneLessBetterCode]: https://www.javacodegeeks.com/2018/03/lombok-autovalue-and-immutables-or-how-to-write-less-and-better-code-returns.html
-[_GsonSerializerDeserializerForIBeans]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/extension/GsonSerializerDeserializerForIBeans.html
-[_Jackson2ModuleForIBeans]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/extension/Jackson2ModuleForIBeans.html
-[_GsonSupportApi]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/extension/GsonSupport.html
-[_Jackson2SupportApi]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/extension/Jackson2Support.html
-[_ModifcationAwareAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/extension/ModificationAware.html
-[_NullSafeAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/extension/NullSafe.html
-[_PkgExtensionAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/extension/package-summary.html
-[_PkgIbeanAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/package-summary.html
-[_ExtensionHandlerAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/proxy/ExtensionHandler.html
-[_BeanStyleApi]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/BeanStyle.html
-[_ClassicBeanStyleApi]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/beanstyle/ClassicBeanStyle.html
-[_ModernBeanStyleApi]: https://static.javadoc.io/org.coliper/ibean/0.4.5/org/coliper/ibean/beanstyle/ModernBeanStyle.html
-[_BeanStyleSample]: https://github.com/coliper/ibean/blob/v0.4.5/src/test/java/org/coliper/ibean/samples/ModernBeanStyleSample.java
-[_GsonSample]: https://github.com/coliper/ibean/blob/v0.4.5/src/test/java/org/coliper/ibean/samples/GsonSample.java
+[_GsonSerializerDeserializerForIBeans]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/extension/GsonSerializerDeserializerForIBeans.html
+[_Jackson2ModuleForIBeans]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/extension/Jackson2ModuleForIBeans.html
+[_GsonSupportApi]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/extension/GsonSupport.html
+[_Jackson2SupportApi]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/extension/Jackson2Support.html
+[_ModifcationAwareAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/extension/ModificationAware.html
+[_NullSafeAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/extension/NullSafe.html
+[_PkgExtensionAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/extension/package-summary.html
+[_PkgIbeanAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/package-summary.html
+[_ExtensionHandlerAPI]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/proxy/ExtensionHandler.html
+[_BeanStyleApi]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/BeanStyle.html
+[_ClassicBeanStyleApi]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/beanstyle/ClassicBeanStyle.html
+[_ModernBeanStyleApi]: https://static.javadoc.io/org.coliper/ibean/0.4.6/org/coliper/ibean/beanstyle/ModernBeanStyle.html
+[_BeanStyleSample]: https://github.com/coliper/ibean/blob/v0.4.6/src/test/java/org/coliper/ibean/samples/ModernBeanStyleSample.java
+[_GsonSample]: https://github.com/coliper/ibean/blob/v0.4.6/src/test/java/org/coliper/ibean/samples/GsonSample.java
