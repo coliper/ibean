@@ -3,6 +3,7 @@ def PROJECTNAME = "Coliper IBean"
 
 // Apply the java-library plugin to add support for Java Library
 apply plugin: 'java-library'
+apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = "org.coliper"
@@ -21,7 +22,7 @@ repositories {
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-lang3:3.2'
+    api 'org.apache.commons:commons-lang3:3.4'
     api 'com.squareup:javapoet:1.11.1'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
@@ -42,6 +43,7 @@ dependencies {
 
 javadoc {
     title = PROJECTNAME + ' API ' + version 
+    options.source = "8"
     options.stylesheetFile file('doc-src/javadoc-stylesheet.css', PathValidation.FILE)
     options.links "https://commons.apache.org/proper/commons-lang/apidocs/",
                   "https://docs.oracle.com/javase/8/docs/api/",
