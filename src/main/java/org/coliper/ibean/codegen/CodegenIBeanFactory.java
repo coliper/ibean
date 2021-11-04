@@ -447,7 +447,7 @@ public class CodegenIBeanFactory implements IBeanFactory {
         return this.toStringStyle;
     }
 
-    public static interface SimpleBean {
+    public static interface SimpleBean extends CloneableBean<SimpleBean> {
         int getInt();
 
         void setInt(int i);
