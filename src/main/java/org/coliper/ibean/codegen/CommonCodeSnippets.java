@@ -23,4 +23,5 @@ public abstract class CommonCodeSnippets {
     public static final String SETTER_ARGUMENT_NAME = "newValue";
     public static final String TEMP_VALUE_VARIABLE_NAME = "value";
     public static final String FACTORY_FIELD_NAME = "factory";
+    public static final String EXTENSION_SPECIFIC_FIELD_NAME_PREFIX = "$_";
 }

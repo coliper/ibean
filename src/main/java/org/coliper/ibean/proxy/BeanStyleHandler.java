@@ -64,11 +64,7 @@ public interface BeanStyleHandler {
                 Object returnValueWithWrongType) {
             checkArgument(Optional.class == expectedReturnType,
                     "unexpected return type %s for getter", expectedReturnType);
-            if (returnValueWithWrongType != null) {
-                return Optional.of(returnValueWithWrongType);
-            } else {
-                return Optional.empty();
-            }
+            return Optional.ofNullable(returnValueWithWrongType);
         }
 
     };
@@ -83,11 +79,7 @@ public interface BeanStyleHandler {
                 Object returnValueWithWrongType) {
             checkArgument(Optional.class == expectedReturnType,
                     "unexpected return type %s for getter", expectedReturnType);
-            if (returnValueWithWrongType != null) {
-                return Optional.of(returnValueWithWrongType);
-            } else {
-                return Optional.empty();
-            }
+            return Optional.ofNullable(returnValueWithWrongType);
         }
 
         @Override

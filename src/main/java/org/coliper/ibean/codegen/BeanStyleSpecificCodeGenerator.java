@@ -56,19 +56,20 @@ public interface BeanStyleSpecificCodeGenerator {
      * <code>BeanStyleHandler</code> for
      * {@link ClassicBeanStyleWithOptionalSupport}.
      */
-    BeanStyleSpecificCodeGenerator CLASSIC_WITH_OPTIONAL_SUPPORT = new BeanStyleSpecificCodeGenerator() {
+    BeanStyleSpecificCodeGenerator CLASSIC_WITH_OPTIONAL_SUPPORT =
+            new BeanStyleSpecificCodeGenerator() {
 
-        @Override
-        public CodeBlock createGetterEndBlock(IBeanFieldMetaInfo fieldMeta) {
-            if (fieldMeta.hasOptionalSupport()) {
-                return CodeBlock.builder().addStatement("return Optional.of($L)",
-                        CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME).build();
-            } else {
-                return BeanStyleSpecificCodeGenerator.super.createGetterEndBlock(fieldMeta);
-            }
-        }
+                @Override
+                public CodeBlock createGetterEndBlock(IBeanFieldMetaInfo fieldMeta) {
+                    if (fieldMeta.hasOptionalSupport()) {
+                        return CodeBlock.builder().addStatement("return Optional.ofNullable($L)",
+                                CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME).build();
+                    } else {
+                        return BeanStyleSpecificCodeGenerator.super.createGetterEndBlock(fieldMeta);
+                    }
+                }
 
-    };
+            };
 
     /**
      * <code>BeanStyleHandler</code> for {@link ModernBeanStyle}.

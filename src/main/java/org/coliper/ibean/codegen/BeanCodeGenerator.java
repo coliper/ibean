@@ -16,6 +16,7 @@ package org.coliper.ibean.codegen;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -113,7 +114,11 @@ class BeanCodeGenerator {
      */
     private void addFields(Builder typeBuilder, BeanCodeElements codeElements) {
         BeanFieldsCodeGenerator fieldGen = new BeanFieldsCodeGenerator(codeElements, beanMeta);
-        List<FieldSpec> fieldSpecs = fieldGen.createFields();
+        final List<FieldSpec> fieldSpecs = new ArrayList<>();
+        fieldSpecs.addAll(fieldGen.createFields());
+        for (ExtensionCodeGenerator extCodeGen : this.extensionCodeGenerators) {
+            fieldSpecs.addAll(extCodeGen.createExtensionSpecificFields(this.beanMeta));
+        }
         for (FieldSpec fieldSpec : fieldSpecs) {
             typeBuilder.addField(fieldSpec);
         }

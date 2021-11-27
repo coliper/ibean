@@ -45,6 +45,7 @@ public class JavaPoetUtil {
         for (Class<?> paramType : paramTypes) {
             builder.addParameter(paramType, argNames[i++]);
         }
+        builder.returns(method.getReturnType());
         return builder;
     }
 

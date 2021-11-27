@@ -47,8 +47,10 @@ import org.coliper.ibean.IBeanMetaInfoParser;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.InvalidIBeanTypeException;
 import org.coliper.ibean.codegen.extension.CloneableBeanExtensionCodeGenerator;
+import org.coliper.ibean.codegen.extension.CompletableExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.NullSafeExtensionCodeGenerator;
 import org.coliper.ibean.extension.CloneableBean;
+import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.proxy.ExtensionSupport;
@@ -278,6 +280,7 @@ public class CodegenIBeanFactory implements IBeanFactory {
         public Builder withDefaultInterfaceSupport() {
             this.withBuiltInInterfaceSupport(NullSafe.class);
             this.withBuiltInInterfaceSupport(CloneableBean.class);
+            this.withBuiltInInterfaceSupport(Completable.class);
             return this;
         }
 
@@ -289,6 +292,10 @@ public class CodegenIBeanFactory implements IBeanFactory {
             if (builtInExtensionInterface == CloneableBean.class) {
                 this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
                         new CloneableBeanExtensionCodeGenerator());
+            }
+            if (builtInExtensionInterface == Completable.class) {
+                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
+                        new CompletableExtensionCodeGenerator());
             }
             return this;
 
