@@ -22,10 +22,13 @@ import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -48,11 +51,13 @@ import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.InvalidIBeanTypeException;
 import org.coliper.ibean.codegen.extension.CloneableBeanExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.CompletableExtensionCodeGenerator;
+import org.coliper.ibean.codegen.extension.FreezableExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.NullSafeExtensionCodeGenerator;
 import org.coliper.ibean.extension.CloneableBean;
 import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.NullSafe;
+import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
@@ -109,6 +114,16 @@ public class CodegenIBeanFactory implements IBeanFactory {
                     return generatedTypeName.toString();
                 }
             };
+
+    private static Optional<Class<?>> findSubOrSuperTypeInCollection(Class<?> type,
+            Collection<Class<?>> typeCollection) {
+        for (Class<?> typeElement : typeCollection) {
+            if (typeElement.isAssignableFrom(type) || type.isAssignableFrom(typeElement)) {
+                return Optional.of(typeElement);
+            }
+        }
+        return Optional.empty();
+    }
 
     /**
      * Creates a {@link Builder} for setting up a new {@link ProxyIBeanFactory}.
@@ -281,6 +296,8 @@ public class CodegenIBeanFactory implements IBeanFactory {
             this.withBuiltInInterfaceSupport(NullSafe.class);
             this.withBuiltInInterfaceSupport(CloneableBean.class);
             this.withBuiltInInterfaceSupport(Completable.class);
+            this.withBuiltInInterfaceSupport(Freezable.class);
+            this.withBuiltInInterfaceSupport(TempFreezable.class);
             return this;
         }
 
@@ -296,6 +313,14 @@ public class CodegenIBeanFactory implements IBeanFactory {
             if (builtInExtensionInterface == Completable.class) {
                 this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
                         new CompletableExtensionCodeGenerator());
+            }
+            if (builtInExtensionInterface == Freezable.class) {
+                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
+                        new FreezableExtensionCodeGenerator());
+            }
+            if (builtInExtensionInterface == TempFreezable.class) {
+                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
+                        new FreezableExtensionCodeGenerator());
             }
             return this;
 
@@ -445,48 +470,33 @@ public class CodegenIBeanFactory implements IBeanFactory {
     }
 
     private ExtensionCodeGenerator[] extensionCodeGeneratorsForType(Class<?> beanInterfaceType) {
-        return this.extensionCodeGeneratorMap.entrySet().stream()
-                .filter(entry -> entry.getKey().isAssignableFrom(beanInterfaceType))
-                .map(entry -> entry.getValue()).toArray(ExtensionCodeGenerator[]::new);
+        final Map<Class<?>, ExtensionCodeGenerator> selected = new HashMap<>();
+        for (Entry<Class<?>, ExtensionCodeGenerator> codeGen : this.extensionCodeGeneratorMap
+                .entrySet()) {
+            final Class<?> extType = codeGen.getKey();
+            if (extType.isAssignableFrom(beanInterfaceType)) {
+                // We need to check if there are sub- or super-interfaces
+                // already in "selected". We always want to keep the sub-type
+                // and remove the super-type.
+                final Optional<Class<?>> subOrSuper =
+                        findSubOrSuperTypeInCollection(extType, selected.keySet());
+                if (subOrSuper.isPresent()) {
+                    // sub- or super-interface found!
+                    if (extType.isAssignableFrom(subOrSuper.get())) {
+                        // selected already contains sub-interface, we do not
+                        // need "extType"
+                        continue;
+                    }
+                    // remove super-interface from "selected"
+                    selected.remove(subOrSuper.get());
+                }
+                selected.put(extType, codeGen.getValue());
+            }
+        }
+        return selected.values().toArray(new ExtensionCodeGenerator[selected.size()]);
     }
 
     public ToStringStyle toStringStyle() {
         return this.toStringStyle;
-    }
-
-    public static interface SimpleBean extends CloneableBean<SimpleBean> {
-        int getInt();
-
-        void setInt(int i);
-
-        String getStr();
-
-        void setStr(String s);
-    }
-
-    public static void main(String[] args) throws IOException {
-        // IBeanTypeMetaInfo<?> beanMeta = new
-        // IBeanMetaInfoParser().parse(SimpleBean.class,
-        // BeanStyle.CLASSIC, Collections.emptyList());
-        // File sourceFolder =
-        // Files.createTempDirectory(DEFAULT_PACKAGE_NAME).toFile();
-        // BeanCodeGenerator generator = new BeanCodeGenerator(sourceFolder,
-        // DEFAULT_PACKAGE_NAME,
-        // DEFAULT_TYPE_NAME_BUILDER, DEFAULT_FIELD_NAME_BUILDER);
-        // generator.createBeanSourceFile(beanMeta);
-
-        File srcDir = new File("src/test/java");
-        // srcDir.mkdirs();
-        CodegenIBeanFactory factory = CodegenIBeanFactory.builder().withDefaultInterfaceSupport()
-                .withPersistentSourceCode(srcDir, null).build();
-        SimpleBean bean = factory.create(SimpleBean.class);
-        SimpleBean bean2 = factory.create(SimpleBean.class);
-        bean.setInt(9238748);
-        System.out.println("int: " + bean.getInt());
-        System.out.println("hash: " + bean.hashCode());
-        System.out.println("toString: " + bean.toString());
-        System.out.println("equals: " + bean.equals(bean2));
-        bean2.setInt(9238748);
-        System.out.println("equals: " + bean.equals(bean2));
     }
 }
