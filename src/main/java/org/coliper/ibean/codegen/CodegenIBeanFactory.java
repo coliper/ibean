@@ -14,7 +14,8 @@
 
 package org.coliper.ibean.codegen;
 
-import static java.util.Objects.requireNonNull;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -52,10 +53,12 @@ import org.coliper.ibean.InvalidIBeanTypeException;
 import org.coliper.ibean.codegen.extension.CloneableBeanExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.CompletableExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.FreezableExtensionCodeGenerator;
+import org.coliper.ibean.codegen.extension.GsonSupportExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.NullSafeExtensionCodeGenerator;
 import org.coliper.ibean.extension.CloneableBean;
 import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.Freezable;
+import org.coliper.ibean.extension.GsonSupport;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ExtensionSupport;
@@ -73,6 +76,16 @@ public class CodegenIBeanFactory implements IBeanFactory {
 
     public static final String DEFAULT_PACKAGE_NAME =
             CodegenIBeanFactory.class.getPackage().getName() + ".generated";
+
+    //@formatter:off     
+    private static Map<Class<?>, ExtensionCodeGenerator> DEFAULT_EXT_GENERATOR_MAP = Map.of(
+            NullSafe.class, new NullSafeExtensionCodeGenerator(),
+            CloneableBean.class, new CloneableBeanExtensionCodeGenerator(),
+            Completable.class, new CompletableExtensionCodeGenerator(),
+            Freezable.class, new FreezableExtensionCodeGenerator(),
+            TempFreezable.class, new FreezableExtensionCodeGenerator(),
+            GsonSupport.class, new GsonSupportExtensionCodeGenerator());
+    //@formatter:on     
 
     /*
      * Converts a given bean type to a class name used for the generated
@@ -188,7 +201,7 @@ public class CodegenIBeanFactory implements IBeanFactory {
          * @return the {@code Builder} instance itself to enable chained calls
          */
         public Builder withToStringStyle(ToStringStyle toStringStyle) {
-            requireNonNull(toStringStyle);
+            checkNotNull(toStringStyle);
             this.toStringStyle = toStringStyle;
             return this;
         }
@@ -273,8 +286,8 @@ public class CodegenIBeanFactory implements IBeanFactory {
         //@formatter:on     
         /*
          * public Builder withInterfaceSupport(ExtensionSupport support) {
-         * requireNonNull(support, "support");
-         * this.interfaceSupport.add(support); return this; }
+         * checkNotNull(support, "support"); this.interfaceSupport.add(support);
+         * return this; }
          */
 
         /**
@@ -293,37 +306,22 @@ public class CodegenIBeanFactory implements IBeanFactory {
          * @return the {@code Builder} instance itself to enable chained calls
          */
         public Builder withDefaultInterfaceSupport() {
-            this.withBuiltInInterfaceSupport(NullSafe.class);
-            this.withBuiltInInterfaceSupport(CloneableBean.class);
-            this.withBuiltInInterfaceSupport(Completable.class);
-            this.withBuiltInInterfaceSupport(Freezable.class);
-            this.withBuiltInInterfaceSupport(TempFreezable.class);
+            Set<Class<?>> x = DEFAULT_EXT_GENERATOR_MAP.keySet();
+            for (Class<?> defaultExtIntf : x) {
+                this.withBuiltInInterfaceSupport(defaultExtIntf);
+            }
             return this;
         }
 
         public Builder withBuiltInInterfaceSupport(Class<?> builtInExtensionInterface) {
-            if (builtInExtensionInterface == NullSafe.class) {
-                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
-                        new NullSafeExtensionCodeGenerator());
-            }
-            if (builtInExtensionInterface == CloneableBean.class) {
-                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
-                        new CloneableBeanExtensionCodeGenerator());
-            }
-            if (builtInExtensionInterface == Completable.class) {
-                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
-                        new CompletableExtensionCodeGenerator());
-            }
-            if (builtInExtensionInterface == Freezable.class) {
-                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
-                        new FreezableExtensionCodeGenerator());
-            }
-            if (builtInExtensionInterface == TempFreezable.class) {
-                this.extensionCodeGeneratorMap.put(builtInExtensionInterface,
-                        new FreezableExtensionCodeGenerator());
-            }
-            return this;
+            checkNotNull(builtInExtensionInterface, "builtInExtensionInterface");
+            ExtensionCodeGenerator codeGenerator =
+                    DEFAULT_EXT_GENERATOR_MAP.get(builtInExtensionInterface);
+            checkArgument(codeGenerator != null, "%s is not a built in extension interface",
+                    builtInExtensionInterface.getName());
 
+            this.extensionCodeGeneratorMap.put(builtInExtensionInterface, codeGenerator);
+            return this;
         }
 
         /**
@@ -400,7 +398,7 @@ public class CodegenIBeanFactory implements IBeanFactory {
      */
     @Override
     public <T> T create(Class<T> beanType) throws InvalidIBeanTypeException {
-        Objects.requireNonNull(beanType, "beanType");
+        checkNotNull(beanType, "beanType");
         Class<?> implementationType = this.implementationTypeMap.computeIfAbsent(beanType,
                 this::createIBeanImplementation);
 

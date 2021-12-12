@@ -53,6 +53,7 @@ public class CompletableExtensionCodeGenerator implements ExtensionCodeGenerator
     private MethodSpec createAssertCompleteImplementation(IBeanTypeMetaInfo<?> beanMeta) {
         MethodSpec.Builder methodSpec =
                 JavaPoetUtil.methodSpecBuilderFromOverride(ASSERT_COMPLETE_METHOD);
+        methodSpec.returns(beanMeta.beanType());
         //@formatter:off
         methodSpec
             .beginControlFlow("if (!this.isComplete())")

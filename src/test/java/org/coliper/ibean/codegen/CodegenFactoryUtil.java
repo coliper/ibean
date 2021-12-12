@@ -42,7 +42,7 @@ public abstract class CodegenFactoryUtil {
         }
         if (style == BeanStyle.MODERN) {
             return CodegenIBeanFactory.builder().withBeanStyleModern().withDefaultInterfaceSupport()
-                    .build();
+                    .withPersistentSourceCode(SOURCE_DIRECTORY, Charsets.UTF_8).build();
         }
         throw new RuntimeException("unexpected bean style " + style);
     }

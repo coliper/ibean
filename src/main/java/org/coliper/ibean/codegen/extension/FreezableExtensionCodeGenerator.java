@@ -80,6 +80,7 @@ public class FreezableExtensionCodeGenerator implements ExtensionCodeGenerator {
     private MethodSpec createFreezeImplementation(IBeanTypeMetaInfo<?> beanMeta) {
         //@formatter:off
         return JavaPoetUtil.methodSpecBuilderFromOverride(FREEZE_METHOD)
+                .returns(beanMeta.beanType())
                 .addStatement("$N = true", IS_FROZEN_FIELD_NAME)
                 .addStatement("return this")
                 .build();
@@ -89,6 +90,7 @@ public class FreezableExtensionCodeGenerator implements ExtensionCodeGenerator {
     private MethodSpec createUnfreezeImplementation(IBeanTypeMetaInfo<?> beanMeta) {
         //@formatter:off
         return JavaPoetUtil.methodSpecBuilderFromOverride(UNFREEZE_METHOD)
+                .returns(beanMeta.beanType())
                 .addStatement("$N = false", IS_FROZEN_FIELD_NAME)
                 .addStatement("return this")
                 .build();
