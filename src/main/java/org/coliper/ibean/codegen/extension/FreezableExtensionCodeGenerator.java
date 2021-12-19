@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.lang.model.element.Modifier;
 
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.codegen.BeanCodeElements;
@@ -17,6 +16,7 @@ import org.coliper.ibean.extension.BeanFrozenException;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ExtensionHandler;
+import org.coliper.ibean.util.ReflectionUtil;
 
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
@@ -32,11 +32,11 @@ import com.squareup.javapoet.TypeName;
 public class FreezableExtensionCodeGenerator implements ExtensionCodeGenerator {
 
     private final static Method IS_FROZEN_METHOD =
-            MethodUtils.getAccessibleMethod(Freezable.class, "isFrozen");
+            ReflectionUtil.lookupInterfaceMethod(Freezable.class, s -> s.isFrozen());
     private final static Method FREEZE_METHOD =
-            MethodUtils.getAccessibleMethod(Freezable.class, "freeze");
+            ReflectionUtil.lookupInterfaceMethod(Freezable.class, s -> s.freeze());
     private final static Method UNFREEZE_METHOD =
-            MethodUtils.getAccessibleMethod(TempFreezable.class, "unfreeze");
+            ReflectionUtil.lookupInterfaceMethod(TempFreezable.class, s -> s.unfreeze());
     private final static String IS_FROZEN_FIELD_NAME =
             CommonCodeSnippets.EXTENSION_SPECIFIC_FIELD_NAME_PREFIX + "isFrozen";
 

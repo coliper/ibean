@@ -54,11 +54,13 @@ import org.coliper.ibean.codegen.extension.CloneableBeanExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.CompletableExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.FreezableExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.GsonSupportExtensionCodeGenerator;
+import org.coliper.ibean.codegen.extension.Jackson2SupportExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.NullSafeExtensionCodeGenerator;
 import org.coliper.ibean.extension.CloneableBean;
 import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.GsonSupport;
+import org.coliper.ibean.extension.Jackson2Support;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ExtensionSupport;
@@ -84,7 +86,8 @@ public class CodegenIBeanFactory implements IBeanFactory {
             Completable.class, new CompletableExtensionCodeGenerator(),
             Freezable.class, new FreezableExtensionCodeGenerator(),
             TempFreezable.class, new FreezableExtensionCodeGenerator(),
-            GsonSupport.class, new GsonSupportExtensionCodeGenerator());
+            GsonSupport.class, new GsonSupportExtensionCodeGenerator(),
+            Jackson2Support.class, new Jackson2SupportExtensionCodeGenerator());
     //@formatter:on     
 
     /*

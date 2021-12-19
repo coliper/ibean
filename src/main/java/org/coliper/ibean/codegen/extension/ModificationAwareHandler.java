@@ -37,15 +37,15 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
  * 
  * @author alex@coliper.org
  */
-public class ModificationAwareHandler extends StatefulExtensionHandler
-        implements ModificationAwareExt {
+public class ModificationAwareHandler implements ModificationAwareExt {
     /**
      * {@link ExtensionSupport} related to this handler supposed to be used when
      * configuring extension handlers in {@link IBeanFactory}s, for example in
      * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
      */
-    public static final ExtensionSupport SUPPORT = new ExtensionSupport(ModificationAwareExt.class,
-            ModificationAwareHandler.class, true/* stateful */);
+    // public static final ExtensionSupport SUPPORT = new
+    // ExtensionSupport(ModificationAwareExt.class,
+    // ModificationAwareHandler.class, true/* stateful */);
 
     private boolean modified = false;
     private boolean[] fieldModified = null;
@@ -85,14 +85,14 @@ public class ModificationAwareHandler extends StatefulExtensionHandler
      * interceptSetterCall(org.coliper.ibean.proxy.IBeanContext,
      * org.coliper.ibean.IBeanFieldMetaInfo, java.lang.Object)
      */
-    @Override
     public Object interceptSetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
             Object newValue, Object proxyInstance) {
         this.modified = true;
         if (this.fieldModified != null) {
             this.fieldModified[fieldMeta.ordinal()] = true;
         }
-        return super.interceptSetterCall(context, fieldMeta, newValue, proxyInstance);
+        return null; // super.interceptSetterCall(context, fieldMeta, newValue,
+                     // proxyInstance);
     }
 
     /*

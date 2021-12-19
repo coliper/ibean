@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.function.FailableConsumer;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -153,6 +154,7 @@ public class ReflectionUtil {
         }
     }
 
+    // TODO !!!!
     public static <T> Method lookupInterfaceMethod(Class<T> interfaceType,
             Consumer<T> methodSpecifier) {
         requireNonNull(interfaceType, "interfaceType");
@@ -165,6 +167,22 @@ public class ReflectionUtil {
         checkArgument(method != null,
                 "given methodSpecifier does not call a method on interface %s", interfaceType);
         return method;
+    }
+
+    // TODO !!!!
+    public static <T> Method lookupFailableInterfaceMethod(Class<T> interfaceType,
+            final FailableConsumer<T, ? extends Throwable> methodSpecifier) {
+        requireNonNull(interfaceType, "interfaceType");
+        requireNonNull(methodSpecifier, "methodSpecifier");
+        checkArgument(interfaceType.isInterface(), "%s is not an interface type", interfaceType);
+        Consumer<T> consumer = (T t) -> {
+            try {
+                methodSpecifier.accept(t);
+            } catch (Throwable willNotHappen) {
+
+            }
+        };
+        return lookupInterfaceMethod(interfaceType, consumer);
     }
 
     /**

@@ -21,6 +21,7 @@ import org.coliper.ibean.IBeanFactory;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,8 +73,21 @@ class Jackson2DeserializerForIBeans extends JsonDeserializer<Jackson2Support> {
     public Jackson2Support deserialize(JsonParser p, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         final Jackson2Support bean = this.createBean(this.beanType);
-        bean.readFromJsonParser(p, ctxt);
+        this.readFromJsonParser(bean, p, ctxt);
         return bean;
+    }
+
+    private void readFromJsonParser(Jackson2Support bean, JsonParser parser,
+            DeserializationContext ctxt) throws IOException {
+        JsonToken jsonToken = parser.nextToken();
+        while (!JsonToken.END_OBJECT.equals(jsonToken)) {
+            if (JsonToken.FIELD_NAME.equals(jsonToken)) {
+                String fieldName = parser.getCurrentName();
+                parser.nextToken();
+                bean.readPropertyValueFromJsonParser(fieldName, parser, ctxt);
+            }
+            jsonToken = parser.nextToken();
+        }
     }
 
 }

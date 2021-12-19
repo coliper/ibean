@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.codegen.BeanCodeElements;
@@ -27,6 +26,7 @@ import org.coliper.ibean.codegen.ExtensionCodeGenerator;
 import org.coliper.ibean.codegen.JavaPoetUtil;
 import org.coliper.ibean.extension.CloneableBean;
 import org.coliper.ibean.proxy.ExtensionHandler;
+import org.coliper.ibean.util.ReflectionUtil;
 
 import com.squareup.javapoet.MethodSpec;
 
@@ -39,9 +39,9 @@ import com.squareup.javapoet.MethodSpec;
 public class CloneableBeanExtensionCodeGenerator implements ExtensionCodeGenerator {
 
     private final static Method CLONE_METHOD =
-            MethodUtils.getAccessibleMethod(CloneableBean.class, "clone");
+            ReflectionUtil.lookupInterfaceMethod(CloneableBean.class, s -> s.clone());
     private final static Method DEEP_CLONE_METHOD =
-            MethodUtils.getAccessibleMethod(CloneableBean.class, "deepClone");
+            ReflectionUtil.lookupInterfaceMethod(CloneableBean.class, s -> s.deepClone());
 
     @Override
     public List<MethodSpec> createInterfaceMethodImplementations(IBeanTypeMetaInfo<?> beanMeta,

@@ -31,6 +31,7 @@ import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.util.ReflectionUtil;
 
 import com.google.common.base.Throwables;
 
@@ -47,19 +48,13 @@ public class CloneableHandler extends StatelessExtensionHandler {
      * configuring extension handlers in {@link IBeanFactory}s, for example in
      * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
      */
-    public static final ExtensionSupport SUPPORT =
-            new ExtensionSupport(CloneableBean.class, CloneableHandler.class, false/* stateful */);
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(CloneableBean.class,
+            CloneableHandler.class, false/* stateful */);
 
-    private static final Method CLONE_METHOD;
-    private static final Method DEEP_CLONE_METHOD;
-    static {
-        try {
-            CLONE_METHOD = CloneableBean.class.getMethod("clone");
-            DEEP_CLONE_METHOD = CloneableBean.class.getMethod("deepClone");
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private final static Method CLONE_METHOD =
+            ReflectionUtil.lookupInterfaceMethod(CloneableBean.class, s -> s.clone());
+    private final static Method DEEP_CLONE_METHOD =
+            ReflectionUtil.lookupInterfaceMethod(CloneableBean.class, s -> s.deepClone());
 
     // Function that returns a deep clone of a given object.
     private static final UnaryOperator<Object> CLONE_OPERATOR = new UnaryOperator<Object>() {

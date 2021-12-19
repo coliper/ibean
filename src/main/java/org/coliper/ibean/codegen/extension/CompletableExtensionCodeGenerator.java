@@ -3,7 +3,6 @@ package org.coliper.ibean.codegen.extension;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.codegen.BeanCodeElements;
@@ -12,6 +11,7 @@ import org.coliper.ibean.codegen.JavaPoetUtil;
 import org.coliper.ibean.extension.BeanIncompleteException;
 import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.proxy.ExtensionHandler;
+import org.coliper.ibean.util.ReflectionUtil;
 
 import com.squareup.javapoet.MethodSpec;
 
@@ -24,9 +24,9 @@ import com.squareup.javapoet.MethodSpec;
 public class CompletableExtensionCodeGenerator implements ExtensionCodeGenerator {
 
     private final static Method IS_COMPLETE_METHOD =
-            MethodUtils.getAccessibleMethod(Completable.class, "isComplete");
+            ReflectionUtil.lookupInterfaceMethod(Completable.class, s -> s.isComplete());
     private final static Method ASSERT_COMPLETE_METHOD =
-            MethodUtils.getAccessibleMethod(Completable.class, "assertComplete");
+            ReflectionUtil.lookupInterfaceMethod(Completable.class, s -> s.assertComplete());
 
     @Override
     public List<MethodSpec> createInterfaceMethodImplementations(IBeanTypeMetaInfo<?> beanMeta,

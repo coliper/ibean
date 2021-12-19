@@ -50,6 +50,7 @@ public interface Jackson2Support extends JsonSerializable {
      * @param ctxt
      *            the Jackson2 deserialization context
      */
-    void readFromJsonParser(JsonParser p, DeserializationContext ctxt);
+    void readPropertyValueFromJsonParser(String propertyName, JsonParser p,
+            DeserializationContext ctxt);
 
 }

@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 import org.coliper.ibean.codegen.BeanCodeElements;
@@ -16,12 +15,10 @@ import org.coliper.ibean.codegen.JavaPoetUtil;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.GsonSupport;
 import org.coliper.ibean.proxy.ExtensionHandler;
+import org.coliper.ibean.util.ReflectionUtil;
 
-import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 
@@ -33,12 +30,10 @@ import com.squareup.javapoet.MethodSpec;
  */
 public class GsonSupportExtensionCodeGenerator implements ExtensionCodeGenerator {
 
-    private final static Method READ_FROM_JSON_OBJECT_METHOD =
-            MethodUtils.getAccessibleMethod(GsonSupport.class, "readFromJsonObject",
-                    JsonObject.class, JsonDeserializationContext.class);
-    private final static Method WRITE_TO_JSON_OBJECT_METHOD =
-            MethodUtils.getAccessibleMethod(GsonSupport.class, "writeToJsonObject",
-                    JsonObject.class, JsonSerializationContext.class);
+    private final static Method READ_FROM_JSON_OBJECT_METHOD = ReflectionUtil
+            .lookupInterfaceMethod(GsonSupport.class, s -> s.readFromJsonObject(null, null));
+    private final static Method WRITE_TO_JSON_OBJECT_METHOD = ReflectionUtil
+            .lookupInterfaceMethod(GsonSupport.class, s -> s.writeToJsonObject(null, null));
     private static final String JSON_OBJECT_PARAM_NAME = "jsonObject";
     private static final String CONTEXT_PARAM_NAME = "context";
 
@@ -112,17 +107,20 @@ public class GsonSupportExtensionCodeGenerator implements ExtensionCodeGenerator
 
     private CodeBlock createReadCodeForField(BeanCodeElements beanCodeElements,
             IBeanFieldMetaInfo fieldMeta) {
-        final String objectDeserializationExpression =
-                CodeBlock.of("($T)$N.deserialize(value, $T.class)", fieldMeta.fieldType(),
-                        CONTEXT_PARAM_NAME, fieldMeta.fieldType()).toString();
-        final String valueExpression = READ_EXPRESSION_MAP.getOrDefault(fieldMeta.fieldType(),
-                objectDeserializationExpression);
         final String fieldName = beanCodeElements.fieldNameFromPropertyName(fieldMeta.fieldName());
+        final String valueExpression = READ_EXPRESSION_MAP.get(fieldMeta.fieldType());
+        final CodeBlock setFieldBlock;
+        if (valueExpression != null) {
+            setFieldBlock = CodeBlock.of("this.$N = " + valueExpression, fieldName);
+        } else {
+            setFieldBlock = CodeBlock.of("this.$N = ($T)$N.deserialize(value, $T.class)", fieldName,
+                    fieldMeta.fieldType(), CONTEXT_PARAM_NAME, fieldMeta.fieldType());
+        }
         final CodeBlock.Builder code = CodeBlock.builder();
         code.beginControlFlow("if ($N.has($S))", JSON_OBJECT_PARAM_NAME, fieldMeta.fieldName());
         code.addStatement("$T value = $N.get($S)", JsonElement.class, JSON_OBJECT_PARAM_NAME,
                 fieldMeta.fieldName());
-        code.addStatement("this.$N = $L", fieldName, valueExpression);
+        code.addStatement(setFieldBlock);
         code.endControlFlow();
         return code.build();
     }
