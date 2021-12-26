@@ -15,6 +15,7 @@
 package org.coliper.ibean.codegen;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Objects;
 
 import javax.lang.model.element.Modifier;
@@ -44,6 +45,10 @@ public class JavaPoetUtil {
         int i = 0;
         for (Class<?> paramType : paramTypes) {
             builder.addParameter(paramType, argNames[i++]);
+        }
+        Type[] thrownExceptionTypes = method.getGenericExceptionTypes();
+        for (Type type : thrownExceptionTypes) {
+            builder.addException(type);
         }
         builder.returns(method.getReturnType());
         return builder;

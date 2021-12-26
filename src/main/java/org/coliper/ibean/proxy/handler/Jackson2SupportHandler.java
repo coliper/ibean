@@ -55,7 +55,7 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
             Jackson2SupportHandler.class, false/* stateful */);
 
     private static final Method READ_PROPERTY_VALUE_FROM_JSON_PARSER_METHOD =
-            ReflectionUtil.lookupInterfaceMethod(Jackson2Support.class,
+            ReflectionUtil.lookupFailableInterfaceMethod(Jackson2Support.class,
                     s -> s.readPropertyValueFromJsonParser(null, null, null));
     private static final Method SERIALIZE_METHOD = ReflectionUtil
             .lookupFailableInterfaceMethod(Jackson2Support.class, s -> s.serialize(null, null));

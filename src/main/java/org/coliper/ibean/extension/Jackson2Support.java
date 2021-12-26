@@ -14,6 +14,8 @@
 
 package org.coliper.ibean.extension;
 
+import java.io.IOException;
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonSerializable;
@@ -51,6 +53,6 @@ public interface Jackson2Support extends JsonSerializable {
      *            the Jackson2 deserialization context
      */
     void readPropertyValueFromJsonParser(String propertyName, JsonParser p,
-            DeserializationContext ctxt);
+            DeserializationContext ctxt) throws IOException;
 
 }
