@@ -76,10 +76,17 @@ class BeanCodeGenerator {
         final Builder typeBuilder = TypeSpec.classBuilder(implementationTypeName)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addSuperinterface(beanMeta.beanType());
+        this.addNestedTypes(typeBuilder, codeElements);
         this.addFields(typeBuilder, codeElements);
         this.addMethods(typeBuilder, codeElements);
 
         return buildCode(typeBuilder);
+    }
+
+    private void addNestedTypes(Builder typeBuilder, BeanCodeElements codeElements) {
+        for (ExtensionCodeGenerator extCodeGen : this.extensionCodeGenerators) {
+            typeBuilder.addTypes(extCodeGen.createNestedTypes(this.beanMeta));
+        }
     }
 
     private String buildCode(final Builder typeBuilder) {

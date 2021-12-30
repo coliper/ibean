@@ -9,6 +9,7 @@ import org.coliper.ibean.IBeanTypeMetaInfo;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
 
 public interface ExtensionCodeGenerator {
 
@@ -28,6 +29,10 @@ public interface ExtensionCodeGenerator {
     }
 
     default List<FieldSpec> createExtensionSpecificFields(IBeanTypeMetaInfo<?> beanMeta) {
+        return Collections.emptyList();
+    }
+
+    default List<TypeSpec> createNestedTypes(IBeanTypeMetaInfo<?> beanMeta) {
         return Collections.emptyList();
     }
 
