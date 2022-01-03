@@ -55,6 +55,7 @@ import org.coliper.ibean.codegen.extension.CompletableExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.FreezableExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.GsonSupportExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.Jackson2SupportExtensionCodeGenerator;
+import org.coliper.ibean.codegen.extension.LazyInitExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.ModificationAwareExtensionCodeGenerator;
 import org.coliper.ibean.codegen.extension.NullSafeExtensionCodeGenerator;
 import org.coliper.ibean.extension.CloneableBean;
@@ -62,6 +63,7 @@ import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.extension.Freezable;
 import org.coliper.ibean.extension.GsonSupport;
 import org.coliper.ibean.extension.Jackson2Support;
+import org.coliper.ibean.extension.LazyInitParent;
 import org.coliper.ibean.extension.ModificationAware;
 import org.coliper.ibean.extension.ModificationAwareExt;
 import org.coliper.ibean.extension.NullSafe;
@@ -70,6 +72,7 @@ import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author alex@coliper.org
@@ -83,16 +86,19 @@ public class CodegenIBeanFactory implements IBeanFactory {
             CodegenIBeanFactory.class.getPackage().getName() + ".generated";
 
     //@formatter:off     
-    private static Map<Class<?>, ExtensionCodeGenerator> DEFAULT_EXT_GENERATOR_MAP = Map.of(
-            NullSafe.class, new NullSafeExtensionCodeGenerator(),
-            CloneableBean.class, new CloneableBeanExtensionCodeGenerator(),
-            Completable.class, new CompletableExtensionCodeGenerator(),
-            Freezable.class, new FreezableExtensionCodeGenerator(),
-            TempFreezable.class, new FreezableExtensionCodeGenerator(),
-            GsonSupport.class, new GsonSupportExtensionCodeGenerator(),
-            Jackson2Support.class, new Jackson2SupportExtensionCodeGenerator(),
-            ModificationAware.class, new ModificationAwareExtensionCodeGenerator(),
-            ModificationAwareExt.class, new ModificationAwareExtensionCodeGenerator());
+    private static Map<Class<?>, ExtensionCodeGenerator> DEFAULT_EXT_GENERATOR_MAP = 
+            new ImmutableMap.Builder<Class<?>, ExtensionCodeGenerator>()
+                .put(NullSafe.class, new NullSafeExtensionCodeGenerator())
+                .put(CloneableBean.class, new CloneableBeanExtensionCodeGenerator())
+                .put(Completable.class, new CompletableExtensionCodeGenerator())
+                .put(Freezable.class, new FreezableExtensionCodeGenerator())
+                .put(TempFreezable.class, new FreezableExtensionCodeGenerator())
+                .put(GsonSupport.class, new GsonSupportExtensionCodeGenerator())
+                .put(Jackson2Support.class, new Jackson2SupportExtensionCodeGenerator())
+                .put(ModificationAware.class, new ModificationAwareExtensionCodeGenerator())
+                .put(ModificationAwareExt.class, new ModificationAwareExtensionCodeGenerator())
+                .put(LazyInitParent.class, new LazyInitExtensionCodeGenerator())
+                .build();
     //@formatter:on     
 
     /*
