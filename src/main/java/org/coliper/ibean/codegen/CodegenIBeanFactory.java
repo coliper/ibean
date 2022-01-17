@@ -511,4 +511,8 @@ public class CodegenIBeanFactory implements IBeanFactory {
     public ToStringStyle toStringStyle() {
         return this.toStringStyle;
     }
+
+    public ToStringStyle toStringStyleForInterface(Class<?> interfaceType) {
+        return new ToStringStyleWrapper(this.toStringStyle, interfaceType);
+    }
 }

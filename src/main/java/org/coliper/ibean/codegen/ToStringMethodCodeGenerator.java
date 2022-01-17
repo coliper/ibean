@@ -15,12 +15,12 @@
 package org.coliper.ibean.codegen;
 
 import java.lang.reflect.Method;
-import java.util.Collection;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.coliper.ibean.IBeanFieldMetaInfo;
+import org.coliper.ibean.IBeanTypeMetaInfo;
 
-import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.MethodSpec.Builder;
 
@@ -32,34 +32,37 @@ class ToStringMethodCodeGenerator {
 
     private static final Method TO_STRING_METHOD =
             MethodUtils.getMatchingAccessibleMethod(Object.class, "toString");
+    private static final String TO_STRING_BUILDER_VARIABLE_NAME = "bldr";
+
+    private final IBeanTypeMetaInfo<?> metaInfo;
     private final BeanCodeElements codeElements;
 
     /**
      * @param codeElements
      * @param metaInfo
      */
-    ToStringMethodCodeGenerator(BeanCodeElements codeElements) {
+    ToStringMethodCodeGenerator(BeanCodeElements codeElements, IBeanTypeMetaInfo<?> metaInfo) {
+        this.metaInfo = metaInfo;
         this.codeElements = codeElements;
     }
 
     MethodSpec createMethod() {
-        Builder methodBuilder = JavaPoetUtil.methodSpecBuilderFromOverride(TO_STRING_METHOD);
-        final CodeBlock.Builder methodBlock = CodeBlock.builder();
-        this.addStatement(methodBlock);
-        methodBuilder.addCode(methodBlock.build());
+        final Builder methodBuilder = JavaPoetUtil.methodSpecBuilderFromOverride(TO_STRING_METHOD);
+        methodBuilder.addStatement(
+                "$T $N = new $T(this, this.$N.toStringStyleForInterface($T.class))",
+                ToStringBuilder.class, TO_STRING_BUILDER_VARIABLE_NAME, ToStringBuilder.class,
+                CommonCodeSnippets.FACTORY_FIELD_NAME, this.metaInfo.beanType());
+        for (IBeanFieldMetaInfo iBeanFieldMetaInfo : this.metaInfo.fieldMetaInfos()) {
+            this.addStatementForProperty(methodBuilder, iBeanFieldMetaInfo.fieldName());
+        }
+        methodBuilder.addStatement("return $N.toString()", TO_STRING_BUILDER_VARIABLE_NAME);
         return methodBuilder.build();
     }
 
-    private void addStatement(CodeBlock.Builder builder) {
-        final StringBuilder statement =
-                new StringBuilder("return new $T(this, this.$L.toStringStyle())");
-        Collection<String> fields = this.codeElements.fieldNames();
-        for (String field : fields) {
-            statement.append("$Z.append(").append(field).append(")");
-        }
-        statement.append("$Z.toString()");
-        builder.addStatement(statement.toString(), ToStringBuilder.class,
-                CommonCodeSnippets.FACTORY_FIELD_NAME);
+    private void addStatementForProperty(MethodSpec.Builder builder, String propertyName) {
+        final String fieldName = this.codeElements.fieldNameFromPropertyName(propertyName);
+        builder.addStatement("$N.append($S, this.$N)", TO_STRING_BUILDER_VARIABLE_NAME,
+                propertyName, fieldName);
     }
 
 }

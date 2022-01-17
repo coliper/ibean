@@ -50,7 +50,7 @@ class BeanMethodsCodeGenerator {
         List<MethodSpec> methodSpecs = new ArrayList<>();
         methodSpecs.add(new HashCodeMethodCodeGenerator(codeElements, metaInfo).createMethod());
         methodSpecs.add(new EqualsMethodCodeGenerator(codeElements, metaInfo).createMethod());
-        methodSpecs.add(new ToStringMethodCodeGenerator(codeElements).createMethod());
+        methodSpecs.add(new ToStringMethodCodeGenerator(codeElements, metaInfo).createMethod());
         methodSpecs.addAll(new GetterMethodsCodeGenerator(codeElements, metaInfo, beanStyleHandler,
                 extensionCodeGenerators).createMethods());
         methodSpecs.addAll(new SetterMethodsCodeGenerator(codeElements, metaInfo, beanStyleHandler,
