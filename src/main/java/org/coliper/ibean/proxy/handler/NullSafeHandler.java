@@ -21,6 +21,7 @@ import org.coliper.ibean.extension.NullSafetyException;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
+import org.coliper.ibean.proxy.IBeanFieldAccess;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
 /**
@@ -36,8 +37,8 @@ public class NullSafeHandler extends StatelessExtensionHandler {
      * configuring extension handlers in {@link IBeanFactory}s, for example in
      * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
      */
-    public static final ExtensionSupport SUPPORT =
-            new ExtensionSupport(NullSafe.class, NullSafeHandler.class, false/* stateful */);
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(NullSafe.class,
+            NullSafeHandler.class, false/* stateful */);
 
     /*
      * (non-Javadoc)
@@ -48,7 +49,7 @@ public class NullSafeHandler extends StatelessExtensionHandler {
      */
     @Override
     public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
-            Object returnValue, Object proxyInstance) {
+            IBeanFieldAccess bean, Object returnValue, Object proxyInstance) {
         if (returnValue == null) {
             throw new NullSafetyException(fieldMeta.fieldName());
         }

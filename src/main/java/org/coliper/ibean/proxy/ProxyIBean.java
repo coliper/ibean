@@ -292,7 +292,7 @@ class ProxyIBean<T> implements InvocationHandler, IBeanFieldAccess {
     private Object handleGetter(Object proxy, IBeanFieldMetaInfo fieldMeta) {
         Object originalValue = this.getFieldValue(fieldMeta);
         Object modifiedValue = this.extendedInterfaceHandler.interceptGetterCall(this.context,
-                fieldMeta, originalValue, proxy);
+                fieldMeta, this, originalValue, proxy);
         if (this.isFieldTypeDifferentToGetterReturnType(fieldMeta)) {
             modifiedValue = this.context.beanStyleHandler().convertReturnValueOfGetterCall(
                     fieldMeta.getterMethod().getReturnType(), modifiedValue);

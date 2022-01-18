@@ -23,6 +23,7 @@ import org.coliper.ibean.extension.LazyInitParent;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
+import org.coliper.ibean.proxy.IBeanFieldAccess;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 
 /**
@@ -59,11 +60,12 @@ public class LazyInitHandler extends StatefulExtensionHandler {
      */
     @Override
     public Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
-            Object returnValue, Object proxyInstance) {
+            IBeanFieldAccess bean, Object returnValue, Object proxyInstance) {
         if (returnValue == null) {
             Class<?> returnType = fieldMeta.fieldType();
             if (LazyInitChild.class.isAssignableFrom(returnType)) {
                 returnValue = this.factory.create(returnType);
+                bean.setFieldValue(fieldMeta, returnValue);
             }
         }
         return returnValue;

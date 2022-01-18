@@ -20,7 +20,8 @@ public interface ExtensionCodeGenerator {
         return Collections.emptyList();
     }
 
-    default CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta) {
+    default CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta,
+            BeanCodeElements beanCodeElements) {
         return EMPTY_BLOCK;
     }
 

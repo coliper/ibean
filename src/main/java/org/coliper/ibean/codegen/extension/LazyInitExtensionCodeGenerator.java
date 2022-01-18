@@ -15,6 +15,7 @@
 package org.coliper.ibean.codegen.extension;
 
 import org.coliper.ibean.IBeanFieldMetaInfo;
+import org.coliper.ibean.codegen.BeanCodeElements;
 import org.coliper.ibean.codegen.CommonCodeSnippets;
 import org.coliper.ibean.codegen.ExtensionCodeGenerator;
 import org.coliper.ibean.extension.LazyInitChild;
@@ -32,16 +33,22 @@ import com.squareup.javapoet.CodeBlock;
 public class LazyInitExtensionCodeGenerator implements ExtensionCodeGenerator {
 
     @Override
-    public CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta) {
+    public CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta,
+            BeanCodeElements beanCodeElements) {
         if (!LazyInitChild.class.isAssignableFrom(fieldMeta.fieldType())) {
             return EMPTY_BLOCK;
         }
+        final String fieldName = beanCodeElements.fieldNameFromPropertyName(fieldMeta.fieldName());
         //@formatter:off
         return CodeBlock.builder()
-                .addStatement("$N = this.$N.create($T.class)",
+                .beginControlFlow("if ($N == null)", CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME)
+                .addStatement("$N = ($T)this.$N.create($T.class)",
                         CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME,
+                        fieldMeta.fieldType(),
                         CommonCodeSnippets.FACTORY_FIELD_NAME,
                         fieldMeta.fieldType())
+                .addStatement("this.$N = $N", fieldName, CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME)
+                .endControlFlow()
                 .build();
         //@formatter:on
     }

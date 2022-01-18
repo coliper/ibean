@@ -68,7 +68,8 @@ class GetterMethodsCodeGenerator {
         codeBlockBuilder.addStatement("$T $L = $L", fieldMeta.fieldType(),
                 CommonCodeSnippets.TEMP_VALUE_VARIABLE_NAME, fieldName);
         for (ExtensionCodeGenerator extensionCodeGenerator : this.extensionCodeGenerators) {
-            codeBlockBuilder.add(extensionCodeGenerator.createGetterCodeBlock(fieldMeta));
+            codeBlockBuilder.add(
+                    extensionCodeGenerator.createGetterCodeBlock(fieldMeta, this.codeElements));
         }
         codeBlockBuilder.add(this.beanStyleHandler.createGetterEndBlock(fieldMeta));
         methodBuilder.addCode(codeBlockBuilder.build());

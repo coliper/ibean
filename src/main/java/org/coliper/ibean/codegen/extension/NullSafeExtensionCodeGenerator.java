@@ -14,18 +14,15 @@
 
 package org.coliper.ibean.codegen.extension;
 
-import com.squareup.javapoet.CodeBlock;
-
-import org.coliper.ibean.IBeanFactory;
 import org.coliper.ibean.IBeanFieldMetaInfo;
+import org.coliper.ibean.codegen.BeanCodeElements;
 import org.coliper.ibean.codegen.CommonCodeSnippets;
 import org.coliper.ibean.codegen.ExtensionCodeGenerator;
 import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.NullSafetyException;
 import org.coliper.ibean.proxy.ExtensionHandler;
-import org.coliper.ibean.proxy.ExtensionSupport;
-import org.coliper.ibean.proxy.IBeanContext;
-import org.coliper.ibean.proxy.ProxyIBeanFactory;
+
+import com.squareup.javapoet.CodeBlock;
 
 /**
  * {@link ExtensionHandler} implementation for bean extension interface
@@ -36,7 +33,8 @@ import org.coliper.ibean.proxy.ProxyIBeanFactory;
 public class NullSafeExtensionCodeGenerator implements ExtensionCodeGenerator {
 
     @Override
-    public CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta) {
+    public CodeBlock createGetterCodeBlock(IBeanFieldMetaInfo fieldMeta,
+            BeanCodeElements beanCodeElements) {
         if (fieldMeta.fieldType().isPrimitive()) {
             return EMPTY_BLOCK;
         }

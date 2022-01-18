@@ -81,10 +81,10 @@ class ExtensionHandlerDispatcher {
     }
 
     Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
-            Object returnValue, Object proxyInstance) {
+            IBeanFieldAccess bean, Object returnValue, Object proxyInstance) {
         Object modifiedReturnValue = returnValue;
         for (ExtensionHandler handler : handlerMap.values()) {
-            modifiedReturnValue = handler.interceptGetterCall(context, fieldMeta,
+            modifiedReturnValue = handler.interceptGetterCall(context, fieldMeta, bean,
                     modifiedReturnValue, proxyInstance);
         }
         return modifiedReturnValue;
