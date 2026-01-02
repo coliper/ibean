@@ -66,7 +66,7 @@ public abstract class AbstractExtensionModificationAwareTest extends AbstractFac
         bean.setString("sldfj");
         assertThat(bean.isModified()).isTrue();
 
-        bean.setDouble(new Double(23980754));
+        bean.setDouble(Double.valueOf(23980754));
         assertThat(bean.isModified()).isTrue();
 
         bean.setInt(92834);
@@ -117,7 +117,7 @@ public abstract class AbstractExtensionModificationAwareTest extends AbstractFac
                 .containsExactlyInAnyOrder(new String[] { "int", "string" });
         assertThat(bean.allFieldsModified()).isFalse();
 
-        bean.setDouble(new Double(23980754));
+        bean.setDouble(Double.valueOf(23980754));
         assertThat(bean.isModified()).isTrue();
         assertThat(bean.getModifiedFieldNames())
                 .containsExactlyInAnyOrder(new String[] { "int", "string", "double" });

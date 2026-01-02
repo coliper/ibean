@@ -1,15 +1,20 @@
 
-def PROJECTNAME = "Coliper IBean"
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
 
-// Apply the java-library plugin to add support for Java Library
-apply plugin: 'java-library'
-apply plugin: 'maven'
-apply plugin: 'signing'
+def PROJECTNAME = "Coliper IBean"
 
 group = "org.coliper"
 version = '0.4.6'
 description = 'creates all artifacts of the Coliper IBean project'
-sourceCompatibility = 1.8
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 
 
@@ -43,10 +48,11 @@ dependencies {
 
 javadoc {
     title = PROJECTNAME + ' API ' + version 
-    options.source = "8"
+    options.source = "17"
+    options.addBooleanOption('Xdoclint:none', true)
     options.stylesheetFile file('doc-src/javadoc-stylesheet.css', PathValidation.FILE)
     options.links "https://commons.apache.org/proper/commons-lang/apidocs/",
-                  "https://docs.oracle.com/javase/8/docs/api/",
+                  "https://docs.oracle.com/en/java/javase/17/docs/api/",
                   "http://fasterxml.github.io/jackson-core/javadoc/2.6/",
                   "http://fasterxml.github.io/jackson-databind/javadoc/2.6/"
     options.linksOffline("https://static.javadoc.io/com.google.code.gson/gson/2.8.5/", 
@@ -79,15 +85,17 @@ task createUserManuals {
 //////////////////////////////////////////////////////////////////////////////////////////
 // Creation of upload artefacts.
 
-archivesBaseName = "ibean"
+base {
+    archivesName = "ibean"
+}
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
+    archiveClassifier = 'sources'
     from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
+    archiveClassifier = 'javadoc'
     from javadoc.destinationDir
 }
 
@@ -96,55 +104,57 @@ artifacts {
     archives javadocJar
 }
 
-signing {
-    sign configurations.archives
-}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
 
+            pom {
+                name = 'Coliper IBean'
+                packaging = 'jar'
+                description = 'Java library used to define beans as interfaces.'
+                url = 'https://coliper.github.io/ibean'
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Maven Central upload.
+                scm {
+                    connection = 'scm:git:git://github.com/coliper/ibean.git'
+                    developerConnection = 'scm:git:ssh://github.com:coliper/ibean.git'
+                    url = 'http://github.com/coliper/ibean/tree/master'
+                }
 
-uploadArchives {
-  repositories {
-    mavenDeployer {
-      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
 
-      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-        authentication(userName: ossrhUsername, password: ossrhPassword)
-      }
-
-      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-        authentication(userName: ossrhUsername, password: ossrhPassword)
-      }
-
-      pom.project {
-        name 'Coliper IBean'
-        packaging 'jar'
-        // optionally artifactId can be defined here 
-        description 'Java library used to define beans as interfaces.'
-        url 'https://coliper.github.io/ibean'
-
-        scm {
-          connection 'scm:git:git://github.com/coliper/ibean.git'
-          developerConnection 'scm:git:ssh://github.com:coliper/ibean.git'
-          url 'http://github.com/coliper/ibean/tree/master'
+                developers {
+                    developer {
+                        id = 'alex'
+                        name = 'Alexander Einhaeuser'
+                        email = 'alex@coliper.org'
+                    }
+                }
+            }
         }
-
-        licenses {
-          license {
-            name 'The Apache License, Version 2.0'
-            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-          }
-        }
-
-        developers {
-          developer {
-            id 'alex'
-            name 'Alexander Einhaeuser'
-            email 'alex@coliper.org'
-          }
-        }
-      }
     }
-  }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username = project.findProperty("ossrhUsername") ?: System.getenv("OSSRH_USERNAME")
+                password = project.findProperty("ossrhPassword") ?: System.getenv("OSSRH_PASSWORD")
+            }
+        }
+    }
 }
+
+signing {
+    sign publishing.publications.mavenJava
+}
+

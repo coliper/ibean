@@ -81,7 +81,7 @@ public interface PrimitivesBeanClassic {
         this.setCharPrimitive('x');
         this.setCharObject(Character.valueOf('@'));
         this.setDoublePrimitive(Double.MIN_NORMAL);
-        this.setDoubleObject(Double.valueOf(Double.MAX_VALUE));
+        this.setDoubleObject(Double.MAX_VALUE);
         this.setFloatPrimitive(Float.MAX_VALUE);
         this.setFloatObject(Float.valueOf(Float.MIN_VALUE));
         this.setIntPrimitive(Integer.MIN_VALUE);
