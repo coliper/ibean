@@ -17,9 +17,9 @@ package org.coliper.ibean.codegen;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanTypeMetaInfo;
+import org.coliper.ibean.util.CycleSafeHashCodeBuilder;
 
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.MethodSpec;
@@ -71,8 +71,8 @@ class HashCodeMethodCodeGenerator {
             statement.append("$Z.append(").append(field).append(")");
         }
         statement.append("$Z.toHashCode()");
-        return CodeBlock.builder().addStatement(statement.toString(), HashCodeBuilder.class)
-                .build();
+        return CodeBlock.builder()
+                .addStatement(statement.toString(), CycleSafeHashCodeBuilder.class).build();
     }
 
 }
