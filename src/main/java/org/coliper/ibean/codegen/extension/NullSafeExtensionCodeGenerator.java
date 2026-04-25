@@ -22,7 +22,7 @@ import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.extension.NullSafetyException;
 import org.coliper.ibean.proxy.ExtensionHandler;
 
-import com.squareup.javapoet.CodeBlock;
+import com.palantir.javapoet.CodeBlock;
 
 /**
  * {@link ExtensionHandler} implementation for bean extension interface

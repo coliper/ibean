@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
-import com.squareup.javapoet.MethodSpec;
+import com.palantir.javapoet.MethodSpec;
 
 /**
  * @author alex@coliper.org

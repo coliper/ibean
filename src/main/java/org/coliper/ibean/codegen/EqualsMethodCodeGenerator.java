@@ -21,9 +21,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.MethodSpec.Builder;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.MethodSpec.Builder;
 
 /**
  * @author alex@coliper.org
@@ -67,13 +67,13 @@ class EqualsMethodCodeGenerator {
     }
 
     private CodeBlock createDefaultEqualsBlock() {
-        final com.squareup.javapoet.CodeBlock.Builder codeBuilder = CodeBlock.builder();
+        final com.palantir.javapoet.CodeBlock.Builder codeBuilder = CodeBlock.builder();
         this.addDefaultChecks(codeBuilder);
         this.addFieldLoop(codeBuilder);
         return codeBuilder.build();
     }
 
-    private void addDefaultChecks(com.squareup.javapoet.CodeBlock.Builder codeBuilder) {
+    private void addDefaultChecks(com.palantir.javapoet.CodeBlock.Builder codeBuilder) {
         codeBuilder.beginControlFlow("if ($L == null)", ARGUMENT_NAME);
         codeBuilder.addStatement("return false");
         codeBuilder.endControlFlow();
@@ -87,7 +87,7 @@ class EqualsMethodCodeGenerator {
         codeBuilder.endControlFlow();
     }
 
-    private void addFieldLoop(com.squareup.javapoet.CodeBlock.Builder codeBuilder) {
+    private void addFieldLoop(com.palantir.javapoet.CodeBlock.Builder codeBuilder) {
         codeBuilder.addStatement("$L other =$W($L)obj", this.codeElements.beanClassName(),
                 this.codeElements.beanClassName());
 

@@ -21,8 +21,8 @@ import org.apache.commons.lang3.reflect.MethodUtils;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.MethodSpec.Builder;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.MethodSpec.Builder;
 
 /**
  * @author alex@coliper.org

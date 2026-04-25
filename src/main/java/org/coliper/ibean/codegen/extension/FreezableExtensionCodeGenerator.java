@@ -18,10 +18,10 @@ import org.coliper.ibean.extension.TempFreezable;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.util.ReflectionUtil;
 
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeName;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.TypeName;
 
 /**
  * {@link ExtensionHandler} implementation for bean extension interface

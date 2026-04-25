@@ -21,8 +21,8 @@ import java.util.Objects;
 import javax.lang.model.element.Modifier;
 
 import com.google.common.base.Preconditions;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.MethodSpec.Builder;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.MethodSpec.Builder;
 
 /**
  * @author alex@coliper.org

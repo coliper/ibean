@@ -13,7 +13,7 @@ import org.coliper.ibean.extension.Completable;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.util.ReflectionUtil;
 
-import com.squareup.javapoet.MethodSpec;
+import com.palantir.javapoet.MethodSpec;
 
 /**
  * {@link ExtensionHandler} implementation for bean extension interface

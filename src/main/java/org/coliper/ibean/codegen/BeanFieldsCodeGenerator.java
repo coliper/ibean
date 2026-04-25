@@ -22,7 +22,7 @@ import javax.lang.model.element.Modifier;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
-import com.squareup.javapoet.FieldSpec;
+import com.palantir.javapoet.FieldSpec;
 
 /**
  * @author alex@coliper.org

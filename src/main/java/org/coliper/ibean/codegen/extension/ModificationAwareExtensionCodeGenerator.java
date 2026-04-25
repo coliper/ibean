@@ -33,10 +33,10 @@ import org.coliper.ibean.extension.NullSafe;
 import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.util.ReflectionUtil;
 
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.TypeSpec;
 
 /**
  * {@link ExtensionHandler} implementation for bean extension interface

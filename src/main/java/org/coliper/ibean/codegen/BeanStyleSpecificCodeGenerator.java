@@ -22,7 +22,7 @@ import org.coliper.ibean.beanstyle.ModernBeanStyle;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
 import org.coliper.ibean.proxy.ProxyIBeanFactory.Builder;
 
-import com.squareup.javapoet.CodeBlock;
+import com.palantir.javapoet.CodeBlock;
 
 /**
  * {@code BeanStyleHandler}s are used by the {@link ProxyIBeanFactory} to deal

@@ -106,6 +106,18 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
         }
     }
 
+    private void readPropertyValueFromJsonParser(String propertyName, JsonParser parser,
+            DeserializationContext ctxt, IBeanContext<?> context, IBeanFieldAccess bean)
+            throws IOException {
+        final IBeanFieldMetaInfo meta =
+                context.metaInfo().findFieldMetaWithFieldName(propertyName)
+                        .orElseThrow(() -> new JsonParseException(parser,
+                                "unknown property " + propertyName + " for type "
+                                        + context.metaInfo().beanType()));
+        final Object value = this.readFieldValue(parser, ctxt, meta.fieldType());
+        bean.setFieldValue(meta, value);
+    }
+
     private void readField(JsonParser parser, DeserializationContext ctxt, IBeanContext<?> context,
             IBeanFieldAccess bean) throws IOException, JsonParseException {
         String fieldName = parser.currentName();

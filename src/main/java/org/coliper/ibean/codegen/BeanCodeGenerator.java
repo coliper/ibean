@@ -27,11 +27,11 @@ import javax.lang.model.element.Modifier;
 import org.coliper.ibean.IBeanFieldMetaInfo;
 import org.coliper.ibean.IBeanTypeMetaInfo;
 
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeSpec.Builder;
+import com.palantir.javapoet.FieldSpec;
+import com.palantir.javapoet.JavaFile;
+import com.palantir.javapoet.MethodSpec;
+import com.palantir.javapoet.TypeSpec;
+import com.palantir.javapoet.TypeSpec.Builder;
 
 /**
  * @author alex@coliper.org

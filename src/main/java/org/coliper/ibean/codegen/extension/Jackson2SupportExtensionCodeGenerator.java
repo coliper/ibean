@@ -17,8 +17,8 @@ import org.coliper.ibean.proxy.ExtensionHandler;
 import org.coliper.ibean.util.ReflectionUtil;
 
 import com.fasterxml.jackson.core.JsonToken;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.MethodSpec;
+import com.palantir.javapoet.CodeBlock;
+import com.palantir.javapoet.MethodSpec;
 
 /**
  * {@link ExtensionHandler} implementation for bean extension interface
