@@ -20,4 +20,4 @@ gradle.properties
 # Virtual Studio Code
 .vscode
 /bin/
-.code-workspace
+*.code-workspace

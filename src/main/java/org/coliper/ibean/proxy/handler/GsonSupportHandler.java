@@ -51,17 +51,13 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
      * configuring extension handlers in {@link IBeanFactory}s, for example in
      * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
      */
-    public static final ExtensionSupport SUPPORT =
-            new ExtensionSupport(GsonSupport.class, GsonSupportHandler.class, false/* stateful */);
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(GsonSupport.class,
+            GsonSupportHandler.class, false/* stateful */);
 
-    private static final Method JSON_READ_METHOD =
-            ReflectionUtil.lookupInterfaceMethod(GsonSupport.class, (GsonSupport s) -> {
-                s.readFromJsonObject(null, null);
-            });
-    private static final Method JSON_WRITE_METHOD =
-            ReflectionUtil.lookupInterfaceMethod(GsonSupport.class, (GsonSupport s) -> {
-                s.writeToJsonObject(null, null);
-            });
+    private final static Method JSON_READ_METHOD = ReflectionUtil
+            .lookupInterfaceMethod(GsonSupport.class, s -> s.readFromJsonObject(null, null));
+    private final static Method JSON_WRITE_METHOD = ReflectionUtil
+            .lookupInterfaceMethod(GsonSupport.class, s -> s.writeToJsonObject(null, null));
 
     /*
      * (non-Javadoc)

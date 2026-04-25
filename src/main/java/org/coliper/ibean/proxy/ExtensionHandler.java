@@ -184,7 +184,7 @@ public interface ExtensionHandler {
      *         <code>returnValue</code>
      */
     default Object interceptGetterCall(IBeanContext<?> context, IBeanFieldMetaInfo fieldMeta,
-            Object returnValue, Object proxyInstance) {
+            IBeanFieldAccess bean, Object returnValue, Object proxyInstance) {
         return returnValue;
     }
 

@@ -54,24 +54,14 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
     public static final ExtensionSupport SUPPORT = new ExtensionSupport(Jackson2Support.class,
             Jackson2SupportHandler.class, false/* stateful */);
 
-    private static final Method READ_FROM_JSON_PARSER_METHOD =
-            ReflectionUtil.lookupInterfaceMethod(Jackson2Support.class, (Jackson2Support s) -> {
-                s.readFromJsonParser(null, null);
-            });
-    private static final Method SERIALIZE_METHOD =
-            ReflectionUtil.lookupInterfaceMethod(Jackson2Support.class, (Jackson2Support s) -> {
-                try {
-                    s.serialize(null, null);
-                } catch (IOException willNotHappen) {
-                }
-            });
+    private static final Method READ_PROPERTY_VALUE_FROM_JSON_PARSER_METHOD =
+            ReflectionUtil.lookupFailableInterfaceMethod(Jackson2Support.class,
+                    s -> s.readPropertyValueFromJsonParser(null, null, null));
+    private static final Method SERIALIZE_METHOD = ReflectionUtil
+            .lookupFailableInterfaceMethod(Jackson2Support.class, s -> s.serialize(null, null));
     private static final Method SERIALIZE_WITH_TYPE_METHOD =
-            ReflectionUtil.lookupInterfaceMethod(Jackson2Support.class, (Jackson2Support s) -> {
-                try {
-                    s.serializeWithType(null, null, null);
-                } catch (IOException willNotHappen) {
-                }
-            });
+            ReflectionUtil.lookupFailableInterfaceMethod(Jackson2Support.class,
+                    s -> s.serializeWithType(null, null, null));
 
     /*
      * (non-Javadoc)
@@ -84,11 +74,11 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
     @Override
     public Object handleExtendedInterfaceCall(IBeanContext<?> context, IBeanFieldAccess bean,
             Object proxyInstance, Method method, Object[] params) throws Throwable {
-        if (READ_FROM_JSON_PARSER_METHOD.equals(method)) {
+        if (READ_PROPERTY_VALUE_FROM_JSON_PARSER_METHOD.equals(method)) {
             Objects.requireNonNull(params, "params");
-            Preconditions.checkArgument(params.length == 2);
-            this.readFromJsonParser((JsonParser) params[0], (DeserializationContext) params[1],
-                    context, bean);
+            Preconditions.checkArgument(params.length == 3);
+            this.readPropertyValueFromJsonParser((String) params[0], (JsonParser) params[1],
+                    (DeserializationContext) params[2], context, bean);
         } else if (SERIALIZE_METHOD.equals(method)) {
             Objects.requireNonNull(params, "params");
             Preconditions.checkArgument(params.length == 2);

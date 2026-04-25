@@ -18,6 +18,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.lang.reflect.Method;
+import java.util.Optional;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.coliper.ibean.util.ReflectionUtil;
@@ -118,6 +119,17 @@ public class IBeanFieldMetaInfo {
      */
     public int ordinal() {
         return this.ordinal;
+    }
+
+    /**
+     * Determines if the getter method returns {@link Optional} although the
+     * field type is not {@code Optional}.
+     * 
+     * @return <code>true</code> if getter returns {@link Optional}
+     */
+    public boolean hasOptionalSupport() {
+        return this.fieldType != Optional.class
+                && this.getterMethod.getReturnType() == Optional.class;
     }
 
     /*

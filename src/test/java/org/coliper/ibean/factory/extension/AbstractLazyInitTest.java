@@ -57,5 +57,8 @@ public abstract class AbstractLazyInitTest extends AbstractFactoryTest {
         Child child = parent.child();
         assertThat(child).isNotNull();
         assertThat(child.parent()).isNull();
+
+        // check behavior if value exists
+        assertThat(parent.child()).isSameAs(child);
     }
 }

@@ -14,17 +14,37 @@
 
 package org.coliper.ibean.codegen;
 
+import java.io.File;
+
 import org.coliper.ibean.BeanStyle;
 import org.coliper.ibean.IBeanFactory;
+
+import com.google.common.base.Charsets;
 
 /**
  * @author alex@coliper.org
  *
  */
-public interface CodegenFactoryUtil {
+public abstract class CodegenFactoryUtil {
+
+    private static final File SOURCE_DIRECTORY = new File("./build/codegen");
 
     public static IBeanFactory factoryWithStyle(BeanStyle style) {
-        throw new RuntimeException("implementation missing");
+        if (style == BeanStyle.CLASSIC) {
+            return CodegenIBeanFactory.builder().withBeanStyleClassic()
+                    .withDefaultInterfaceSupport()
+                    .withPersistentSourceCode(SOURCE_DIRECTORY, Charsets.UTF_8).build();
+        }
+        if (style == BeanStyle.CLASSIC_WITH_OPTIONAL) {
+            return CodegenIBeanFactory.builder().withBeanStyleClassicWithOptional()
+                    .withDefaultInterfaceSupport()
+                    .withPersistentSourceCode(SOURCE_DIRECTORY, Charsets.UTF_8).build();
+        }
+        if (style == BeanStyle.MODERN) {
+            return CodegenIBeanFactory.builder().withBeanStyleModern().withDefaultInterfaceSupport()
+                    .withPersistentSourceCode(SOURCE_DIRECTORY, Charsets.UTF_8).build();
+        }
+        throw new RuntimeException("unexpected bean style " + style);
     }
 
 }

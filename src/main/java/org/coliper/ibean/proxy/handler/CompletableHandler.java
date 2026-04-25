@@ -26,6 +26,7 @@ import org.coliper.ibean.proxy.ExtensionSupport;
 import org.coliper.ibean.proxy.IBeanContext;
 import org.coliper.ibean.proxy.IBeanFieldAccess;
 import org.coliper.ibean.proxy.ProxyIBeanFactory;
+import org.coliper.ibean.util.ReflectionUtil;
 
 /**
  * {@link ExtensionHandler} implementation for bean extension interface
@@ -40,19 +41,13 @@ public class CompletableHandler extends StatelessExtensionHandler {
      * configuring extension handlers in {@link IBeanFactory}s, for example in
      * {@link ProxyIBeanFactory.Builder#withInterfaceSupport(ExtensionSupport)}.
      */
-    public static final ExtensionSupport SUPPORT =
-            new ExtensionSupport(Completable.class, CompletableHandler.class, false/* stateful */);
+    public static final ExtensionSupport SUPPORT = new ExtensionSupport(Completable.class,
+            CompletableHandler.class, false/* stateful */);
 
-    private static final Method IS_COMPLETE_METHOD;
-    private static final Method ASSERT_COMPLETE_METHOD;
-    static {
-        try {
-            IS_COMPLETE_METHOD = Completable.class.getMethod("isComplete");
-            ASSERT_COMPLETE_METHOD = Completable.class.getMethod("assertComplete");
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private final static Method IS_COMPLETE_METHOD =
+            ReflectionUtil.lookupInterfaceMethod(Completable.class, s -> s.isComplete());
+    private final static Method ASSERT_COMPLETE_METHOD =
+            ReflectionUtil.lookupInterfaceMethod(Completable.class, s -> s.assertComplete());
 
     /*
      * (non-Javadoc)
