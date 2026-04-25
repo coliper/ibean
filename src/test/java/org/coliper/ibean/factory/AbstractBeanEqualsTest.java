@@ -136,6 +136,7 @@ public abstract class AbstractBeanEqualsTest extends AbstractFactoryTest {
         void setX(int i);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testDifferentTypes() {
         A beanA = this.factory.create(A.class);

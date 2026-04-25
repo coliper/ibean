@@ -8,7 +8,7 @@ plugins {
 def PROJECTNAME = "Coliper IBean"
 
 group = "org.coliper"
-version = '0.4.6'
+version = '0.9.0'
 description = 'creates all artifacts of the Coliper IBean project'
 
 java {
@@ -27,19 +27,19 @@ repositories {
 
 dependencies {
     // This dependency is exported to consumers, that is to say found on their compile classpath.
-    api 'org.apache.commons:commons-lang3:3.4'
-    api 'com.squareup:javapoet:1.11.1'
+    api 'org.apache.commons:commons-lang3:3.15.0'
+    api 'com.palantir.javapoet:javapoet:0.13.0'
 
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-    implementation 'com.google.guava:guava:21.0'
-    implementation 'com.google.code.gson:gson:2.4'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.6.1'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.6.1'
+    implementation 'com.google.guava:guava:33.2.0-jre'
+    implementation 'com.google.code.gson:gson:2.10.1'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.17.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.1'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
-    testImplementation 'commons-beanutils:commons-beanutils:1.9.3'
-    testImplementation 'org.assertj:assertj-core:3.8.0'
+    testImplementation 'commons-beanutils:commons-beanutils:1.9.4'
+    testImplementation 'org.assertj:assertj-core:3.26.0'
 }
 
 
@@ -51,12 +51,13 @@ javadoc {
     options.source = "17"
     options.addBooleanOption('Xdoclint:none', true)
     options.stylesheetFile file('doc-src/javadoc-stylesheet.css', PathValidation.FILE)
-    options.links "https://commons.apache.org/proper/commons-lang/apidocs/",
+    options.links "https://javadoc.io/doc/org.apache.commons/commons-lang3/3.15.0/",
                   "https://docs.oracle.com/en/java/javase/17/docs/api/",
-                  "http://fasterxml.github.io/jackson-core/javadoc/2.6/",
-                  "http://fasterxml.github.io/jackson-databind/javadoc/2.6/"
-    options.linksOffline("https://static.javadoc.io/com.google.code.gson/gson/2.8.5/", 
-                         "./doc-src/gson-2.4-javadoc")
+                  "https://www.javadoc.io/doc/com.fasterxml.jackson.core/jackson-core/2.17.1/",
+                  "https://www.javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/2.17.1/",
+                  "https://www.javadoc.io/doc/com.google.code.gson/gson/2.10.1/"
+//    options.linksOffline("https://static.javadoc.io/com.google.code.gson/gson/2.8.5/", 
+//                         "./doc-src/gson-2.4-javadoc")
 }
 
 task createPagesIntro(type: Copy) {

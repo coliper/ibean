@@ -118,14 +118,13 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
 
     private void readField(JsonParser parser, DeserializationContext ctxt, IBeanContext<?> context,
             IBeanFieldAccess bean) throws IOException, JsonParseException {
-        String fieldName = parser.getCurrentName();
+        String fieldName = parser.currentName();
         parser.nextToken();
         final IBeanFieldMetaInfo meta =
                 context.metaInfo().findFieldMetaWithFieldName(fieldName)
-                        .orElseThrow(() -> new JsonParseException(
+                        .orElseThrow(() -> new JsonParseException(parser,
                                 "unknown property " + fieldName + " for type "
-                                        + context.metaInfo().beanType(),
-                                parser.getCurrentLocation()));
+                                        + context.metaInfo().beanType()));
         final Object value = this.readFieldValue(parser, ctxt, meta.fieldType());
         bean.setFieldValue(meta, value);
     }
@@ -175,9 +174,9 @@ public class Jackson2SupportHandler extends StatelessExtensionHandler {
     private void serializeWithType(JsonGenerator gen, SerializerProvider serializers,
             TypeSerializer typeSer, Object proxyInstance, IBeanContext<?> context,
             IBeanFieldAccess bean) throws IOException {
-        typeSer.writeTypePrefixForObject(proxyInstance, gen, context.metaInfo().beanType());
+        typeSer.writeTypePrefix(gen, typeSer.typeId(proxyInstance, context.metaInfo().beanType(), JsonToken.START_OBJECT));
         this.serialize(gen, serializers, context, bean);
-        typeSer.writeTypeSuffixForObject(proxyInstance, gen);
+        typeSer.writeTypeSuffix(gen, typeSer.typeId(proxyInstance, context.metaInfo().beanType(), JsonToken.START_OBJECT));
     }
 
     private void serialize(JsonGenerator gen, SerializerProvider serializers,

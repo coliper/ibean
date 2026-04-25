@@ -126,7 +126,12 @@ public class GsonSupportHandler extends StatelessExtensionHandler {
             return Byte.valueOf(value.getAsByte());
         }
         if (char.class == prim) {
-            return Character.valueOf(value.getAsCharacter());
+            String str = value.getAsString();
+            if (str.length() != 1) {
+                throw new RuntimeException(
+                        "expected a single character but got: " + str);
+            }
+            return Character.valueOf(str.charAt(0));
         }
         if (int.class == prim) {
             return Integer.valueOf(value.getAsInt());

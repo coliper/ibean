@@ -39,8 +39,8 @@ public class ExtensionSupport {
 
     private static void validateHandlerType(Class<? extends ExtensionHandler> handlerType) {
         try {
-            handlerType.newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            handlerType.getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
             throw new IllegalArgumentException("class " + handlerType + "is not a valid handler "
                     + "type as it does not contain a public default constructor");
         }

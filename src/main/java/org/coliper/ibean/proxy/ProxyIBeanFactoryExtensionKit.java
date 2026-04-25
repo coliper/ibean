@@ -72,8 +72,8 @@ class ProxyIBeanFactoryExtensionKit {
 
     private static ExtensionHandler createHandler(ExtensionSupport support) {
         try {
-            return support.handlerType().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            return support.handlerType().getDeclaredConstructor().newInstance();
+        } catch (ReflectiveOperationException e) {
             // unexpected as this was already checked when creating the support
             // instance
             throw new IllegalStateException(e);
